@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.Threading;
 using System.Threading.Tasks.Dataflow;
 using PerkinElmer.Simplicity.DataMigration.Common;
 using PerkinElmer.Simplicity.DataMigration.Common.Postgresql;
@@ -14,16 +15,18 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationCont
     public class PostgresqlDbUpgradeContextFactory : ContextFactocyBase
     {
         private readonly ReleaseVersions _toVersion;
+        private readonly CancellationTokenSource _cancellationTokenSource;
 
-        public PostgresqlDbUpgradeContextFactory(ReleaseVersions toVersion)
+        public PostgresqlDbUpgradeContextFactory(ReleaseVersions toVersion, CancellationTokenSource cancellationTokenSource)
         {
             _toVersion = toVersion;
+            _cancellationTokenSource = cancellationTokenSource;
         }
 
         public override MigrationContextBase GetMigrationContext()
         {
             var sourceContext = GeneratePostgresqlSourceContext();
-            var targetContext = GeneratePostgresqlTargetContext(_toVersion);
+            var targetContext = GeneratePostgresqlTargetContext();
             var transformContext = GeneratePostgresqlTransformContext();
             var migrationContext = new PostgresqlDbUpgradeMigrationContext
             {
@@ -38,7 +41,11 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationCont
 
         private PostgresqlSourceContext GeneratePostgresqlSourceContext()
         {
-            var blockOption = new ExecutionDataflowBlockOptions { MaxDegreeOfParallelism = 4 };
+            var blockOption = new ExecutionDataflowBlockOptions
+            {
+                MaxDegreeOfParallelism = 4,
+                CancellationToken = _cancellationTokenSource.Token
+            };
             var fromVersion = DatabaseUtil.GetChromatographyDatabaseVersion();
             var chromatographyConnName = ConfigurationManager.AppSettings["ChromatographyConn"];
             var auditTrailConnName = ConfigurationManager.AppSettings["AuditTrailConn"];
@@ -62,10 +69,14 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationCont
 
         }
 
-        private PostgresqlTargetContext GeneratePostgresqlTargetContext(ReleaseVersions targetReleaseVersion)
+        private PostgresqlTargetContext GeneratePostgresqlTargetContext()
         {
-            var blockOption = new ExecutionDataflowBlockOptions { MaxDegreeOfParallelism = 4 };
-            switch (targetReleaseVersion)
+            var blockOption = new ExecutionDataflowBlockOptions
+            {
+                MaxDegreeOfParallelism = 4,
+                CancellationToken = _cancellationTokenSource.Token
+            };
+            switch (_toVersion)
             {
                 case ReleaseVersions.Version15:
                     var chromatographyConnNameV15 = ConfigurationManager.AppSettings["ChromatographyConnVer15"];
@@ -73,7 +84,7 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationCont
                     return new PostgresqlTargetContext
                     {
                         BlockOption = blockOption,
-                        TargetReleaseVersion = targetReleaseVersion,
+                        TargetReleaseVersion = _toVersion,
                         ChromatographyConnection = ConfigurationManager.ConnectionStrings[chromatographyConnNameV15].ConnectionString,
                         AuditTrailConnection = ConfigurationManager.ConnectionStrings[auditTrailConnNameV15].ConnectionString
                     };
@@ -83,18 +94,22 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationCont
                     return new PostgresqlTargetContext
                     {
                         BlockOption = blockOption,
-                        TargetReleaseVersion = targetReleaseVersion,
+                        TargetReleaseVersion = _toVersion,
                         ChromatographyConnection = ConfigurationManager.ConnectionStrings[chromatographyConnNameV16].ConnectionString,
                         AuditTrailConnection = ConfigurationManager.ConnectionStrings[auditTrailConnNameV16].ConnectionString
                     };
             }
 
-            throw new ArgumentException(nameof(targetReleaseVersion));
+            throw new ArgumentException("Target Version not supported!");
         }
 
         private PostgresqlTransformContext GeneratePostgresqlTransformContext()
         {
-            var blockOption = new ExecutionDataflowBlockOptions { MaxDegreeOfParallelism = 4 };
+            var blockOption = new ExecutionDataflowBlockOptions
+            {
+                MaxDegreeOfParallelism = 4 ,
+                CancellationToken = _cancellationTokenSource.Token
+            };
             return new PostgresqlTransformContext
             {
                 BlockOption = blockOption

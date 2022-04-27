@@ -40,6 +40,7 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation.Controllers
 
             var postgresqlSourceContext = migrationContext.SourceContext as PostgresqlSourceContext;
             var projectGuids = GetAllProjectGuid(postgresqlSourceContext);
+            //TODO : Implement progress here.
             foreach (var projectGuid in projectGuids)
                 MigrateProject(projectGuid, migrationContext);
         }
