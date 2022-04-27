@@ -1,0 +1,14 @@
+﻿using System;
+
+namespace PerkinElmer.Simplicity.Data.Version15.DomainEntities.Interface.Shared
+{
+    public interface IPdaExtractedChannelMetaDataSimple : IExtractedChannelMetaData, IEquatable<IPdaExtractedChannelMetaDataSimple>, ICloneable
+    {
+        double Wavelength { get; set; }
+        double WavelengthBandwidth { get; set; }
+        bool UseReference { get; set; }
+        double ReferenceWavelength { get; set; }
+        double ReferenceWavelengthBandwidth { get; set; }
+		bool IsApexOptimized { get; set; }
+    }
+}

@@ -1,0 +1,33 @@
+<Project>    	
+	<PropertyGroup>
+	
+		<!-- Third Party Components -->
+	
+		<DapperStrongName>2.0.90</DapperStrongName>
+		<Log4net>2.0.12</Log4net>
+		<Npgsql>5.0.7</Npgsql>
+		<SystemRuntimeCompilerServicesUnsafe>5.0.0</SystemRuntimeCompilerServicesUnsafe>
+		<SystemThreadingTasksExtensions>4.5.3</SystemThreadingTasksExtensions>
+		<MicrosoftTestSdk>16.9.4</MicrosoftTestSdk>
+		<NUnit>3.13.1</NUnit>
+		<NUnit3TestAdapter>3.17.0</NUnit3TestAdapter>
+		<SystemDataDataSetExtensions>4.5.0</SystemDataDataSetExtensions>
+		<MicrosoftCSharp>4.7.0</MicrosoftCSharp>
+		<SystemConfigurationConfigurationManager>5.0.0</SystemConfigurationConfigurationManager>
+		<NewtonsoftJson>12.0.3</NewtonsoftJson>
+		<SystemManagement>5.0.0</SystemManagement>
+		<MicrosoftExtensionsDependencyInjection>1.1.1</MicrosoftExtensionsDependencyInjection>
+		<MicrosoftExtensionsDependencyInjectionAbstractions>1.1.1</MicrosoftExtensionsDependencyInjectionAbstractions>
+		<SystemDataSQLite>1.0.114.2</SystemDataSQLite>
+		<Log4NetAspNetCore>5.0.3</Log4NetAspNetCore>
+		<PerformanceCounter>4.7.0</PerformanceCounter>
+		<DotNetZip>1.15.0</DotNetZip>
+		<MicrosoftExtensionsLogging>3.0.3</MicrosoftExtensionsLogging>
+		<MicrosoftExtensionsLoggingAbstractions>3.0.3</MicrosoftExtensionsLoggingAbstractions>
+		<MicrosoftPowerShellSDK>7.0.6</MicrosoftPowerShellSDK>
+		<CommandLineParser>2.8.0</CommandLineParser>
+		<SystemThreadingTasksDataflow>6.0.0</SystemThreadingTasksDataflow>
+		<NewtonsoftJson>12.0.2</NewtonsoftJson>
+		<PerkinElmerDevices>2.5.2101.18227</PerkinElmerDevices>
+	</PropertyGroup>
+</Project>
