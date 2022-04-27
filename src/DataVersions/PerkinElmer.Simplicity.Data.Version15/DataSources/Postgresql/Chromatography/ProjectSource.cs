@@ -25,7 +25,7 @@ namespace PerkinElmer.Simplicity.Data.Version15.DataSources.Postgresql.Chromatog
 
         public override Version SchemaVersion => SchemaVersions.ChromatographySchemaVersion15;
 
-        public override IPropagatorBlock<Guid, MigrationDataBase> CreateSourceByProjectId(SourceContextBase sourceContext)
+        public override IPropagatorBlock<Guid, MigrationDataBase> CreateProjectSource(SourceContextBase sourceContext)
         {
             if (!(sourceContext is PostgresqlSourceContext posgresqlContext))
                 throw new ArgumentException(nameof(sourceContext));
@@ -55,7 +55,7 @@ namespace PerkinElmer.Simplicity.Data.Version15.DataSources.Postgresql.Chromatog
             return DataflowBlock.Encapsulate(actionBlock, bufferBlock);
         }
 
-        public override IPropagatorBlock<Tuple<Guid, IList<Guid>>, MigrationDataBase> CreateSourceByIds(SourceContextBase sourceContext)
+        public override IPropagatorBlock<Tuple<Guid, IList<Guid>>, MigrationDataBase> CreateEntitiesSource(SourceContextBase sourceContext)
         {
             if (!(sourceContext is PostgresqlSourceContext posgresqlContext))
                 throw new ArgumentException(nameof(sourceContext));

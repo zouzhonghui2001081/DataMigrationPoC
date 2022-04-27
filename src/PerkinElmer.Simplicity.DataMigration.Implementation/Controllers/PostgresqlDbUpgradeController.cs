@@ -49,49 +49,49 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation.Controllers
         {
             //Migrate project first.
             var projectPipelineBuilder = MigrationPipelines[MigrationDataTypes.Project];
-            var (projectSource, projectTarget) = projectPipelineBuilder.CreateProjectPipeline(migrationContextBase);
+            var (projectSource, projectTarget) = projectPipelineBuilder.CreateProjectTransformationPipeline(migrationContextBase);
             projectSource.Post(projectGuid);
             projectSource.Complete();
             projectTarget.Wait();
 
             var migrationTasks = new List<Task>();
             var acqusitionMethodPilpeLineBuilder = MigrationPipelines[MigrationDataTypes.AcqusitionMethod];
-            var (acqusitionMethodSource, acqusitionMethodTarget) = acqusitionMethodPilpeLineBuilder.CreateProjectPipeline(migrationContextBase);
+            var (acqusitionMethodSource, acqusitionMethodTarget) = acqusitionMethodPilpeLineBuilder.CreateProjectTransformationPipeline(migrationContextBase);
             acqusitionMethodSource.Post(projectGuid);
             acqusitionMethodSource.Complete();
             //acqusitionMethodTarget.Wait();
             migrationTasks.Add(acqusitionMethodTarget);
 
             var sequencePilpeLineBuilder = MigrationPipelines[MigrationDataTypes.Sequence];
-            var (sequenceSource, sequenceTarget) = sequencePilpeLineBuilder.CreateProjectPipeline(migrationContextBase);
+            var (sequenceSource, sequenceTarget) = sequencePilpeLineBuilder.CreateProjectTransformationPipeline(migrationContextBase);
             sequenceSource.Post(projectGuid);
             sequenceSource.Complete();
             //sequenceTarget.Wait();
             migrationTasks.Add(sequenceTarget);
 
             var anlysisResultSetPipleLineBuilder = MigrationPipelines[MigrationDataTypes.AnlysisResultSet];
-            var (analysisResultSetSource, analysisResultSetTarget) = anlysisResultSetPipleLineBuilder.CreateProjectPipeline(migrationContextBase);
+            var (analysisResultSetSource, analysisResultSetTarget) = anlysisResultSetPipleLineBuilder.CreateProjectTransformationPipeline(migrationContextBase);
             analysisResultSetSource.Post(projectGuid);
             analysisResultSetSource.Complete();
             //analysisResultSetTarget.Wait();
             migrationTasks.Add(analysisResultSetTarget);
 
             var compoundLibraryPipelineBuilder = MigrationPipelines[MigrationDataTypes.CompoundLibrary];
-            var (compoundLibarySource, compoundLibarySourceTarget) = compoundLibraryPipelineBuilder.CreateProjectPipeline(migrationContextBase);
+            var (compoundLibarySource, compoundLibarySourceTarget) = compoundLibraryPipelineBuilder.CreateProjectTransformationPipeline(migrationContextBase);
             compoundLibarySource.Post(projectGuid);
             compoundLibarySource.Complete();
             //compoundLibarySourceTarget.Wait();
             migrationTasks.Add(compoundLibarySourceTarget);
 
             var processingMethodPipelineBuilder = MigrationPipelines[MigrationDataTypes.ProcessingMethod];
-            var (processingMethodSource, processingMethodTarget) = processingMethodPipelineBuilder.CreateProjectPipeline(migrationContextBase);
+            var (processingMethodSource, processingMethodTarget) = processingMethodPipelineBuilder.CreateProjectTransformationPipeline(migrationContextBase);
             processingMethodSource.Post(projectGuid);
             processingMethodSource.Complete();
             //processingMethodTarget.Wait();
             migrationTasks.Add(processingMethodTarget);
 
             var reportTemplatePipelineBuilder = MigrationPipelines[MigrationDataTypes.ReportTemplate];
-            var (reportTemplateSource, reportTemplateTarget) = reportTemplatePipelineBuilder.CreateProjectPipeline(migrationContextBase);
+            var (reportTemplateSource, reportTemplateTarget) = reportTemplatePipelineBuilder.CreateProjectTransformationPipeline(migrationContextBase);
             reportTemplateSource.Post(projectGuid);
             reportTemplateSource.Complete();
             //reportTemplateTarget.Wait();

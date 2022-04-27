@@ -15,8 +15,18 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Source
 
         public abstract SourceTypes SourceType { get; }
 
-        public abstract IPropagatorBlock<Guid, MigrationDataBase> CreateSourceByProjectId(SourceContextBase sourceContext);
+        /// <summary>
+        /// Create source block for the whole project (Guid)
+        /// </summary>
+        /// <param name="sourceContext"></param>
+        /// <returns></returns>
+        public abstract IPropagatorBlock<Guid, MigrationDataBase> CreateProjectSource(SourceContextBase sourceContext);
 
-        public abstract IPropagatorBlock<Tuple<Guid, IList<Guid>>, MigrationDataBase> CreateSourceByIds(SourceContextBase sourceContext);
+        /// <summary>
+        /// Create source block for the entities (List<Guid>) in a project (Guid)
+        /// </summary>
+        /// <param name="sourceContext"></param>
+        /// <returns></returns>
+        public abstract IPropagatorBlock<Tuple<Guid, IList<Guid>>, MigrationDataBase> CreateEntitiesSource(SourceContextBase sourceContext);
     }
 }

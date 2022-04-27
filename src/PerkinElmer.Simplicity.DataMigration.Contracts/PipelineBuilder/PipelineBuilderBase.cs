@@ -20,7 +20,7 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.PipelineBuilder
 
         protected abstract IDictionary<ReleaseVersions, IDictionary<ReleaseVersions, TransformBase>> TransformMaps { get; }
 
-        public (IPropagatorBlock<Tuple<Guid, IList<Guid>>, MigrationDataBase>, Task) CreateProjectEntityIdsPipeline(
+        public (IPropagatorBlock<Tuple<Guid, IList<Guid>>, MigrationDataBase>, Task) CreateEntitesTransformationPipeline(
             MigrationContextBase migrationContextBase)
         {
             var sourceVersion = migrationContextBase.SourceContext.FromReleaseVersion;
@@ -35,7 +35,7 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.PipelineBuilder
             if (sourceBlockCreator == null || targetBlockCreator == null) return (null, null);
             if (sourceVersion != targetVersion && transformStack.Count == 0) return (null, null);
 
-            var sourceBlock = sourceBlockCreator.CreateSourceByIds(migrationContextBase.SourceContext);
+            var sourceBlock = sourceBlockCreator.CreateEntitiesSource(migrationContextBase.SourceContext);
             var targetBlock = targetBlockCreator.CreateTarget(migrationContextBase.TargetContext);
 
             if (transformStack != null && transformStack.Count > 0)
@@ -59,7 +59,7 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.PipelineBuilder
             return (sourceBlock, targetBlock.Completion);
         }
 
-        public (IPropagatorBlock<Guid, MigrationDataBase>, Task) CreateProjectPipeline(MigrationContextBase migrationContextBase)
+        public (IPropagatorBlock<Guid, MigrationDataBase>, Task) CreateProjectTransformationPipeline(MigrationContextBase migrationContextBase)
         {
             var sourceVersion = migrationContextBase.SourceContext.FromReleaseVersion;
             var sourceType = migrationContextBase.SourceContext.SourceType;
@@ -73,7 +73,7 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.PipelineBuilder
             if (sourceBlockCreator == null || targetBlockCreator == null) return (null, null);
             if (sourceVersion != targetVersion && transformStack.Count == 0) return (null, null);
 
-            var sourceBlock = sourceBlockCreator.CreateSourceByProjectId(migrationContextBase.SourceContext);
+            var sourceBlock = sourceBlockCreator.CreateProjectSource(migrationContextBase.SourceContext);
             var targetBlock = targetBlockCreator.CreateTarget(migrationContextBase.TargetContext);
 
             if (transformStack != null && transformStack.Count > 0)
