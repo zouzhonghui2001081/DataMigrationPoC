@@ -3,6 +3,7 @@ using PerkinElmer.Simplicity.DataMigration.Common;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationContextFactory;
 using PerkinElmer.Simplicity.DataMigration.Implementation;
 using System.Reflection;
+using System.Threading;
 
 namespace PerkinElmer.Simplicity.DataMigrationAssistant
 {
@@ -13,7 +14,9 @@ namespace PerkinElmer.Simplicity.DataMigrationAssistant
         static void Main(string[] args)
         {
             var upgradeTargetVersion = ReleaseVersions.Version16;
-            var postgresqlDbUpgradeContextFactory = new PostgresqlDbUpgradeContextFactory(upgradeTargetVersion);
+            var cancellationTokenSource = new CancellationTokenSource();
+
+            var postgresqlDbUpgradeContextFactory = new PostgresqlDbUpgradeContextFactory(upgradeTargetVersion, cancellationTokenSource);
             var dbUpgradeContext = postgresqlDbUpgradeContextFactory.GetMigrationContext();
 
             var migrationManager = new MigrationManager();
