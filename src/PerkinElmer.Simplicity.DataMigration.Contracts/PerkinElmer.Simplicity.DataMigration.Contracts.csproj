@@ -5,15 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+	<PackageReference Include="Dapper.StrongName" Version="$(DapperStrongName)" />
     <PackageReference Include="DotNetZip" Version="$(DotNetZip)" />
-    <PackageReference Include="log4net" Version="$(Log4net)" />    
-
+    <PackageReference Include="log4net" Version="$(Log4net)" />
+    <PackageReference Include="Microsoft.CSharp" Version="$(MicrosoftCSharp)" />    
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="$(MicrosoftExtensionsLoggingAbstractions)" />
+	<PackageReference Include="Npgsql" Version="$(Npgsql)" /> 
     <PackageReference Include="System.Data.DataSetExtensions" Version="$(SystemDataDataSetExtensions)" />  
-    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="$(SystemRuntimeCompilerServicesUnsafe)" />
-	<PackageReference Include="System.Threading.Tasks.Dataflow" Version="$(SystemThreadingTasksDataflow)" />
-  </ItemGroup>
+	<PackageReference Include="System.Data.SQLite.Core" Version="$(SystemDataSQLite)" />
 
-  <ItemGroup>
-    <ProjectReference Include="..\PerkinElmer.Simplicity.DataMigration.Common\PerkinElmer.Simplicity.DataMigration.Common.csproj" />
+    <PackageReference Include="System.Threading.Tasks.Dataflow" Version="$(SystemThreadingTasksDataflow)" />
   </ItemGroup>
 </Project>

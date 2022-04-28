@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using PerkinElmer.Simplicity.DataMigration.Common;
+using PerkinElmer.Simplicity.DataMigration.Contracts.Migration;
 using PerkinElmer.Simplicity.DataMigration.Contracts.PipelineBuilder;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Source;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Targets;
@@ -10,23 +10,23 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation.Pipelines
 {
     internal class ProjectPipelineBuilder : PipelineBuilderBase
     {
-        protected override IList<SourceBase> Sources => new List<SourceBase>
+        protected override IList<SourceBlockCreatorBase> Sources => new List<SourceBlockCreatorBase>
         {
-            new Data.Version15.DataSources.Postgresql.Chromatography.ProjectSource(),
-            new Data.Version16.DataSources.Postgresql.Chromatography.ProjectSource()
+            new Data.Version15.DataSources.Postgresql.Chromatography.ProjectSourceBlockCreator(),
+            new Data.Version16.DataSources.Postgresql.Chromatography.ProjectSourceBlockCreator()
         };
 
-        protected override IList<TargetBase> Targets => new List<TargetBase>
+        protected override IList<TargetBlockCreatorBase> Targets => new List<TargetBlockCreatorBase>
         {
-            new Data.Version15.DataTargets.Postgresql.Chromatography.ProjectTarget(),
-            new Data.Version16.DataTargets.Postgresql.Chromatography.ProjectTarget()
+            new Data.Version15.DataTargets.Postgresql.Chromatography.ProjectTargetBlockCreator(),
+            new Data.Version16.DataTargets.Postgresql.Chromatography.ProjectTargetBlockCreator()
         };
 
-        protected override IDictionary<ReleaseVersions, IDictionary<ReleaseVersions, TransformBase>> TransformMaps => new Dictionary<ReleaseVersions, IDictionary<ReleaseVersions, TransformBase>>
+        protected override IDictionary<MigrationVersions, IDictionary<MigrationVersions, TransformBlockCreatorBase>> TransformMaps => new Dictionary<MigrationVersions, IDictionary<MigrationVersions, TransformBlockCreatorBase>>
         {
-            { ReleaseVersions.Version15, new Dictionary<ReleaseVersions, TransformBase>
+            { MigrationVersions.Version15, new Dictionary<MigrationVersions, TransformBlockCreatorBase>
                 {
-                    { ReleaseVersions.Version16, new ProjectDataTransform() }
+                    { MigrationVersions.Version16, new ProjectDataTransform() }
                 }
             }
         };

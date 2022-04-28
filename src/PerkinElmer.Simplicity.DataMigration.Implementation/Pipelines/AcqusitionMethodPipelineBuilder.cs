@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using PerkinElmer.Simplicity.DataMigration.Common;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Migration;
 using PerkinElmer.Simplicity.DataMigration.Contracts.PipelineBuilder;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Source;
@@ -11,23 +10,23 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation.Pipelines
 {
     internal class AcqusitionMethodPipelineBuilder : PipelineBuilderBase
     {
-        protected override IList<SourceBase> Sources => new List<SourceBase>
+        protected override IList<SourceBlockCreatorBase> Sources => new List<SourceBlockCreatorBase>
         {
-            new Data.Version15.DataSources.Postgresql.Chromatography.AcquisitionMethodSource(),
-            new Data.Version16.DataSources.Postgresql.Chromatography.AcquisitionMethodSource()
+            new Data.Version15.DataSources.Postgresql.Chromatography.AcquisitionMethodSourceBlockCreator(),
+            new Data.Version16.DataSources.Postgresql.Chromatography.AcquisitionMethodSourceBlockCreator()
         };
 
-        protected override IList<TargetBase> Targets => new List<TargetBase>
+        protected override IList<TargetBlockCreatorBase> Targets => new List<TargetBlockCreatorBase>
         {
-            new Data.Version15.DataTargets.Postgresql.Chromatography.AcquisitionMethodTarget(),
-            new Data.Version16.DataTargets.Postgresql.Chromatography.AcquisitionMethodTarget()
+            new Data.Version15.DataTargets.Postgresql.Chromatography.AcquisitionMethodTargetBlockCreator(),
+            new Data.Version16.DataTargets.Postgresql.Chromatography.AcquisitionMethodTargetBlockCreator()
         };
 
-        protected override IDictionary<ReleaseVersions, IDictionary<ReleaseVersions, TransformBase>> TransformMaps => new Dictionary<ReleaseVersions, IDictionary<ReleaseVersions, TransformBase>>
+        protected override IDictionary<MigrationVersions, IDictionary<MigrationVersions, TransformBlockCreatorBase>> TransformMaps => new Dictionary<MigrationVersions, IDictionary<MigrationVersions, TransformBlockCreatorBase>>
         {
-            { ReleaseVersions.Version15, new Dictionary<ReleaseVersions, TransformBase>
+            { MigrationVersions.Version15, new Dictionary<MigrationVersions, TransformBlockCreatorBase>
                 {
-                    { ReleaseVersions.Version16, new AcquisitionMethodDataTransform() } 
+                    { MigrationVersions.Version16, new AcquisitionMethodDataTransform() } 
                 }
             }
         };

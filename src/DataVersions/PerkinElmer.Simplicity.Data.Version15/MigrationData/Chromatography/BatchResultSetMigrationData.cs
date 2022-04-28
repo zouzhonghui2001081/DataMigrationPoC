@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using PerkinElmer.Simplicity.DataMigration.Common;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Migration;
 using PerkinElmer.Simplicity.Data.Version15.DataEntities.Chromatography;
 using PerkinElmer.Simplicity.Data.Version15.DataEntities.Chromatography.AcquisitionMethod;
@@ -38,7 +37,7 @@ namespace PerkinElmer.Simplicity.Data.Version15.MigrationData.Chromatography
             BatchRuns = new List<BatchRunData>();
         }
 
-        public override ReleaseVersions ReleaseVersion => ReleaseVersions.Version15;
+        public override MigrationVersions MigrationVersion => MigrationVersions.Version15;
 
         public override MigrationDataTypes MigrationDataTypes => MigrationDataTypes.BatchResultSet;
 

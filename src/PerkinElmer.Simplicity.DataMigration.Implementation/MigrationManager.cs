@@ -10,14 +10,16 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation
         public IDictionary<MigrationTypes, MigrationControllerBase> MigrationControllers =>
             new Dictionary<MigrationTypes, MigrationControllerBase>
             {
-                {MigrationTypes.PostgresqlDbUpgrade, new PostgresqlDbUpgradeController()},
-                {MigrationTypes.ArchiveRetrieve, new ProjectArchiveRetrieveControllers()},
-                {MigrationTypes.ImportExport, new EntitiesImportExportControllers()}
+                {MigrationTypes.Upgrade, new UpgradeController()},
+                {MigrationTypes.Archive, new ArchiveController()},
+                {MigrationTypes.Retrieve, new RetrieveController()},
+                {MigrationTypes.Import, new ImportController()},
+                {MigrationTypes.Export, new ExportController()},
             };
 
         public void Migration(MigrationContextBase migrationContext)
         {
-            var upgradeController = MigrationControllers[MigrationTypes.PostgresqlDbUpgrade];
+            var upgradeController = MigrationControllers[MigrationTypes.Upgrade];
             upgradeController.Migration(migrationContext);
         }
     }

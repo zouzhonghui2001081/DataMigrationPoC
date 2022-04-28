@@ -1,5 +1,4 @@
-﻿using PerkinElmer.Simplicity.DataMigration.Common;
-
+﻿
 namespace PerkinElmer.Simplicity.DataMigration.Contracts.Migration
 {
     public enum MigrationDataTypes
@@ -17,7 +16,7 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Migration
 
     public abstract class MigrationDataBase
     {
-        public abstract ReleaseVersions ReleaseVersion { get; }
+        public abstract MigrationVersions MigrationVersion { get; }
 
         public abstract MigrationDataTypes MigrationDataTypes { get; }
     }

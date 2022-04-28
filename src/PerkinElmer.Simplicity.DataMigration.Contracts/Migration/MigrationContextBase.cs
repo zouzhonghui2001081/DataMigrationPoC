@@ -1,14 +1,16 @@
-﻿using PerkinElmer.Simplicity.DataMigration.Contracts.Source.SourceContext;
-using PerkinElmer.Simplicity.DataMigration.Contracts.Targets.TargetContext;
+﻿using PerkinElmer.Simplicity.DataMigration.Contracts.Source;
+using PerkinElmer.Simplicity.DataMigration.Contracts.Targets;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Transform.TransformContext;
 
 namespace PerkinElmer.Simplicity.DataMigration.Contracts.Migration
 {
     public enum MigrationTypes
     {
-        PostgresqlDbUpgrade,
-        ArchiveRetrieve,
-        ImportExport
+        Upgrade,
+        Archive,
+        Retrieve,
+        Import,
+        Export
     }
 
     public abstract class MigrationContextBase

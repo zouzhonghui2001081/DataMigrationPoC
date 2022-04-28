@@ -14,6 +14,26 @@
      <OutputPath>..\..\..\Output\Debug\</OutputPath>
    </PropertyGroup>
 
+   <ItemGroup>
+     <None Remove="DataAccess\Postgresql\Chromatography\AuditTrailDBSchema.sql" />
+     <None Remove="DataAccess\Postgresql\Chromatography\ChromatographyDBInit.sql" />
+     <None Remove="DataAccess\Postgresql\Chromatography\ChromatographyDBSchema.sql" />
+     <None Remove="DataAccess\Postgresql\Chromatography\DummyRuns.sql" />
+     <None Remove="DataAccess\Postgresql\Chromatography\NotificationFunctionTriggers.sql" />
+     <None Remove="DataAccess\Postgresql\Chromatography\SecurityDbData.sql" />
+     <None Remove="DataAccess\Postgresql\Chromatography\SecurityDbSchema.sql" />
+   </ItemGroup>
+
+   <ItemGroup>
+     <EmbeddedResource Include="DataAccess\Postgresql\SQL\AuditTrailDBSchema.sql" />
+     <EmbeddedResource Include="DataAccess\Postgresql\SQL\ChromatographyDBInit.sql" />
+     <EmbeddedResource Include="DataAccess\Postgresql\SQL\ChromatographyDBSchema.sql" />
+     <EmbeddedResource Include="DataAccess\Postgresql\SQL\DummyRuns.sql" />
+     <EmbeddedResource Include="DataAccess\Postgresql\SQL\NotificationFunctionTriggers.sql" />
+     <EmbeddedResource Include="DataAccess\Postgresql\SQL\SecurityDbData.sql" />
+     <EmbeddedResource Include="DataAccess\Postgresql\SQL\SecurityDbSchema.sql" />
+   </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="Dapper.StrongName" Version="$(DapperStrongName)" />

@@ -4,40 +4,6 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="Postgresql\SQL\Version15\AuditTrailDBSchema.sql" />
-    <None Remove="Postgresql\SQL\Version15\ChromatographyDBInit.sql" />
-    <None Remove="Postgresql\SQL\Version15\ChromatographyDBSchema.sql" />
-    <None Remove="Postgresql\SQL\Version15\DummyRuns.sql" />
-    <None Remove="Postgresql\SQL\Version15\NotificationFunctionTriggers.sql" />
-    <None Remove="Postgresql\SQL\Version15\SecurityDbData.sql" />
-    <None Remove="Postgresql\SQL\Version15\SecurityDbSchema.sql" />
-    <None Remove="Postgresql\SQL\Version16\AuditTrailDBSchema.sql" />
-    <None Remove="Postgresql\SQL\Version16\ChromatographyDBInit.sql" />
-    <None Remove="Postgresql\SQL\Version16\ChromatographyDBSchema.sql" />
-    <None Remove="Postgresql\SQL\Version16\DummyRuns.sql" />
-    <None Remove="Postgresql\SQL\Version16\NotificationFunctionTriggers.sql" />
-    <None Remove="Postgresql\SQL\Version16\SecurityDbData.sql" />
-    <None Remove="Postgresql\SQL\Version16\SecurityDbSchema.sql" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Postgresql\SQL\Version15\AuditTrailDBSchema.sql" />
-    <EmbeddedResource Include="Postgresql\SQL\Version15\ChromatographyDBInit.sql" />
-    <EmbeddedResource Include="Postgresql\SQL\Version15\ChromatographyDBSchema.sql" />
-    <EmbeddedResource Include="Postgresql\SQL\Version15\DummyRuns.sql" />
-    <EmbeddedResource Include="Postgresql\SQL\Version15\NotificationFunctionTriggers.sql" />
-    <EmbeddedResource Include="Postgresql\SQL\Version15\SecurityDbData.sql" />
-    <EmbeddedResource Include="Postgresql\SQL\Version15\SecurityDbSchema.sql" />
-    <EmbeddedResource Include="Postgresql\SQL\Version16\AuditTrailDBSchema.sql" />
-    <EmbeddedResource Include="Postgresql\SQL\Version16\ChromatographyDBInit.sql" />
-    <EmbeddedResource Include="Postgresql\SQL\Version16\ChromatographyDBSchema.sql" />
-    <EmbeddedResource Include="Postgresql\SQL\Version16\DummyRuns.sql" />
-    <EmbeddedResource Include="Postgresql\SQL\Version16\NotificationFunctionTriggers.sql" />
-    <EmbeddedResource Include="Postgresql\SQL\Version16\SecurityDbData.sql" />
-    <EmbeddedResource Include="Postgresql\SQL\Version16\SecurityDbSchema.sql" />
-  </ItemGroup>
-
  <ItemGroup>
     <PackageReference Include="Dapper.StrongName" Version="$(DapperStrongName)" />
     <PackageReference Include="DotNetZip" Version="$(DotNetZip)" />

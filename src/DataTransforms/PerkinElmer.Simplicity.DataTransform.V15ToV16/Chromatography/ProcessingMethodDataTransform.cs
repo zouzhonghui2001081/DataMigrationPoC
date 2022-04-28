@@ -2,7 +2,6 @@
 using System.Reflection;
 using System.Threading.Tasks.Dataflow;
 using log4net;
-using PerkinElmer.Simplicity.DataMigration.Common;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Migration;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Transform;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Transform.TransformContext;
@@ -12,20 +11,20 @@ using PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatogra
 
 namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.Chromatography
 {
-    public class ProcessingMethodDataTransform : TransformBase
+    public class ProcessingMethodDataTransform : TransformBlockCreatorBase
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public override ReleaseVersions FromReleaseVersion => ReleaseVersions.Version15;
+        public override MigrationVersions FromVersion => MigrationVersions.Version15;
 
-        public override ReleaseVersions ToReleaseVersion => ReleaseVersions.Version16;
+        public override MigrationVersions ToVersion => MigrationVersions.Version16;
 
         public override TransformBlock<MigrationDataBase, MigrationDataBase> CreateTransform(TransformContextBase transformContext)
         {
             var projectProcessingMethodTransformBlock = new TransformBlock<MigrationDataBase, MigrationDataBase>(
                 fromVersionData =>
                 {
-                    if (fromVersionData.ReleaseVersion != ReleaseVersions.Version15 ||
+                    if (fromVersionData.MigrationVersion != MigrationVersions.Version15 ||
                         !(fromVersionData is Data.Version15.MigrationData.Chromatography.ProcessingMethodMigrationData processingMethodData))
                         throw new ArgumentException("From version data is incorrect!");
                     return Transform(processingMethodData);

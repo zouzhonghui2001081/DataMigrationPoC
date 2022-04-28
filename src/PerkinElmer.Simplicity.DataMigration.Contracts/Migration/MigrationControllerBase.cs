@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationContext;
 using PerkinElmer.Simplicity.DataMigration.Contracts.PipelineBuilder;
 
 namespace PerkinElmer.Simplicity.DataMigration.Contracts.Migration

@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
-using PerkinElmer.Simplicity.DataMigration.Common;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Migration;
-using PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationContext;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Source;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Targets;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Transform;
@@ -14,18 +11,18 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.PipelineBuilder
 {
     public abstract class PipelineBuilderBase
     {
-        protected abstract IList<SourceBase> Sources { get; }
+        protected abstract IList<SourceBlockCreatorBase> Sources { get; }
 
-        protected abstract IList<TargetBase> Targets { get; }
+        protected abstract IList<TargetBlockCreatorBase> Targets { get; }
 
-        protected abstract IDictionary<ReleaseVersions, IDictionary<ReleaseVersions, TransformBase>> TransformMaps { get; }
+        protected abstract IDictionary<MigrationVersions, IDictionary<MigrationVersions, TransformBlockCreatorBase>> TransformMaps { get; }
 
-        public (IPropagatorBlock<Tuple<Guid, IList<Guid>>, MigrationDataBase>, Task) CreateEntitesTransformationPipeline(
+        public (IPropagatorBlock<SourceParamBase, MigrationDataBase>, Task) CreateEntitesTransformationPipeline(
             MigrationContextBase migrationContextBase)
         {
-            var sourceVersion = migrationContextBase.SourceContext.FromReleaseVersion;
+            var sourceVersion = migrationContextBase.SourceContext.FromMigrationVersion;
             var sourceType = migrationContextBase.SourceContext.SourceType;
-            var targetVersion = migrationContextBase.TargetContext.TargetReleaseVersion;
+            var targetVersion = migrationContextBase.TargetContext.TargetMigrationVersion;
             var targetType = migrationContextBase.TargetContext.TargetType;
 
             var sourceBlockCreator = GenerateSourceBlock(sourceVersion, sourceType);
@@ -35,7 +32,7 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.PipelineBuilder
             if (sourceBlockCreator == null || targetBlockCreator == null) return (null, null);
             if (sourceVersion != targetVersion && transformStack.Count == 0) return (null, null);
 
-            var sourceBlock = sourceBlockCreator.CreateEntitiesSource(migrationContextBase.SourceContext);
+            var sourceBlock = sourceBlockCreator.CreateSourceBlock(migrationContextBase.SourceContext);
             var targetBlock = targetBlockCreator.CreateTarget(migrationContextBase.TargetContext);
 
             if (transformStack != null && transformStack.Count > 0)
@@ -59,75 +56,37 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.PipelineBuilder
             return (sourceBlock, targetBlock.Completion);
         }
 
-        public (IPropagatorBlock<Guid, MigrationDataBase>, Task) CreateProjectTransformationPipeline(MigrationContextBase migrationContextBase)
-        {
-            var sourceVersion = migrationContextBase.SourceContext.FromReleaseVersion;
-            var sourceType = migrationContextBase.SourceContext.SourceType;
-            var targetVersion = migrationContextBase.TargetContext.TargetReleaseVersion;
-            var targetType = migrationContextBase.TargetContext.TargetType;
-
-            var sourceBlockCreator = GenerateSourceBlock(sourceVersion, sourceType);
-            var targetBlockCreator = GenerateTargetBlock(targetVersion, targetType);
-            var transformStack = GenerateTransformBlock(sourceVersion, targetVersion);
-
-            if (sourceBlockCreator == null || targetBlockCreator == null) return (null, null);
-            if (sourceVersion != targetVersion && transformStack.Count == 0) return (null, null);
-
-            var sourceBlock = sourceBlockCreator.CreateProjectSource(migrationContextBase.SourceContext);
-            var targetBlock = targetBlockCreator.CreateTarget(migrationContextBase.TargetContext);
-
-            if (transformStack != null && transformStack.Count > 0)
-            {
-                var previousTransformCreator = transformStack.Pop();
-                var previousTransformBlock = previousTransformCreator.CreateTransform(migrationContextBase.TransformContext);
-                previousTransformBlock.LinkTo(targetBlock, new DataflowLinkOptions { PropagateCompletion = true });
-                while (transformStack.Count > 0)
-                {
-                    var currentTransoformCreator = transformStack.Pop();
-                    var currentTransformBlock = currentTransoformCreator.CreateTransform(migrationContextBase.TransformContext);
-                    currentTransformBlock.LinkTo(previousTransformBlock, new DataflowLinkOptions { PropagateCompletion = true });
-                    previousTransformBlock = currentTransformBlock;
-                }
-
-                sourceBlock.LinkTo(previousTransformBlock, new DataflowLinkOptions { PropagateCompletion = true });
-            }
-            else
-                sourceBlock.LinkTo(targetBlock, new DataflowLinkOptions { PropagateCompletion = true });
-
-            return (sourceBlock, targetBlock.Completion);
-        }
-
-        protected SourceBase GenerateSourceBlock(ReleaseVersions startReleaseVersion,
+        protected SourceBlockCreatorBase GenerateSourceBlock(MigrationVersions startMigrationVersion,
             SourceTypes sourceType)
         {
-            return Sources.FirstOrDefault(source => source.SourceReleaseVersion == startReleaseVersion && 
+            return Sources.FirstOrDefault(source => source.SourceVersion == startMigrationVersion && 
                                                     source.SourceType == sourceType);
         }
 
-        protected TargetBase GenerateTargetBlock(ReleaseVersions targetReleaseVersion,
+        protected TargetBlockCreatorBase GenerateTargetBlock(MigrationVersions targetMigrationVersion,
             TargetTypes targetType)
         {
-            return Targets.FirstOrDefault(target => target.TargetReleaseVersion == targetReleaseVersion &&
+            return Targets.FirstOrDefault(target => target.TargetVersion == targetMigrationVersion &&
                                                     target.TargetType == targetType);
         }
 
-        protected Stack<TransformBase> GenerateTransformBlock(ReleaseVersions startReleaseVersion, ReleaseVersions endReleaseVersion)
+        protected Stack<TransformBlockCreatorBase> GenerateTransformBlock(MigrationVersions startMigrationVersion, MigrationVersions endMigrationVersion)
         {
-            var transformBlocks = new Stack<TransformBase>();
-            if (!TransformMaps.ContainsKey(startReleaseVersion)) return transformBlocks;
+            var transformBlocks = new Stack<TransformBlockCreatorBase>();
+            if (!TransformMaps.ContainsKey(startMigrationVersion)) return transformBlocks;
 
-            var endBlockMaps = TransformMaps[startReleaseVersion];
-            if (!endBlockMaps.ContainsKey(endReleaseVersion))
-                return GetTransformBlocksRecursively(endReleaseVersion, endBlockMaps);
+            var endBlockMaps = TransformMaps[startMigrationVersion];
+            if (!endBlockMaps.ContainsKey(endMigrationVersion))
+                return GetTransformBlocksRecursively(endMigrationVersion, endBlockMaps);
 
-            transformBlocks.Push(endBlockMaps[endReleaseVersion]);
+            transformBlocks.Push(endBlockMaps[endMigrationVersion]);
             return transformBlocks;
         }
 
-        private Stack<TransformBase> GetTransformBlocksRecursively(ReleaseVersions endReleaseVersion,
-            IDictionary<ReleaseVersions, TransformBase> targets)
+        private Stack<TransformBlockCreatorBase> GetTransformBlocksRecursively(MigrationVersions endMigrationVersion,
+            IDictionary<MigrationVersions, TransformBlockCreatorBase> targets)
         {
-            var transformBlocks = new Stack<TransformBase>();
+            var transformBlocks = new Stack<TransformBlockCreatorBase>();
             foreach (var target in targets)
             {
                 if (TransformMaps.ContainsKey(target.Key))
@@ -135,14 +94,14 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.PipelineBuilder
                     var nextTargets = TransformMaps[target.Key];
                     if (nextTargets != null && nextTargets.Count > 0)
                     {
-                        if (nextTargets.ContainsKey(endReleaseVersion))
+                        if (nextTargets.ContainsKey(endMigrationVersion))
                         {
-                            transformBlocks.Push(nextTargets[endReleaseVersion]);
+                            transformBlocks.Push(nextTargets[endMigrationVersion]);
                             transformBlocks.Push(targets[target.Key]);
                             return transformBlocks;
                         }
 
-                        var subResult = GetTransformBlocksRecursively(endReleaseVersion, nextTargets);
+                        var subResult = GetTransformBlocksRecursively(endMigrationVersion, nextTargets);
                         if (subResult != null && subResult.Count > 0)
                         {
                             transformBlocks = subResult;

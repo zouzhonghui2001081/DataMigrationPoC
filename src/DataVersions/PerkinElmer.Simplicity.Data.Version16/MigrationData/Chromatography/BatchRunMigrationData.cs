@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using PerkinElmer.Simplicity.DataMigration.Common;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Migration;
 using PerkinElmer.Simplicity.Data.Version16.DataEntities.Chromatography;
 using PerkinElmer.Simplicity.Data.Version16.DataEntities.Chromatography.AcquisitionMethod;
@@ -16,7 +15,7 @@ namespace PerkinElmer.Simplicity.Data.Version16.MigrationData.Chromatography
             StreamDataBatchResults = new List<StreamDataBatchResult>();
         }
 
-        public override ReleaseVersions ReleaseVersion => ReleaseVersions.Version16;
+        public override MigrationVersions MigrationVersion => MigrationVersions.Version16;
 
         public override MigrationDataTypes MigrationDataTypes => MigrationDataTypes.BatchResultSet;
 
@@ -42,7 +41,7 @@ namespace PerkinElmer.Simplicity.Data.Version16.MigrationData.Chromatography
             BatchRuns = new List<BatchRunMigrationData>();
         }
 
-        public override ReleaseVersions ReleaseVersion => ReleaseVersions.Version16;
+        public override MigrationVersions MigrationVersion => MigrationVersions.Version16;
 
         public override MigrationDataTypes MigrationDataTypes => MigrationDataTypes.BatchResultSet;
 

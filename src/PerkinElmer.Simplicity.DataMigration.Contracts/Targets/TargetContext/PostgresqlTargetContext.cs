@@ -1,5 +1,4 @@
-﻿using PerkinElmer.Simplicity.DataMigration.Contracts.Migration;
-
+﻿
 namespace PerkinElmer.Simplicity.DataMigration.Contracts.Targets.TargetContext
 {
     public class PostgresqlTargetContext : TargetContextBase

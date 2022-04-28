@@ -1,5 +1,4 @@
-﻿using PerkinElmer.Simplicity.DataMigration.Contracts.Migration;
-
+﻿
 namespace PerkinElmer.Simplicity.DataMigration.Contracts.Source.SourceContext
 {
     public class PostgresqlSourceContext : SourceContextBase
@@ -11,5 +10,7 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Source.SourceContext
         public string ChromatographyConnection { get; set; }
 
         public string SecurityConnection { get; set; }
+
+        public SourceParamTypes SourceParamType { get; set; }
     }
 }

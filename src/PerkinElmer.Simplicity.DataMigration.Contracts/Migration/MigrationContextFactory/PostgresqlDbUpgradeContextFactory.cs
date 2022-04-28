@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Configuration;
+using System.Data;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks.Dataflow;
-using PerkinElmer.Simplicity.DataMigration.Common;
-using PerkinElmer.Simplicity.DataMigration.Common.Postgresql;
-using PerkinElmer.Simplicity.DataMigration.Common.Postgresql.Utils;
+using Dapper;
+using log4net;
+using Npgsql;
+using PerkinElmer.Simplicity.DataMigration.Contracts.Common;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationContext;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Source.SourceContext;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Targets.TargetContext;
@@ -14,10 +17,12 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationCont
 {
     public class PostgresqlDbUpgradeContextFactory : ContextFactocyBase
     {
-        private readonly ReleaseVersions _toVersion;
+        private readonly MigrationVersions _toVersion;
         private readonly CancellationTokenSource _cancellationTokenSource;
 
-        public PostgresqlDbUpgradeContextFactory(ReleaseVersions toVersion, CancellationTokenSource cancellationTokenSource)
+        protected readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
+        public PostgresqlDbUpgradeContextFactory(MigrationVersions toVersion, CancellationTokenSource cancellationTokenSource)
         {
             _toVersion = toVersion;
             _cancellationTokenSource = cancellationTokenSource;
@@ -28,9 +33,8 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationCont
             var sourceContext = GeneratePostgresqlSourceContext();
             var targetContext = GeneratePostgresqlTargetContext();
             var transformContext = GeneratePostgresqlTransformContext();
-            var migrationContext = new PostgresqlDbUpgradeMigrationContext
+            var migrationContext = new UpgradeContext
             {
-                MigrationDataType = MigrationDataTypes.Project,
                 SourceContext = sourceContext,
                 TargetContext = targetContext,
                 TransformContext = transformContext
@@ -46,25 +50,29 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationCont
                 MaxDegreeOfParallelism = 4,
                 CancellationToken = _cancellationTokenSource.Token
             };
-            var fromVersion = DatabaseUtil.GetChromatographyDatabaseVersion();
-            var chromatographyConnName = ConfigurationManager.AppSettings["ChromatographyConn"];
-            var auditTrailConnName = ConfigurationManager.AppSettings["AuditTrailConn"];
+            var fromVersion = GetChromatographyDatabaseVersion();
+            var chromatographyConnName = ConfigurationManager.AppSettings[ConstNames.ChromatographyConn];
+            var auditTrailConnName = ConfigurationManager.AppSettings[ConstNames.AuditTrailConn];
+            var securityConnName = ConfigurationManager.AppSettings[ConstNames.SecurityConn];
 
-            var releaseVersion = ReleaseVersions.Unknown;
+            var migrationVersion = MigrationVersions.Unknown;
             if (fromVersion == SchemaVersions.ChromatographySchemaVersion15)
-                releaseVersion = ReleaseVersions.Version15;
+                migrationVersion = MigrationVersions.Version15;
+                
             if (fromVersion == SchemaVersions.ChromatographySchemaVersion16)
-                releaseVersion = ReleaseVersions.Version16;
+                migrationVersion = MigrationVersions.Version16;
 
-            if (releaseVersion == ReleaseVersions.Unknown)
+            if (migrationVersion == MigrationVersions.Unknown)
                 throw new ArgumentException("Failed to get release version from CDS application database! ");
 
             return new PostgresqlSourceContext
             {
                 BlockOption = blockOption,
-                FromReleaseVersion = releaseVersion,
+                FromMigrationVersion = migrationVersion,
+                SourceParamType = Source.SourceParamTypes.ProjectGuid,
                 ChromatographyConnection = ConfigurationManager.ConnectionStrings[chromatographyConnName].ConnectionString,
-                AuditTrailConnection = ConfigurationManager.ConnectionStrings[auditTrailConnName].ConnectionString
+                AuditTrailConnection = ConfigurationManager.ConnectionStrings[auditTrailConnName].ConnectionString,
+                SecurityConnection = ConfigurationManager.ConnectionStrings[securityConnName].ConnectionString,
             };
 
         }
@@ -78,42 +86,89 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationCont
             };
             switch (_toVersion)
             {
-                case ReleaseVersions.Version15:
-                    var chromatographyConnNameV15 = ConfigurationManager.AppSettings["ChromatographyConnVer15"];
-                    var auditTrailConnNameV15 = ConfigurationManager.AppSettings["AuditTrailConnVer15"];
+                case MigrationVersions.Version15:
+                    var chromatographyConnNameV15 = ConfigurationManager.AppSettings[ConstNames.ChromatographyConnVer15];
+                    var auditTrailConnNameV15 = ConfigurationManager.AppSettings[ConstNames.AuditTrailConnVer15];
+                    var securityConnNameV15 = ConfigurationManager.AppSettings[ConstNames.SecurityConnVer15];
                     return new PostgresqlTargetContext
                     {
                         BlockOption = blockOption,
-                        TargetReleaseVersion = _toVersion,
+                        TargetMigrationVersion = _toVersion,
                         ChromatographyConnection = ConfigurationManager.ConnectionStrings[chromatographyConnNameV15].ConnectionString,
-                        AuditTrailConnection = ConfigurationManager.ConnectionStrings[auditTrailConnNameV15].ConnectionString
+                        AuditTrailConnection = ConfigurationManager.ConnectionStrings[auditTrailConnNameV15].ConnectionString,
+                        SecurityConnection = ConfigurationManager.ConnectionStrings[securityConnNameV15].ConnectionString
                     };
-                case ReleaseVersions.Version16:
-                    var chromatographyConnNameV16 = ConfigurationManager.AppSettings["ChromatographyConnVer16"];
-                    var auditTrailConnNameV16 = ConfigurationManager.AppSettings["AuditTrailConnVer16"];
+                case MigrationVersions.Version16:
+                    var chromatographyConnNameV16 = ConfigurationManager.AppSettings[ConstNames.ChromatographyConnVer16];
+                    var auditTrailConnNameV16 = ConfigurationManager.AppSettings[ConstNames.AuditTrailConnVer16];
+                    var securityConnNameV16 = ConfigurationManager.AppSettings[ConstNames.SecurityConnVer16];
                     return new PostgresqlTargetContext
                     {
                         BlockOption = blockOption,
-                        TargetReleaseVersion = _toVersion,
+                        TargetMigrationVersion = _toVersion,
                         ChromatographyConnection = ConfigurationManager.ConnectionStrings[chromatographyConnNameV16].ConnectionString,
-                        AuditTrailConnection = ConfigurationManager.ConnectionStrings[auditTrailConnNameV16].ConnectionString
+                        AuditTrailConnection = ConfigurationManager.ConnectionStrings[auditTrailConnNameV16].ConnectionString,
+                        SecurityConnection = ConfigurationManager.ConnectionStrings[securityConnNameV16].ConnectionString,
                     };
             }
 
             throw new ArgumentException("Target Version not supported!");
         }
 
-        private PostgresqlTransformContext GeneratePostgresqlTransformContext()
+        private TransformContext GeneratePostgresqlTransformContext()
         {
             var blockOption = new ExecutionDataflowBlockOptions
             {
                 MaxDegreeOfParallelism = 4 ,
                 CancellationToken = _cancellationTokenSource.Token
             };
-            return new PostgresqlTransformContext
+            return new TransformContext
             {
                 BlockOption = blockOption
             };
+        }
+
+        private Version GetChromatographyDatabaseVersion()
+        {
+            try
+            {
+                var connectionStringName = ConfigurationManager.AppSettings[ConstNames.PostgresqlDefaultDb];
+                var defaultConnectionString = ConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString;
+                var defaultDbConnectionStrBuilder = new NpgsqlConnectionStringBuilder(defaultConnectionString);
+
+                var chromatographyConnName = ConfigurationManager.AppSettings[ConstNames.ChromatographyConn];
+                var chromatographyConnection = ConfigurationManager.ConnectionStrings[chromatographyConnName].ConnectionString;
+                var appDbConnectionStrBuilder = new NpgsqlConnectionStringBuilder(chromatographyConnection);
+
+                using (var connection = new NpgsqlConnection(defaultDbConnectionStrBuilder.ConnectionString))
+                {
+                    connection.Open();
+
+                    var chromatographyDatabaseExists = connection.ExecuteScalar<bool>(
+                        $"SELECT EXISTS(SELECT 1 FROM pg_catalog.pg_database where datname = '{appDbConnectionStrBuilder.Database}');");
+                    connection.Close();
+
+                    if (chromatographyDatabaseExists == false)
+                        throw new ArgumentException("Chromatogram database not exist!");
+                }
+
+                using (IDbConnection connection = new NpgsqlConnection(appDbConnectionStrBuilder.ConnectionString))
+                {
+                    var databaseVersion =
+                        connection.QueryFirstOrDefault(
+                            $"SELECT * FROM {ConstNames.SchemaTableName} WHERE {ConstNames.MajorVersionColumn} != -1;");
+
+                    var dbSchemaVer = new Version((int)databaseVersion.majorversion,
+                        (int)databaseVersion.minorversion);
+                    connection.Close();
+                    return dbSchemaVer;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message, ex);
+            }
+            return null;
         }
     }
 }

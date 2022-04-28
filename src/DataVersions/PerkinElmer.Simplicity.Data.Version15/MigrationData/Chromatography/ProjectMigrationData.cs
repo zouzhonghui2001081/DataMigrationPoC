@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using PerkinElmer.Simplicity.DataMigration.Common;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Migration;
 using PerkinElmer.Simplicity.Data.Version15.DataEntities.AuditTrail;
 using PerkinElmer.Simplicity.Data.Version15.DataEntities.Chromatography;
@@ -8,7 +7,7 @@ namespace PerkinElmer.Simplicity.Data.Version15.MigrationData.Chromatography
 {
     public class ProjectMigrationData : MigrationDataBase
     {
-        public override ReleaseVersions ReleaseVersion => ReleaseVersions.Version15;
+        public override MigrationVersions MigrationVersion => MigrationVersions.Version15;
 
         public override MigrationDataTypes MigrationDataTypes => MigrationDataTypes.Project;
 

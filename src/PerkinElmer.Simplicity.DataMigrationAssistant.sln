@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.1.32421.90
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31019.35
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataVersions", "DataVersions", "{483F59B3-A7AF-421E-A650-D9141192A0E3}"
 EndProject
@@ -18,8 +18,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataTransforms", "DataTransforms", "{88390252-11A2-4161-A0BD-AE38AB6402C1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PerkinElmer.Simplicity.DataTransform.V15ToV16", "DataTransforms\PerkinElmer.Simplicity.DataTransform.V15ToV16\PerkinElmer.Simplicity.DataTransform.V15ToV16.csproj", "{7F38E682-DB08-48AB-A630-80828B24A05F}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PerkinElmer.Simplicity.DataMigration.Common", "PerkinElmer.Simplicity.DataMigration.Common\PerkinElmer.Simplicity.DataMigration.Common.csproj", "{221FC8B2-FCC2-4F0D-9DC4-B6500F1B0800}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,10 +49,6 @@ Global
 		{7F38E682-DB08-48AB-A630-80828B24A05F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7F38E682-DB08-48AB-A630-80828B24A05F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7F38E682-DB08-48AB-A630-80828B24A05F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{221FC8B2-FCC2-4F0D-9DC4-B6500F1B0800}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{221FC8B2-FCC2-4F0D-9DC4-B6500F1B0800}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{221FC8B2-FCC2-4F0D-9DC4-B6500F1B0800}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{221FC8B2-FCC2-4F0D-9DC4-B6500F1B0800}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

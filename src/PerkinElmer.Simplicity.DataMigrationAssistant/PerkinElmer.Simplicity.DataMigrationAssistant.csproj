@@ -23,7 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PerkinElmer.Simplicity.DataMigration.Common\PerkinElmer.Simplicity.DataMigration.Common.csproj" />
     <ProjectReference Include="..\PerkinElmer.Simplicity.DataMigration.Contracts\PerkinElmer.Simplicity.DataMigration.Contracts.csproj" />
     <ProjectReference Include="..\PerkinElmer.Simplicity.DataMigration.Implementation\PerkinElmer.Simplicity.DataMigration.Implementation.csproj" />
   </ItemGroup>
