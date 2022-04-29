@@ -19,7 +19,7 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation
 
         public void Migration(MigrationContextBase migrationContext)
         {
-            var upgradeController = MigrationControllers[MigrationTypes.Upgrade];
+            var upgradeController = MigrationControllers[migrationContext.MigrationType];
             upgradeController.Migration(migrationContext);
         }
     }
