@@ -15,7 +15,7 @@ namespace PerkinElmer.Simplicity.Data.Version16.MigrationData.Chromatography
 
         public override MigrationVersions MigrationVersion => MigrationVersions.Version16;
 
-        public override MigrationDataTypes MigrationDataTypes => MigrationDataTypes.ReportTemplate;
+        public override MigrationDataTypes MigrationDataTypes => MigrationDataTypes.Sequence;
 
         public Guid ProjectGuid { get; set; }
 

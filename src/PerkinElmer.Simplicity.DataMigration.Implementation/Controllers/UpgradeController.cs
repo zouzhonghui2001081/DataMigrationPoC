@@ -63,7 +63,6 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation.Controllers
                 MigrateProject(projectSourceParam, migrationContext);
             }
         }
-        
 
         private bool MigrateProject(ProjectSourceParams projectSourceParam, MigrationContextBase migrationContextBase)
         {

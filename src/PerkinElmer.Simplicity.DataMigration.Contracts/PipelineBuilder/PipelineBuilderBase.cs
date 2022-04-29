@@ -39,19 +39,19 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.PipelineBuilder
             {
                 var previousTransformCreator = transformStack.Pop();
                 var previousTransformBlock = previousTransformCreator.CreateTransform(migrationContextBase.TransformContext);
-                previousTransformBlock.LinkTo(targetBlock);
+                previousTransformBlock.LinkTo(targetBlock, new DataflowLinkOptions { PropagateCompletion = true });
                 while (transformStack.Count > 0)
                 {
                     var currentTransoformCreator = transformStack.Pop();
                     var currentTransformBlock = currentTransoformCreator.CreateTransform(migrationContextBase.TransformContext);
-                    currentTransformBlock.LinkTo(previousTransformBlock);
+                    currentTransformBlock.LinkTo(previousTransformBlock, new DataflowLinkOptions { PropagateCompletion = true });
                     previousTransformBlock = currentTransformBlock;
                 }
 
-                sourceBlock.LinkTo(previousTransformBlock);
+                sourceBlock.LinkTo(previousTransformBlock, new DataflowLinkOptions { PropagateCompletion = true });
             }
             else
-                sourceBlock.LinkTo(targetBlock);
+                sourceBlock.LinkTo(targetBlock, new DataflowLinkOptions { PropagateCompletion = true });
 
             return (sourceBlock, targetBlock.Completion);
         }

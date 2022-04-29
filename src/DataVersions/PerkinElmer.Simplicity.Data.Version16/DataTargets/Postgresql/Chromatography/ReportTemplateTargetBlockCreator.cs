@@ -28,7 +28,7 @@ namespace PerkinElmer.Simplicity.Data.Version16.DataTargets.Postgresql.Chromatog
 
             var actionBlock = new ActionBlock<MigrationDataBase>(versionData =>
             {
-                if (versionData == null || versionData.MigrationDataTypes != MigrationDataTypes.ProcessingMethod) return;
+                if (versionData == null || versionData.MigrationDataTypes != MigrationDataTypes.ReportTemplate) return;
                 if (versionData.MigrationVersion != MigrationVersions.Version16) return;
                 if (!(versionData is ReportTemplateMigrationData reportTemplateData)) return;
 
