@@ -46,14 +46,14 @@ namespace PerkinElmer.Simplicity.Data.Version16.DataSources.Postgresql.Chromatog
                                 var processingMethods = processingMethodProjDao.GetAllProcessingMethods(connection, projectGuid);
                                 foreach (var processingMethod in processingMethods)
                                 {
-                                    var reviewApproveData = ReviewApproveSourceBlockCreator.GetReviewApproveData(connection, projectGuid,
+                                    var reviewApproveData = EntityAssociatedReviewApproveSource.GetReviewApproveData(connection, projectGuid,
                                         processingMethod.Guid.ToString(), ReviewApproveEntityType.ProcessingMethod);
                                     var processingMethodData = new ProcessingMethodMigrationData
                                     {
                                         ProjectGuid = projectGuid,
                                         ProcessingMethod = processingMethod,
                                         ReviewApproveData = reviewApproveData,
-                                        AuditTrailLogs = AuditTrailSource.GetAuditTrail(posgresqlContext, processingMethod.Guid.ToString(), EntityTypeConstants.ProcessingMethod)
+                                        AuditTrailLogs = EntityAssociatedAuditTrailSource.GetAuditTrail(posgresqlContext, processingMethod.Guid.ToString(), EntityTypeConstants.ProcessingMethod)
                                     };
                                     bufferBlock.Post(processingMethodData);
                                 }
@@ -67,14 +67,14 @@ namespace PerkinElmer.Simplicity.Data.Version16.DataSources.Postgresql.Chromatog
                                 foreach (var processingMethodId in processingMethodIds)
                                 {
                                     var processingMethod = processingMethodProjDao.GetProcessingMethod(connection, projectGuid, processingMethodId);
-                                    var reviewApproveData = ReviewApproveSourceBlockCreator.GetReviewApproveData(connection, projectGuid,
+                                    var reviewApproveData = EntityAssociatedReviewApproveSource.GetReviewApproveData(connection, projectGuid,
                                         processingMethod.Guid.ToString(), ReviewApproveEntityType.ProcessingMethod);
                                     var processingMethodData = new ProcessingMethodMigrationData
                                     {
                                         ProjectGuid = projectGuid,
                                         ProcessingMethod = processingMethod,
                                         ReviewApproveData = reviewApproveData,
-                                        AuditTrailLogs = AuditTrailSource.GetAuditTrail(posgresqlContext, processingMethod.Guid.ToString(), EntityTypeConstants.ProcessingMethod)
+                                        AuditTrailLogs = EntityAssociatedAuditTrailSource.GetAuditTrail(posgresqlContext, processingMethod.Guid.ToString(), EntityTypeConstants.ProcessingMethod)
                                     };
                                     bufferBlock.Post(processingMethodData);
                                 }

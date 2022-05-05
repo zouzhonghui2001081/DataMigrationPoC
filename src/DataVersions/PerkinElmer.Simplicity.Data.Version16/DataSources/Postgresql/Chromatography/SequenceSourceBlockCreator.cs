@@ -51,7 +51,7 @@ namespace PerkinElmer.Simplicity.Data.Version16.DataSources.Postgresql.Chromatog
                                     {
                                         ProjectGuid = projectGuid,
                                         Sequence = sequence,
-                                        AuditTrailLogs = AuditTrailSource.GetAuditTrail(posgresqlContext, sequence.Guid.ToString(), EntityTypeConstants.Sequence)
+                                        AuditTrailLogs = EntityAssociatedAuditTrailSource.GetAuditTrail(posgresqlContext, sequence.Guid.ToString(), EntityTypeConstants.Sequence)
                                     };
                                     bufferBlock.Post(sequenceSource);
                                 }
@@ -71,7 +71,7 @@ namespace PerkinElmer.Simplicity.Data.Version16.DataSources.Postgresql.Chromatog
                                     {
                                         ProjectGuid = projectGuid,
                                         Sequence = sequence,
-                                        AuditTrailLogs = AuditTrailSource.GetAuditTrail(posgresqlContext, sequence.Guid.ToString(), EntityTypeConstants.Sequence)
+                                        AuditTrailLogs = EntityAssociatedAuditTrailSource.GetAuditTrail(posgresqlContext, sequence.Guid.ToString(), EntityTypeConstants.Sequence)
                                     };
                                     bufferBlock.Post(sequenceSource);
                                 }

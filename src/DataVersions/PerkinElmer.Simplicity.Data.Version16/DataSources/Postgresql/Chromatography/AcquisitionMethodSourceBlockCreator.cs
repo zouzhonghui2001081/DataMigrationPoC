@@ -48,14 +48,14 @@ namespace PerkinElmer.Simplicity.Data.Version16.DataSources.Postgresql.Chromatog
                                 foreach (var acquisitionMethod in acquisitionMethods)
                                 {
                                     acquisitionMethod.DeviceMethods = GetAcquisitionMethodChildren(connection, acquisitionMethod.Id);
-                                    var reviewApproveData = ReviewApproveSourceBlockCreator.GetReviewApproveData(connection, projectGuid,
+                                    var reviewApproveData = EntityAssociatedReviewApproveSource.GetReviewApproveData(connection, projectGuid,
                                         acquisitionMethod.Guid.ToString(), ReviewApproveEntityType.AcquisitionMethod);
                                     var acqusitionMethodData = new AcqusitionMethodMigrationData
                                     {
                                         ProjectGuid = projectGuid,
                                         AcquisitionMethod = acquisitionMethod,
                                         ReviewApproveData = reviewApproveData,
-                                        AuditTrailLogs = AuditTrailSource.GetAuditTrail(posgresqlContext, acquisitionMethod.Guid.ToString(), EntityTypeConstants.AcquisitionMethod)
+                                        AuditTrailLogs = EntityAssociatedAuditTrailSource.GetAuditTrail(posgresqlContext, acquisitionMethod.Guid.ToString(), EntityTypeConstants.AcquisitionMethod)
                                     };
                                     bufferBlock.Post(acqusitionMethodData);
                                 }
@@ -71,14 +71,14 @@ namespace PerkinElmer.Simplicity.Data.Version16.DataSources.Postgresql.Chromatog
                                 {
                                     var acquisitionMethod = acquisitionMethodDao.Get(connection, projectGuid, acquisitionMethodId);
                                     acquisitionMethod.DeviceMethods = GetAcquisitionMethodChildren(connection, acquisitionMethod.Id);
-                                    var reviewApproveData = ReviewApproveSourceBlockCreator.GetReviewApproveData(connection, projectGuid,
+                                    var reviewApproveData = EntityAssociatedReviewApproveSource.GetReviewApproveData(connection, projectGuid,
                                         acquisitionMethod.Guid.ToString(), ReviewApproveEntityType.AcquisitionMethod);
                                     var acqusitionMethodData = new AcqusitionMethodMigrationData
                                     {
                                         ProjectGuid = projectGuid,
                                         AcquisitionMethod = acquisitionMethod,
                                         ReviewApproveData = reviewApproveData,
-                                        AuditTrailLogs = AuditTrailSource.GetAuditTrail(posgresqlContext, acquisitionMethod.Guid.ToString(), EntityTypeConstants.AcquisitionMethod)
+                                        AuditTrailLogs = EntityAssociatedAuditTrailSource.GetAuditTrail(posgresqlContext, acquisitionMethod.Guid.ToString(), EntityTypeConstants.AcquisitionMethod)
                                     };
                                     bufferBlock.Post(acqusitionMethodData);
                                 }

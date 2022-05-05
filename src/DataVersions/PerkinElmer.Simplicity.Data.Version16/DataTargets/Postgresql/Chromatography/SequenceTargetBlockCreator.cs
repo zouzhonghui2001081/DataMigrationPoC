@@ -43,7 +43,7 @@ namespace PerkinElmer.Simplicity.Data.Version16.DataTargets.Postgresql.Chromatog
                         return;
                     sequenceData.Sequence.ProjectId = project.Id;
                     sequenceDao.CreateSequence(connection, sequenceData.ProjectGuid, sequenceData.Sequence);
-                    AuditTrailTarget.CreateAuditTrailLogs(postgresqlTargetContext, sequenceData.AuditTrailLogs);
+                    EntityAssociatedAuditTrailTarget.CreateAuditTrailLogs(postgresqlTargetContext, sequenceData.AuditTrailLogs);
                     connection.Close();
                 }
             }, targetContext.BlockOption);

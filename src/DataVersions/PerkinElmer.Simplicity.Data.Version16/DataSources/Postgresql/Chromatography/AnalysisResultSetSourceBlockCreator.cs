@@ -52,7 +52,7 @@ namespace PerkinElmer.Simplicity.Data.Version16.DataSources.Postgresql.Chromatog
                                     var analysisResultSetData =
                                         CreateAnalysisResultSetData(connection, projectGuid, analysisResultSet);
                                     analysisResultSetData.AuditTrailLogs =
-                                        AuditTrailSource.GetAuditTrail(posgresqlContext,
+                                        EntityAssociatedAuditTrailSource.GetAuditTrail(posgresqlContext,
                                             analysisResultSet.Guid.ToString(), EntityTypeConstants.AnalysisResultSet);
                                     bufferBlock.Post(analysisResultSetData);
                                 }
@@ -71,7 +71,7 @@ namespace PerkinElmer.Simplicity.Data.Version16.DataSources.Postgresql.Chromatog
                                     var analysisResultSetData =
                                         CreateAnalysisResultSetData(connection, projectGuid, analysisResultSet);
                                     analysisResultSetData.AuditTrailLogs =
-                                        AuditTrailSource.GetAuditTrail(posgresqlContext,
+                                        EntityAssociatedAuditTrailSource.GetAuditTrail(posgresqlContext,
                                             analysisResultSet.Guid.ToString(), EntityTypeConstants.AnalysisResultSet);
                                     bufferBlock.Post(analysisResultSetData);
                                 }
@@ -139,7 +139,7 @@ namespace PerkinElmer.Simplicity.Data.Version16.DataSources.Postgresql.Chromatog
 
             analysisResultSetData.CompoundLibraryData = CompoundLibrarySourceBlockCreator.CreateCompoundLibraryData(connection, projectGuid, analysisResultSet.Guid);
 
-            analysisResultSetData.ReviewApproveData = ReviewApproveSourceBlockCreator.GetReviewApproveData(connection, projectGuid, analysisResultSet.Guid.ToString(), ReviewApproveEntityType.AnalysisResultSet);
+            analysisResultSetData.ReviewApproveData = EntityAssociatedReviewApproveSource.GetReviewApproveData(connection, projectGuid, analysisResultSet.Guid.ToString(), ReviewApproveEntityType.AnalysisResultSet);
 
             return analysisResultSetData;
         }

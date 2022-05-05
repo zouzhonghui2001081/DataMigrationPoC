@@ -46,14 +46,14 @@ namespace PerkinElmer.Simplicity.Data.Version15.DataSources.Postgresql.Chromatog
 
                                 foreach (var reportTemplate in reportTemplates)
                                 {
-                                    var reviewApproveData = ReviewApproveSource.GetReviewApproveData(connection, projectGuid,
+                                    var reviewApproveData = EntityAssociatedReviewApproveSource.GetReviewApproveData(connection, projectGuid,
                                         reportTemplate.Id.ToString(), ReviewApproveEntityType.ReportTemplate);
                                     var reportTemplateData = new ReportTemplateMigrationData
                                     {
                                         ProjectGuid = projectGuid,
                                         ReportTemplate = reportTemplate,
                                         ReviewApproveData = reviewApproveData,
-                                        AuditTrailLogs = AuditTrailSource.GetAuditTrail(posgresqlContext, reportTemplate.Id.ToString(), EntityTypeConstants.ReportTemplate)
+                                        AuditTrailLogs = EntityAssociatedAuditTrailSource.GetAuditTrail(posgresqlContext, reportTemplate.Id.ToString(), EntityTypeConstants.ReportTemplate)
                                     };
                                     bufferBlock.Post(reportTemplateData);
                                 }
@@ -68,7 +68,7 @@ namespace PerkinElmer.Simplicity.Data.Version15.DataSources.Postgresql.Chromatog
                                 foreach (var reportTemplateId in reportTemplateIds)
                                 {
                                     var reportTemplate = reportTemplateDao.Get(connection, projectGuid, reportTemplateId);
-                                    var reviewApproveData = ReviewApproveSource.GetReviewApproveData(connection, projectGuid,
+                                    var reviewApproveData = EntityAssociatedReviewApproveSource.GetReviewApproveData(connection, projectGuid,
                                         reportTemplateId.ToString(), ReviewApproveEntityType.ReportTemplate);
 
                                     var reportTemplateData = new ReportTemplateMigrationData
@@ -76,7 +76,7 @@ namespace PerkinElmer.Simplicity.Data.Version15.DataSources.Postgresql.Chromatog
                                         ProjectGuid = projectGuid,
                                         ReportTemplate = reportTemplate,
                                         ReviewApproveData = reviewApproveData,
-                                        AuditTrailLogs = AuditTrailSource.GetAuditTrail(posgresqlContext, reportTemplate.Id.ToString(), EntityTypeConstants.ReportTemplate)
+                                        AuditTrailLogs = EntityAssociatedAuditTrailSource.GetAuditTrail(posgresqlContext, reportTemplate.Id.ToString(), EntityTypeConstants.ReportTemplate)
                                     };
                                     bufferBlock.Post(reportTemplateData);
                                 }

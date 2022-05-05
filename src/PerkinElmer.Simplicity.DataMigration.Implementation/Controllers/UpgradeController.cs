@@ -6,13 +6,13 @@ using PerkinElmer.Simplicity.DataMigration.Contracts.Migration;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationContext;
 using PerkinElmer.Simplicity.DataMigration.Contracts.PipelineBuilder;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Source.SourceBlockParams;
-using PerkinElmer.Simplicity.DataMigration.Contracts.Source.SourceHost;
-using PerkinElmer.Simplicity.DataMigration.Contracts.Targets.TargetHost;
 using PerkinElmer.Simplicity.DataMigration.Implementation.Pipelines;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
+using PerkinElmer.Simplicity.DataMigration.Contracts.Source;
+using PerkinElmer.Simplicity.DataMigration.Contracts.Targets;
 
 namespace PerkinElmer.Simplicity.DataMigration.Implementation.Controllers
 {
@@ -31,15 +31,15 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation.Controllers
                 {MigrationDataTypes.ReportTemplate, new ReportTemplatePipelineBuilder()},
             };
 
-        private readonly IDictionary<MigrationVersions, PostgresqlSourceHost> _postgresqlSourceHosts =
-            new Dictionary<MigrationVersions, PostgresqlSourceHost>
+        protected override IDictionary<MigrationVersions, SourceHostBase> MigrationSourceHost =>
+            new Dictionary<MigrationVersions, SourceHostBase>
             {
                 {MigrationVersions.Version15, new PostgresqlSourceHostVer15()},
                 {MigrationVersions.Version16, new PostgresqlSourceHostVer16()}
             };
 
-        private readonly IDictionary<MigrationVersions, PostgresqlTargetHost> _postgresqlTargetHosts =
-            new Dictionary<MigrationVersions, PostgresqlTargetHost>
+        protected override IDictionary<MigrationVersions, TargetHostBase> MigrationTargetHost =>
+            new Dictionary<MigrationVersions, TargetHostBase>
             {
                 {MigrationVersions.Version15, new PostgresqlTargetHostVer15()},
                 {MigrationVersions.Version16, new PostgresqlTargetHostVer16()}
@@ -52,10 +52,10 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation.Controllers
             if (!(migrationContext is UpgradeContext upgradeMigrationContext))
                 throw new ArgumentException();
 
-            var targetHost = _postgresqlTargetHosts[migrationContext.TargetContext.TargetMigrationVersion];
+            var targetHost = MigrationTargetHost[migrationContext.TargetContext.TargetMigrationVersion];
             targetHost.PrepareTargetHost(migrationContext.TargetContext);
 
-            var sourceHost = _postgresqlSourceHosts[migrationContext.SourceContext.FromMigrationVersion];
+            var sourceHost = MigrationSourceHost[migrationContext.SourceContext.FromMigrationVersion];
             var sourceParams = sourceHost.GetSourceBlockInputParams(migrationContext.SourceContext);
             foreach (var sourceParam in sourceParams)
             {

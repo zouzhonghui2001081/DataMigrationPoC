@@ -7,7 +7,6 @@ using PerkinElmer.Simplicity.DataMigration.Contracts.Source.SourceBlockParams;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Source.SourceContext;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Source.SourceHost;
 
-
 namespace PerkinElmer.Simplicity.Data.Version15.DataSources.Postgresql
 {
     public class PostgresqlSourceHostVer15 : PostgresqlSourceHost

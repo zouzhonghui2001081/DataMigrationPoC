@@ -37,8 +37,8 @@ namespace PerkinElmer.Simplicity.Data.Version16.DataTargets.Postgresql.Chromatog
                 {
                     if (connection.State != ConnectionState.Open) connection.Open();
                     CreateProcessingMethod(connection, processingMethodData.ProjectGuid, processingMethodData.ProcessingMethod);
-                    ReviewApproveTargets.CreateReviewApproveEntity(connection, processingMethodData.ReviewApproveData);
-                    AuditTrailTarget.CreateAuditTrailLogs(postgresqlTargetContext, processingMethodData.AuditTrailLogs);
+                    EntityAssociatedReviewApproveTarget.CreateReviewApproveEntity(connection, processingMethodData.ReviewApproveData);
+                    EntityAssociatedAuditTrailTarget.CreateAuditTrailLogs(postgresqlTargetContext, processingMethodData.AuditTrailLogs);
                     connection.Close();
                 }
             }, targetContext.BlockOption);

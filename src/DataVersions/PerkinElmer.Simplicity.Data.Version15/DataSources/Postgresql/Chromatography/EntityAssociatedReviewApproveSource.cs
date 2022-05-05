@@ -9,7 +9,7 @@ using PerkinElmer.Simplicity.Data.Version15.MigrationData.Chromatography;
 
 namespace PerkinElmer.Simplicity.Data.Version15.DataSources.Postgresql.Chromatography
 {
-    public class ReviewApproveSource
+    public class EntityAssociatedReviewApproveSource
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
