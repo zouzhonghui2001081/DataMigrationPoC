@@ -48,8 +48,8 @@ namespace PerkinElmer.Simplicity.Data.Version15.DataTargets.Postgresql.Chromatog
                     reportTemplateData.ReportTemplate.ProjectId = project.Id;
                     reportTemplateDao.Insert(connection, reportTemplateData.ReportTemplate);
                     if(reportTemplateData.ReviewApproveData != null)
-                        ReviewApproveTarget.CreateReviewApproveEntity(connection, reportTemplateData.ReviewApproveData);
-                    AuditTrailTarget.CreateAuditTrailLogs(postgresqlTargetContext, reportTemplateData.AuditTrailLogs);
+                        EntityAssociatedReviewApproveTarget.CreateReviewApproveEntity(connection, reportTemplateData.ReviewApproveData);
+                    EntityAssociatedAuditTrailTarget.CreateAuditTrailLogs(postgresqlTargetContext, reportTemplateData.AuditTrailLogs);
                     connection.Close();
                 }
             }, targetContext.BlockOption);

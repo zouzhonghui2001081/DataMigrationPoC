@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using Npgsql;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Targets.TargetContext;
-using PerkinElmer.Simplicity.Data.Version16.DataAccess.Postgresql.AuditTrail;
-using PerkinElmer.Simplicity.Data.Version16.DataEntities.AuditTrail;
+using PerkinElmer.Simplicity.Data.Version15.DataAccess.Postgresql.AuditTrail;
+using PerkinElmer.Simplicity.Data.Version15.DataEntities.AuditTrail;
 
-namespace PerkinElmer.Simplicity.Data.Version16.DataTargets.Postgresql.AuditTrail
+namespace PerkinElmer.Simplicity.Data.Version15.DataTargets.Postgresql.AuditTrail
 {
-    public class AuditTrailTarget
+    public class EntityAssociatedAuditTrailTarget
     {
         public static void CreateAuditTrailLogs(PostgresqlTargetContext targetContext, IList<AuditTrailLogEntry> auditTrailLogs)
         {
@@ -18,7 +18,7 @@ namespace PerkinElmer.Simplicity.Data.Version16.DataTargets.Postgresql.AuditTrai
                 foreach (var auditTrailLog in auditTrailLogs)
                 {
                     if (auditTrailLog.VersionDiffEntry != null)
-                        entityVersionDao.Insert(dbConnection, auditTrailLog.VersionDiffEntry);
+                        auditTrailLog.ItemVersionId = entityVersionDao.Insert(dbConnection, auditTrailLog.VersionDiffEntry);
                     auditTrailDataDao.CreateLog(dbConnection, auditTrailLog);
                 }
             }

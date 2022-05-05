@@ -6,7 +6,7 @@ using PerkinElmer.Simplicity.Data.Version16.DataEntities.AuditTrail;
 
 namespace PerkinElmer.Simplicity.Data.Version16.DataSources.Postgresql.AuditTrail
 {
-    public class AuditTrailSource
+    public class EntityAssociatedAuditTrailSource
     {
         public static IList<AuditTrailLogEntry> GetAuditTrail(PostgresqlSourceContext posgresqlContext, string entityId,
             string entityType)

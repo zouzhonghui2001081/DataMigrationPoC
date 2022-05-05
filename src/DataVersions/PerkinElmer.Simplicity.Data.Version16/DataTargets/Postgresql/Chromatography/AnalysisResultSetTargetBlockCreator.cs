@@ -37,7 +37,7 @@ namespace PerkinElmer.Simplicity.Data.Version16.DataTargets.Postgresql.Chromatog
                 {
                     if (connection.State != ConnectionState.Open) connection.Open();
                     CreateAnalysisResultSet(connection, analysisResultSetData);
-                    AuditTrailTarget.CreateAuditTrailLogs(postgresqlTargetContext, analysisResultSetData.AuditTrailLogs);
+                    EntityAssociatedAuditTrailTarget.CreateAuditTrailLogs(postgresqlTargetContext, analysisResultSetData.AuditTrailLogs);
                     connection.Close();
                 }
             }, targetContext.BlockOption);
@@ -102,7 +102,7 @@ namespace PerkinElmer.Simplicity.Data.Version16.DataTargets.Postgresql.Chromatog
             CreateBatchRunAnalysisResultData(connection, analysisResultSetMigrationData.ProjectGuid, analysisResultSet.Id,
                 analysisResultSetMigrationData.BatchRunAnalysisResults);
 
-            ReviewApproveTargets.CreateReviewApproveEntity(connection, analysisResultSetMigrationData.ReviewApproveData);
+            EntityAssociatedReviewApproveTarget.CreateReviewApproveEntity(connection, analysisResultSetMigrationData.ReviewApproveData);
         }
 
         internal static void CreateBatchRunAnalysisResultData(IDbConnection connection, Guid projectGuid,
