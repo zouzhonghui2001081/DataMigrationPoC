@@ -17,7 +17,7 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.PipelineBuilder
 
         protected abstract IDictionary<MigrationVersions, IDictionary<MigrationVersions, TransformBlockCreatorBase>> TransformMaps { get; }
 
-        public (IPropagatorBlock<SourceParamBase, MigrationDataBase>, Task) CreateEntitesTransformationPipeline(
+        public (IPropagatorBlock<SourceParamBase, MigrationDataBase>, Task) CreateTransformationPipeline(
             MigrationContextBase migrationContextBase)
         {
             var sourceVersion = migrationContextBase.SourceContext.FromMigrationVersion;
@@ -33,7 +33,7 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.PipelineBuilder
             if (sourceVersion != targetVersion && transformStack.Count == 0) return (null, null);
 
             var sourceBlock = sourceBlockCreator.CreateSourceBlock(migrationContextBase.SourceContext);
-            var targetBlock = targetBlockCreator.CreateTarget(migrationContextBase.TargetContext);
+            var targetBlock = targetBlockCreator.CreateTargetBlock(migrationContextBase.TargetContext);
 
             if (transformStack != null && transformStack.Count > 0)
             {

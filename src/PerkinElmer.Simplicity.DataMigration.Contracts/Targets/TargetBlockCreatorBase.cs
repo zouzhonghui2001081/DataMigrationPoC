@@ -10,6 +10,6 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Targets
 
         public abstract TargetTypes TargetType { get; }
 
-        public abstract ITargetBlock<MigrationDataBase> CreateTarget(TargetContextBase targetContext);
+        public abstract ITargetBlock<MigrationDataBase> CreateTargetBlock(TargetContextBase targetContext);
     }
 }

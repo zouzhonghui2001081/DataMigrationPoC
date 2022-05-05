@@ -20,7 +20,7 @@ namespace PerkinElmer.Simplicity.Data.Version16.DataTargets.Postgresql.Chromatog
 
         public override MigrationVersions TargetVersion => MigrationVersions.Version16;
 
-        public override ITargetBlock<MigrationDataBase> CreateTarget(TargetContextBase targetContext)
+        public override ITargetBlock<MigrationDataBase> CreateTargetBlock(TargetContextBase targetContext)
         {
             if (!(targetContext is PostgresqlTargetContext postgresqlTargetContext))
                 throw new ArgumentException(nameof(targetContext));

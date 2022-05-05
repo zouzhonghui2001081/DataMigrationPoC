@@ -1,17 +1,18 @@
-﻿using PerkinElmer.Simplicity.DataMigration.Contracts.Migration;
+﻿using PerkinElmer.Simplicity.Data.Version15.DataSources.Postgresql;
+using PerkinElmer.Simplicity.Data.Version15.DataTargets.Postgresql;
+using PerkinElmer.Simplicity.Data.Version16.DataSources.Postgresql;
+using PerkinElmer.Simplicity.Data.Version16.DataTargets.Postgresql;
+using PerkinElmer.Simplicity.DataMigration.Contracts.Migration;
+using PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationContext;
 using PerkinElmer.Simplicity.DataMigration.Contracts.PipelineBuilder;
+using PerkinElmer.Simplicity.DataMigration.Contracts.Source.SourceBlockParams;
+using PerkinElmer.Simplicity.DataMigration.Contracts.Source.SourceHost;
+using PerkinElmer.Simplicity.DataMigration.Contracts.Targets.TargetHost;
 using PerkinElmer.Simplicity.DataMigration.Implementation.Pipelines;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
-using PerkinElmer.Simplicity.Data.Version15.DataSources.Postgresql;
-using PerkinElmer.Simplicity.Data.Version15.DataTargets.Postgresql;
-using PerkinElmer.Simplicity.Data.Version16.DataTargets.Postgresql;
-using PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationContext;
-using PerkinElmer.Simplicity.DataMigration.Contracts.Source.SourceBlockParams;
-using PerkinElmer.Simplicity.DataMigration.Contracts.Source.SourceHost;
-using PerkinElmer.Simplicity.DataMigration.Contracts.Targets.TargetHost;
 
 namespace PerkinElmer.Simplicity.DataMigration.Implementation.Controllers
 {
@@ -34,7 +35,7 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation.Controllers
             new Dictionary<MigrationVersions, PostgresqlSourceHost>
             {
                 {MigrationVersions.Version15, new PostgresqlSourceHostVer15()},
-                {MigrationVersions.Version16, new PostgresqlSourceHostVer15()}
+                {MigrationVersions.Version16, new PostgresqlSourceHostVer16()}
             };
 
         private readonly IDictionary<MigrationVersions, PostgresqlTargetHost> _postgresqlTargetHosts =
@@ -68,49 +69,49 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation.Controllers
         {
             //Migrate project first.
             var projectPipelineBuilder = MigrationPipelines[MigrationDataTypes.Project];
-            var (projectSource, projectTarget) = projectPipelineBuilder.CreateEntitesTransformationPipeline(migrationContextBase);
+            var (projectSource, projectTarget) = projectPipelineBuilder.CreateTransformationPipeline(migrationContextBase);
             projectSource.Post(projectSourceParam);
             projectSource.Complete();
             projectTarget.Wait();
 
             var migrationTasks = new List<Task>();
             var acqusitionMethodPilpeLineBuilder = MigrationPipelines[MigrationDataTypes.AcqusitionMethod];
-            var (acqusitionMethodSource, acqusitionMethodTarget) = acqusitionMethodPilpeLineBuilder.CreateEntitesTransformationPipeline(migrationContextBase);
+            var (acqusitionMethodSource, acqusitionMethodTarget) = acqusitionMethodPilpeLineBuilder.CreateTransformationPipeline(migrationContextBase);
             acqusitionMethodSource.Post(projectSourceParam);
             acqusitionMethodSource.Complete();
             //acqusitionMethodTarget.Wait();
             migrationTasks.Add(acqusitionMethodTarget);
 
             var sequencePilpeLineBuilder = MigrationPipelines[MigrationDataTypes.Sequence];
-            var (sequenceSource, sequenceTarget) = sequencePilpeLineBuilder.CreateEntitesTransformationPipeline(migrationContextBase);
+            var (sequenceSource, sequenceTarget) = sequencePilpeLineBuilder.CreateTransformationPipeline(migrationContextBase);
             sequenceSource.Post(projectSourceParam);
             sequenceSource.Complete();
             //sequenceTarget.Wait();
             migrationTasks.Add(sequenceTarget);
 
             var anlysisResultSetPipleLineBuilder = MigrationPipelines[MigrationDataTypes.AnlysisResultSet];
-            var (analysisResultSetSource, analysisResultSetTarget) = anlysisResultSetPipleLineBuilder.CreateEntitesTransformationPipeline(migrationContextBase);
+            var (analysisResultSetSource, analysisResultSetTarget) = anlysisResultSetPipleLineBuilder.CreateTransformationPipeline(migrationContextBase);
             analysisResultSetSource.Post(projectSourceParam);
             analysisResultSetSource.Complete();
             //analysisResultSetTarget.Wait();
             migrationTasks.Add(analysisResultSetTarget);
 
             var compoundLibraryPipelineBuilder = MigrationPipelines[MigrationDataTypes.CompoundLibrary];
-            var (compoundLibarySource, compoundLibarySourceTarget) = compoundLibraryPipelineBuilder.CreateEntitesTransformationPipeline(migrationContextBase);
+            var (compoundLibarySource, compoundLibarySourceTarget) = compoundLibraryPipelineBuilder.CreateTransformationPipeline(migrationContextBase);
             compoundLibarySource.Post(projectSourceParam);
             compoundLibarySource.Complete();
             //compoundLibarySourceTarget.Wait();
             migrationTasks.Add(compoundLibarySourceTarget);
 
             var processingMethodPipelineBuilder = MigrationPipelines[MigrationDataTypes.ProcessingMethod];
-            var (processingMethodSource, processingMethodTarget) = processingMethodPipelineBuilder.CreateEntitesTransformationPipeline(migrationContextBase);
+            var (processingMethodSource, processingMethodTarget) = processingMethodPipelineBuilder.CreateTransformationPipeline(migrationContextBase);
             processingMethodSource.Post(projectSourceParam);
             processingMethodSource.Complete();
             //processingMethodTarget.Wait();
             migrationTasks.Add(processingMethodTarget);
 
             var reportTemplatePipelineBuilder = MigrationPipelines[MigrationDataTypes.ReportTemplate];
-            var (reportTemplateSource, reportTemplateTarget) = reportTemplatePipelineBuilder.CreateEntitesTransformationPipeline(migrationContextBase);
+            var (reportTemplateSource, reportTemplateTarget) = reportTemplatePipelineBuilder.CreateTransformationPipeline(migrationContextBase);
             reportTemplateSource.Post(projectSourceParam);
             reportTemplateSource.Complete();
             //reportTemplateTarget.Wait();
