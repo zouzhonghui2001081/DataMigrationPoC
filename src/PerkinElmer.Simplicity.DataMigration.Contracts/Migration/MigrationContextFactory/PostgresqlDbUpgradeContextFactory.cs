@@ -8,13 +8,19 @@ using Dapper;
 using log4net;
 using Npgsql;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Common;
-using PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationContext;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Source.SourceContext;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Targets.TargetContext;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Transform.TransformContext;
 
 namespace PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationContextFactory
 {
+    internal enum PostgresqlDatabases
+    {
+        Chromatography,
+        AuditTrail,
+        Security
+    }
+
     public class PostgresqlDbUpgradeContextFactory : ContextFactocyBase
     {
         private readonly MigrationVersions _toVersion;
@@ -28,12 +34,12 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationCont
             _cancellationTokenSource = cancellationTokenSource;
         }
 
-        public override MigrationContextBase GetMigrationContext()
+        public override MigrationContext GetMigrationContext()
         {
             var sourceContext = GeneratePostgresqlSourceContext();
             var targetContext = GeneratePostgresqlTargetContext();
             var transformContext = GeneratePostgresqlTransformContext();
-            var migrationContext = new UpgradeContext
+            var migrationContext = new MigrationContext
             {
                 SourceContext = sourceContext,
                 TargetContext = targetContext,
@@ -50,17 +56,14 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationCont
                 MaxDegreeOfParallelism = 4,
                 CancellationToken = _cancellationTokenSource.Token
             };
-            var fromVersion = GetChromatographyDatabaseVersion();
-            var chromatographyConnName = ConfigurationManager.AppSettings[ConstNames.ChromatographyConn];
-            var auditTrailConnName = ConfigurationManager.AppSettings[ConstNames.AuditTrailConn];
-            var securityConnName = ConfigurationManager.AppSettings[ConstNames.SecurityConn];
 
-            var migrationVersion = MigrationVersions.Unknown;
-            if (fromVersion == SchemaVersions.ChromatographySchemaVersion15)
-                migrationVersion = MigrationVersions.Version15;
-                
-            if (fromVersion == SchemaVersions.ChromatographySchemaVersion16)
-                migrationVersion = MigrationVersions.Version16;
+
+            var chromatographySchemaVersion = GetSchemaVersion(PostgresqlDatabases.Chromatography);
+            var migrationVersion = GetChromatographyMigrationVersion(chromatographySchemaVersion);
+
+            var auditTrailSchemaVersion = GetSchemaVersion(PostgresqlDatabases.AuditTrail);
+            var securityschemaVersion = GetSchemaVersion(PostgresqlDatabases.Security);
+            
 
             if (migrationVersion == MigrationVersions.Unknown)
                 throw new ArgumentException("Failed to get release version from CDS application database! ");
@@ -70,9 +73,9 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationCont
                 BlockOption = blockOption,
                 FromMigrationVersion = migrationVersion,
                 SourceParamType = Source.SourceParamTypes.ProjectGuid,
-                ChromatographyConnection = ConfigurationManager.ConnectionStrings[chromatographyConnName].ConnectionString,
-                AuditTrailConnection = ConfigurationManager.ConnectionStrings[auditTrailConnName].ConnectionString,
-                SecurityConnection = ConfigurationManager.ConnectionStrings[securityConnName].ConnectionString,
+                ChromatographyConnection = GetChromatographyDatabaseConn(chromatographySchemaVersion),
+                AuditTrailConnection = GetAuditTrailDatabaseConn(auditTrailSchemaVersion),
+                SecurityConnection = GetSecurityDatabaseConn(securityschemaVersion)
             };
 
         }
@@ -128,7 +131,18 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationCont
             };
         }
 
-        private Version GetChromatographyDatabaseVersion()
+        private MigrationVersions GetChromatographyMigrationVersion(Version schemaVersion)
+        {
+            if (schemaVersion == SchemaVersions.ChromatographySchemaVersion15)
+                return MigrationVersions.Version15;
+
+            if (schemaVersion == SchemaVersions.ChromatographySchemaVersion16)
+                return MigrationVersions.Version16;
+
+            return MigrationVersions.Unknown;
+        }
+
+        private Version GetSchemaVersion(PostgresqlDatabases database )
         {
             try
             {
@@ -136,19 +150,33 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationCont
                 var defaultConnectionString = ConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString;
                 var defaultDbConnectionStrBuilder = new NpgsqlConnectionStringBuilder(defaultConnectionString);
 
-                var chromatographyConnName = ConfigurationManager.AppSettings[ConstNames.ChromatographyConn];
-                var chromatographyConnection = ConfigurationManager.ConnectionStrings[chromatographyConnName].ConnectionString;
-                var appDbConnectionStrBuilder = new NpgsqlConnectionStringBuilder(chromatographyConnection);
+                var databaseConnName = string.Empty;
+                switch (database)
+                {
+                    case PostgresqlDatabases.Chromatography:
+                        databaseConnName = ConfigurationManager.AppSettings[ConstNames.ChromatographyConn];
+                        break;
+                    case PostgresqlDatabases.AuditTrail:
+                        databaseConnName = ConfigurationManager.AppSettings[ConstNames.AuditTrailConn];
+                        break;
+                    case PostgresqlDatabases.Security:
+                        databaseConnName = ConfigurationManager.AppSettings[ConstNames.SecurityConn];
+                        break;
+                }
+
+                var configuredConnName = ConfigurationManager.AppSettings[databaseConnName];
+                var connectionString = ConfigurationManager.ConnectionStrings[configuredConnName].ConnectionString;
+                var appDbConnectionStrBuilder = new NpgsqlConnectionStringBuilder(connectionString);
 
                 using (var connection = new NpgsqlConnection(defaultDbConnectionStrBuilder.ConnectionString))
                 {
                     connection.Open();
 
-                    var chromatographyDatabaseExists = connection.ExecuteScalar<bool>(
+                    var databaseExists = connection.ExecuteScalar<bool>(
                         $"SELECT EXISTS(SELECT 1 FROM pg_catalog.pg_database where datname = '{appDbConnectionStrBuilder.Database}');");
                     connection.Close();
 
-                    if (chromatographyDatabaseExists == false)
+                    if (databaseExists == false)
                         throw new ArgumentException("Chromatogram database not exist!");
                 }
 
@@ -170,5 +198,77 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationCont
             }
             return null;
         }
+
+        private string GetChromatographyDatabaseConn(Version schemaVersion)
+        {
+            if (schemaVersion == SchemaVersions.ChromatographySchemaVersion15)
+            {
+                var connectName = ConfigurationManager.AppSettings[ConstNames.ChromatographyConnVer15];
+                return ConfigurationManager.ConnectionStrings[connectName].ConnectionString;
+            }
+
+            if (schemaVersion == SchemaVersions.ChromatographySchemaVersion16)
+            {
+                var connectName = ConfigurationManager.AppSettings[ConstNames.ChromatographyConnVer16];
+                return ConfigurationManager.ConnectionStrings[connectName].ConnectionString;
+            }
+
+            throw new ArgumentException(nameof(schemaVersion));
+        }
+
+        private bool IsNeedMigrateAuditTrail(Version schemaVersion)
+        {
+            switch (_toVersion)
+            {
+                case MigrationVersions.Version16:
+                    if (schemaVersion == SchemaVersions.AuditTrailSchemaVersion15)
+                        return true;
+                    break;
+            }
+            return false;
+        }
+
+        private string GetAuditTrailDatabaseConn(Version schemaVersion)
+        {
+            if (schemaVersion == SchemaVersions.AuditTrailSchemaVersion15)
+            {
+                var connectName = ConfigurationManager.AppSettings[ConstNames.AuditTrailConnVer15];
+                return ConfigurationManager.ConnectionStrings[connectName].ConnectionString;
+            }
+
+            if (schemaVersion == SchemaVersions.AuditTrailSchemaVersion16)
+            {
+                var connectName = ConfigurationManager.AppSettings[ConstNames.AuditTrailConnVer16];
+                return ConfigurationManager.ConnectionStrings[connectName].ConnectionString;
+            }
+
+            throw new ArgumentException(nameof(schemaVersion));
+        }
+
+        private bool IsNeedMigrateSecurity(Version schemaVersion)
+        {
+            switch (_toVersion)
+            {
+                case MigrationVersions.Version16:
+                    if (schemaVersion == SchemaVersions.SecurityVersion15 ||
+                       schemaVersion == SchemaVersions.AuditTrailSchemaVersion16)
+                        return false;
+                    break;
+            }
+            return false;
+        }
+
+        private string GetSecurityDatabaseConn(Version schemaVersion)
+        {
+            if (schemaVersion == SchemaVersions.SecurityVersion15)
+                return ConfigurationManager.AppSettings[ConstNames.SecurityConnVer15];
+
+            if (schemaVersion == SchemaVersions.SecurityVersion16)
+                return ConfigurationManager.AppSettings[ConstNames.SecurityConnVer16];
+
+            throw new ArgumentException(nameof(schemaVersion));
+        }
+
+         
     }
 }

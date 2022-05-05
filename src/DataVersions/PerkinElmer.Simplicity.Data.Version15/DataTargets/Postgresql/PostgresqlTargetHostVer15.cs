@@ -44,7 +44,5 @@ namespace PerkinElmer.Simplicity.Data.Version15.DataTargets.Postgresql
                 }
             }
         }
-
-
     }
 }

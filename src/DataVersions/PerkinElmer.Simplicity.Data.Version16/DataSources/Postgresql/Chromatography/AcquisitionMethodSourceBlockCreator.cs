@@ -54,9 +54,10 @@ namespace PerkinElmer.Simplicity.Data.Version16.DataSources.Postgresql.Chromatog
                                     {
                                         ProjectGuid = projectGuid,
                                         AcquisitionMethod = acquisitionMethod,
-                                        ReviewApproveData = reviewApproveData,
-                                        AuditTrailLogs = EntityAssociatedAuditTrailSource.GetAuditTrail(posgresqlContext, acquisitionMethod.Guid.ToString(), EntityTypeConstants.AcquisitionMethod)
+                                        ReviewApproveData = reviewApproveData
                                     };
+                                    if (posgresqlContext.IsMigrateAuditTrail)
+                                        acqusitionMethodData.AuditTrailLogs = EntityAssociatedAuditTrailSource.GetAuditTrail(posgresqlContext, acquisitionMethod.Guid.ToString(), EntityTypeConstants.AcquisitionMethod);
                                     bufferBlock.Post(acqusitionMethodData);
                                 }
                             }
@@ -77,9 +78,10 @@ namespace PerkinElmer.Simplicity.Data.Version16.DataSources.Postgresql.Chromatog
                                     {
                                         ProjectGuid = projectGuid,
                                         AcquisitionMethod = acquisitionMethod,
-                                        ReviewApproveData = reviewApproveData,
-                                        AuditTrailLogs = EntityAssociatedAuditTrailSource.GetAuditTrail(posgresqlContext, acquisitionMethod.Guid.ToString(), EntityTypeConstants.AcquisitionMethod)
+                                        ReviewApproveData = reviewApproveData
                                     };
+                                    if (posgresqlContext.IsMigrateAuditTrail)
+                                        acqusitionMethodData.AuditTrailLogs = EntityAssociatedAuditTrailSource.GetAuditTrail(posgresqlContext, acquisitionMethod.Guid.ToString(), EntityTypeConstants.AcquisitionMethod);
                                     bufferBlock.Post(acqusitionMethodData);
                                 }
                             }
