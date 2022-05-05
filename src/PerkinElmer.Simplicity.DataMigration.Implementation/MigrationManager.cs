@@ -25,14 +25,15 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation
             upgradeController.Migration(migrationContext);
         }
 
-        public void Migration(MigrationType migrationType, MigrationVersion toVersion, CancellationTokenSource cancellationTokenSource)
+        public void Migration(MigrationType migrationType, MigrationVersion fromVersion, MigrationVersion toVersion, CancellationTokenSource cancellationTokenSource)
         {
             var controller = MigrationControllers[migrationType];
-            var migrationContext = GetMigrationContext(migrationType, toVersion, cancellationTokenSource, controller);
+            var migrationContext = GetMigrationContext(migrationType, fromVersion, toVersion, cancellationTokenSource, controller);
             controller.Migration(migrationContext);
         }
 
         private static MigrationContext GetMigrationContext(MigrationType migrationType,
+            MigrationVersion fromVersion,
             MigrationVersion toVersion,
             CancellationTokenSource cancellationTokenSource,
             MigrationControllerBase controller)
@@ -40,7 +41,7 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation
             switch(migrationType)
             {
                 case MigrationType.Upgrade:
-                    var postgresqlDbUpgradeContextFactory = new PostgresqlDbUpgradeContextFactory(toVersion, cancellationTokenSource, controller);
+                    var postgresqlDbUpgradeContextFactory = new PostgresqlDbUpgradeContextFactory(fromVersion, toVersion, cancellationTokenSource, controller);
                     return postgresqlDbUpgradeContextFactory.GetMigrationContext();
                 case MigrationType.Retrieve:
                 case MigrationType.Archive:

@@ -1,0 +1,6 @@
+﻿{
+  "System": "User Id=postgres;Password=Jamun!@#;host=localhost;database=postgres;port=9257",
+  "Chromatography": "User Id=postgres;Password=Jamun!@#;host=localhost;database=Chromatography15;port=9257",
+  "AuditTrail": "User Id=postgres;Password=Jamun!@#;host=localhost;database=SimplicityCDSAuditTrail15;port=9257",
+  "Security": "User Id=postgres;Password=Jamun!@#;host=localhost;database=SimplicityCDSSecurity15;port=9257"
+}

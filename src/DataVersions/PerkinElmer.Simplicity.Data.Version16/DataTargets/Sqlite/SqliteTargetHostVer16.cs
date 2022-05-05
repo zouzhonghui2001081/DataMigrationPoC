@@ -2,7 +2,7 @@
 using PerkinElmer.Simplicity.DataMigration.Contracts.Targets;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Targets.TargetHost;
 
-namespace PerkinElmer.Simplicity.Data.Version16.DataTargets.Postgresql
+namespace PerkinElmer.Simplicity.Data.Version16.DataTargets.Sqlite
 {
     public class SqliteTargetHostVer16 : SqliteTargetHost
     {

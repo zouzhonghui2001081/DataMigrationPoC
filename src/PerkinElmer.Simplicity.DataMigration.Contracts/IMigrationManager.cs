@@ -6,6 +6,6 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts
 {
     public interface IMigrationManager
     {
-        void Migration (MigrationType migrationType, MigrationVersion toVersion, CancellationTokenSource cancellationTokenSource);
+        void Migration (MigrationType migrationType, MigrationVersion fromVersion, MigrationVersion toVersion, CancellationTokenSource cancellationTokenSource);
     }
 }

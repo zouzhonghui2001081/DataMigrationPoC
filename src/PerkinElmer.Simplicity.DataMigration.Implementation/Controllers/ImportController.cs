@@ -30,14 +30,14 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation.Controllers
 
         public override MigrationType MigrationType => MigrationType.Import;
 
-        protected override IDictionary<MigrationVersion, SourceHostBase> MigrationSourceHost =>
+        public override IDictionary<MigrationVersion, SourceHostBase> MigrationSourceHost =>
             new Dictionary<MigrationVersion, SourceHostBase>
             {
                 {MigrationVersion.Version15, new FileSourceHostVer15()},
                 {MigrationVersion.Version16, new FileSourceHostVer16()}
             };
 
-        protected override IDictionary<MigrationVersion, TargetHostBase> MigrationTargetHost =>
+        public override IDictionary<MigrationVersion, TargetHostBase> MigrationTargetHost =>
             new Dictionary<MigrationVersion, TargetHostBase>
             {
                 {MigrationVersion.Version15, new PostgresqlTargetHostVer15()},

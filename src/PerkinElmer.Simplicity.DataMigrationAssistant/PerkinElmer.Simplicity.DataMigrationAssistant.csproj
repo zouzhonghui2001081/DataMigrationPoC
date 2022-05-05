@@ -26,11 +26,5 @@
     <ProjectReference Include="..\PerkinElmer.Simplicity.DataMigration.Contracts\PerkinElmer.Simplicity.DataMigration.Contracts.csproj" />
     <ProjectReference Include="..\PerkinElmer.Simplicity.DataMigration.Implementation\PerkinElmer.Simplicity.DataMigration.Implementation.csproj" />
   </ItemGroup>
-  
-  <ItemGroup>
-    <None Update="ConnectionStrings.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
 
 </Project>

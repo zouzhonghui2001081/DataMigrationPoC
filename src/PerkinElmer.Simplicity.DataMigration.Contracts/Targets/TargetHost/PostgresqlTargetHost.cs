@@ -12,38 +12,55 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Targets.TargetHost
 { 
     public abstract class PostgresqlTargetHost : TargetHostBase
     {
-        protected NpgsqlConnectionStringBuilder DefaultDbConnectionStrBuilder;
-
+        private NpgsqlConnectionStringBuilder _systemDbConnectionStringBuilder;
+        protected NpgsqlConnectionStringBuilder SystemDbConnectionStrBuilder
+        {
+            get
+            {
+                if(_systemDbConnectionStringBuilder == null)
+                {
+                    _systemDbConnectionStringBuilder = new NpgsqlConnectionStringBuilder(ConnectionStrings.System){ Pooling = false };
+                }
+                return _systemDbConnectionStringBuilder;
+            }
+        }
         protected readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         protected PostgresqlTargetHost()
         {
-            var connectionStringName = ConfigurationManager.AppSettings[ConstNames.PostgresqlDefaultDb];
-            var defaultConnectionString = ConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString;
-            DefaultDbConnectionStrBuilder = new NpgsqlConnectionStringBuilder(defaultConnectionString) { Pooling = false };
         }
 
         public override TargetTypes TargetType => TargetTypes.Posgresql;
 
-        public abstract string AuditTrailConnectionString { get; }
-        public abstract string SecurityConnectionString { get; }
-        public abstract string ChromatographyCConnectionString { get; }
+        private ConnectionStrings _connectionStrings = null;
+        public ConnectionStrings ConnectionStrings
+        {
+            get
+            {
+                if (_connectionStrings == null)
+                {
+                    _connectionStrings = GetConnectionStrings();
+                }
+                return _connectionStrings;
+            }
+        }
 
-        protected abstract Version AuditTrailSchemaVersion { get; }
+
+        public abstract Version AuditTrailSchemaVersion { get; }
 
         protected abstract string AuditTrailDbSchema { get; }
 
-        protected abstract Version SecuritySchemaVersion { get; }
+        public abstract Version SecuritySchemaVersion { get; }
 
         protected abstract string SecurityDbSchema { get; }
 
         protected abstract string SecurityData { get; }
 
-        protected abstract Version ChromatographySchemaVersion { get; }
+        public abstract Version ChromatographySchemaVersion { get; }
 
-        protected abstract int ChromatographyMajorDataVersion { get; }
+        public abstract int ChromatographyMajorDataVersion { get; }
 
-        protected abstract int ChromatographyMinorDataVersion { get; }
+        public abstract int ChromatographyMinorDataVersion { get; }
 
         protected abstract string ChromatographyDbSchema { get; }
 
@@ -51,14 +68,18 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Targets.TargetHost
 
         protected abstract string ChromatographyDummyData { get; }
 
+        protected abstract string ConnectionStringResourceName { get; }
+
         public override void PrepareTargetHost(TargetContextBase targetContext)
         {
             if (!(targetContext is PostgresqlTargetContext postgresqlTargetContext))
                 throw new ArgumentException(nameof(targetContext));
 
             ResetChromatographyDatabase(new NpgsqlConnectionStringBuilder(postgresqlTargetContext.ChromatographyConnection));
-            ResetAuditTrailDatabase(new NpgsqlConnectionStringBuilder(postgresqlTargetContext.AuditTrailConnection));
-            ResetSecurityDatabase(new NpgsqlConnectionStringBuilder(postgresqlTargetContext.SecurityConnection));
+            if(postgresqlTargetContext.IsMigrateAuditTrail)
+                ResetAuditTrailDatabase(new NpgsqlConnectionStringBuilder(postgresqlTargetContext.AuditTrailConnection));
+            if(postgresqlTargetContext.IsMigrateSecurity)
+                ResetSecurityDatabase(new NpgsqlConnectionStringBuilder(postgresqlTargetContext.SecurityConnection));
         }
 
         protected void InitializeDatabase(string databaseName)
@@ -74,7 +95,7 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Targets.TargetHost
                 "LC_CTYPE = 'English_United States.1252' " +
                 "CONNECTION LIMIT = -1";
 
-                using (var defaultConnection = new NpgsqlConnection(DefaultDbConnectionStrBuilder.ConnectionString))
+                using (var defaultConnection = new NpgsqlConnection(SystemDbConnectionStrBuilder.ConnectionString))
                 {
                     defaultConnection.Open();
                     defaultConnection.Execute(createDatabase);
@@ -93,7 +114,7 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Targets.TargetHost
             try
             {
                 using (var defaultConnection =
-                    new NpgsqlConnection(DefaultDbConnectionStrBuilder.ConnectionString))
+                    new NpgsqlConnection(SystemDbConnectionStrBuilder.ConnectionString))
                 {
                     defaultConnection.Open();
                     // Below query will delete any backend database connections from connection pool
@@ -115,6 +136,8 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Targets.TargetHost
         }
 
         protected abstract string GetSqlScript(string resourceName);
+
+        protected abstract ConnectionStrings GetConnectionStrings();
 
         protected void ResetChromatographyDatabase(NpgsqlConnectionStringBuilder chromatographyConnBuilder)
         {

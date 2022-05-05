@@ -1,10 +1,9 @@
 ﻿
-using System;
-using System.Collections.Generic;
 using PerkinElmer.Simplicity.Data.Version15.DataSources.Postgresql;
-using PerkinElmer.Simplicity.Data.Version15.DataTargets.Postgresql;
+using PerkinElmer.Simplicity.Data.Version15.DataTargets.Sqlite;
 using PerkinElmer.Simplicity.Data.Version16.DataSources.Postgresql;
 using PerkinElmer.Simplicity.Data.Version16.DataTargets.Postgresql;
+using PerkinElmer.Simplicity.Data.Version16.DataTargets.Sqlite;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Migration;
 using PerkinElmer.Simplicity.DataMigration.Contracts.PipelineBuilder;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Source;
@@ -12,6 +11,8 @@ using PerkinElmer.Simplicity.DataMigration.Contracts.Source.SourceContext;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Targets;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Targets.TargetContext;
 using PerkinElmer.Simplicity.DataMigration.Implementation.Pipelines;
+using System;
+using System.Collections.Generic;
 
 namespace PerkinElmer.Simplicity.DataMigration.Implementation.Controllers
 {
@@ -29,14 +30,14 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation.Controllers
                 {MigrationDataTypes.ReportTemplate, new ReportTemplatePipelineBuilder()},
             };
 
-        protected override IDictionary<MigrationVersion, SourceHostBase> MigrationSourceHost =>
+        public override IDictionary<MigrationVersion, SourceHostBase> MigrationSourceHost =>
             new Dictionary<MigrationVersion, SourceHostBase>
             {
                 {MigrationVersion.Version15, new PostgresqlSourceHostVer15()},
                 {MigrationVersion.Version16, new PostgresqlSourceHostVer16()}
             };
 
-        protected override IDictionary<MigrationVersion, TargetHostBase> MigrationTargetHost =>
+        public override IDictionary<MigrationVersion, TargetHostBase> MigrationTargetHost =>
             new Dictionary<MigrationVersion, TargetHostBase>
             {
                 {MigrationVersion.Version15, new SqliteTargetHostVer15()},

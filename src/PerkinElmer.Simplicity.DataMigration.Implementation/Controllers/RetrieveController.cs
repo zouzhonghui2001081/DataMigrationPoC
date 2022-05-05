@@ -11,6 +11,8 @@ using PerkinElmer.Simplicity.DataMigration.Contracts.Source;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Source.SourceContext;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Targets;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Targets.TargetContext;
+using PerkinElmer.Simplicity.Data.Version15.DataSources.Sqlite;
+using PerkinElmer.Simplicity.Data.Version16.DataSources.Sqlite;
 
 namespace PerkinElmer.Simplicity.DataMigration.Implementation.Controllers
 {
@@ -28,14 +30,14 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation.Controllers
                 {MigrationDataTypes.ReportTemplate, new ReportTemplatePipelineBuilder()},
             };
 
-        protected override IDictionary<MigrationVersion, SourceHostBase> MigrationSourceHost =>
+        public override IDictionary<MigrationVersion, SourceHostBase> MigrationSourceHost =>
             new Dictionary<MigrationVersion, SourceHostBase>
             {
                 {MigrationVersion.Version15, new SqliteSourceHostVer15()},
                 {MigrationVersion.Version16, new SqliteSourceHostVer16()}
             };
 
-        protected override IDictionary<MigrationVersion, TargetHostBase> MigrationTargetHost =>
+        public override IDictionary<MigrationVersion, TargetHostBase> MigrationTargetHost =>
             new Dictionary<MigrationVersion, TargetHostBase>
             {
                 {MigrationVersion.Version15, new PostgresqlTargetHostVer15()},

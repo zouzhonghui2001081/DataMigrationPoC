@@ -5,6 +5,7 @@ using PerkinElmer.Simplicity.DataMigration.Contracts.Common;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Source.SourceContext;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Source.SourceHost;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Targets.TargetContext;
+using PerkinElmer.Simplicity.DataMigration.Contracts.Targets.TargetHost;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Transform.TransformContext;
 using System;
 using System.Configuration;
@@ -15,25 +16,40 @@ using System.Threading.Tasks.Dataflow;
 
 namespace PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationContextFactory
 {
+    internal enum PostgresqlDatabases
+    {
+        Chromatography,
+        AuditTrail,
+        Security
+    }
+
     public class PostgresqlDbUpgradeContextFactory : ContextFactocyBase
     {
+        private readonly MigrationVersion _fromVersion;
         private readonly MigrationVersion _toVersion;
         private readonly CancellationTokenSource _cancellationTokenSource;
         private readonly MigrationControllerBase _controller;
 
         protected readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public PostgresqlDbUpgradeContextFactory(MigrationVersion toVersion, CancellationTokenSource cancellationTokenSource, MigrationControllerBase controller)
+        public PostgresqlDbUpgradeContextFactory(MigrationVersion fromVersion, MigrationVersion toVersion, CancellationTokenSource cancellationTokenSource, MigrationControllerBase controller)
         {
+            _fromVersion = fromVersion;
             _toVersion = toVersion;
             _cancellationTokenSource = cancellationTokenSource;
             _controller = controller;
+            if(controller?.MigrationType != MigrationType.Upgrade)
+            {
+                throw new ArgumentException("Invalid migration controller passed into the factory.", nameof(controller));
+            }
         }
 
         public override MigrationContext GetMigrationContext()
         {
             var sourceContext = GeneratePostgresqlSourceContext();
             var targetContext = GeneratePostgresqlTargetContext();
+            targetContext.IsMigrateAuditTrail = sourceContext.IsMigrateAuditTrail;
+            targetContext.IsMigrateSecurity = sourceContext.IsMigrateSecurity;
             var transformContext = GeneratePostgresqlTransformContext();
             var migrationContext = new MigrationContext(MigrationType.Upgrade)
             {
@@ -52,37 +68,22 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationCont
                 MaxDegreeOfParallelism = 4,
                 CancellationToken = _cancellationTokenSource.Token
             };
-            var fromVersion = GetChromatographyDatabaseVersion();
-            var chromatographyConnName = ConfigurationManager.AppSettings[ConstNames.ChromatographyConn];
-            var auditTrailConnName = ConfigurationManager.AppSettings[ConstNames.AuditTrailConn];
-            var securityConnName = ConfigurationManager.AppSettings[ConstNames.SecurityConn];
 
-            var migrationVersion = MigrationVersion.Unknown;
-            foreach(var sourceHost in _controller.MigrationSourceHost)
-            {
-                if(sourceHost.Value is PostgresqlSourceHost postgresqlSourceHost)
-                {
-                    if (fromVersion == postgresqlSourceHost.ChromatographySchemaVersion)
-                    {
-                        migrationVersion = sourceHost.Key;
-                        break;
-                    }
-                }
-            }
-
-            if (migrationVersion == MigrationVersion.Unknown)
-                throw new ArgumentException("Failed to get release version from CDS application database! ");
+            var sourceHost = _controller.MigrationSourceHost[_fromVersion] as PostgresqlSourceHost;
+            var auditTrailSchemaVersion = GetSchemaVersion(sourceHost.ConnectionStrings.AuditTrail);
+            var securitySchemaVersion = GetSchemaVersion(sourceHost.ConnectionStrings.Security);
 
             return new PostgresqlSourceContext
             {
                 BlockOption = blockOption,
-                MigrateFromVersion = migrationVersion,
+                MigrateFromVersion = _fromVersion,
                 SourceParamType = Source.SourceParamTypes.ProjectGuid,
-                ChromatographyConnection = ConfigurationManager.ConnectionStrings[chromatographyConnName].ConnectionString,
-                AuditTrailConnection = ConfigurationManager.ConnectionStrings[auditTrailConnName].ConnectionString,
-                SecurityConnection = ConfigurationManager.ConnectionStrings[securityConnName].ConnectionString,
+                ChromatographyConnection = sourceHost.ConnectionStrings.Chromatography,
+                IsMigrateAuditTrail = NeedMigrateAuditTrail(auditTrailSchemaVersion),
+                AuditTrailConnection = sourceHost.ConnectionStrings.AuditTrail,
+                IsMigrateSecurity = NeedMigrateSecurity(securitySchemaVersion),
+                SecurityConnection = sourceHost.ConnectionStrings.Security,
             };
-
         }
 
         private PostgresqlTargetContext GeneratePostgresqlTargetContext()
@@ -92,35 +93,16 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationCont
                 MaxDegreeOfParallelism = 4,
                 CancellationToken = _cancellationTokenSource.Token
             };
-            switch (_toVersion)
-            {
-                case MigrationVersion.Version15:
-                    var chromatographyConnNameV15 = ConfigurationManager.AppSettings[ConstNames.ChromatographyConnVer15];
-                    var auditTrailConnNameV15 = ConfigurationManager.AppSettings[ConstNames.AuditTrailConnVer15];
-                    var securityConnNameV15 = ConfigurationManager.AppSettings[ConstNames.SecurityConnVer15];
-                    return new PostgresqlTargetContext
-                    {
-                        BlockOption = blockOption,
-                        MigrateToVersion = _toVersion,
-                        ChromatographyConnection = ConfigurationManager.ConnectionStrings[chromatographyConnNameV15].ConnectionString,
-                        AuditTrailConnection = ConfigurationManager.ConnectionStrings[auditTrailConnNameV15].ConnectionString,
-                        SecurityConnection = ConfigurationManager.ConnectionStrings[securityConnNameV15].ConnectionString
-                    };
-                case MigrationVersion.Version16:
-                    var chromatographyConnNameV16 = ConfigurationManager.AppSettings[ConstNames.ChromatographyConnVer16];
-                    var auditTrailConnNameV16 = ConfigurationManager.AppSettings[ConstNames.AuditTrailConnVer16];
-                    var securityConnNameV16 = ConfigurationManager.AppSettings[ConstNames.SecurityConnVer16];
-                    return new PostgresqlTargetContext
-                    {
-                        BlockOption = blockOption,
-                        MigrateToVersion = _toVersion,
-                        ChromatographyConnection = ConfigurationManager.ConnectionStrings[chromatographyConnNameV16].ConnectionString,
-                        AuditTrailConnection = ConfigurationManager.ConnectionStrings[auditTrailConnNameV16].ConnectionString,
-                        SecurityConnection = ConfigurationManager.ConnectionStrings[securityConnNameV16].ConnectionString,
-                    };
-            }
 
-            throw new ArgumentException("Target Version not supported!");
+            var targetHost = _controller.MigrationTargetHost[_fromVersion] as PostgresqlTargetHost;
+            return new PostgresqlTargetContext
+            {
+                BlockOption = blockOption,
+                MigrateToVersion = _toVersion,
+                ChromatographyConnection = targetHost.ConnectionStrings.Chromatography,
+                AuditTrailConnection = targetHost.ConnectionStrings.AuditTrail,
+                SecurityConnection = targetHost.ConnectionStrings.Security
+            };
         }
 
         private TransformContext GeneratePostgresqlTransformContext()
@@ -136,29 +118,11 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationCont
             };
         }
 
-        private Version GetChromatographyDatabaseVersion()
+        private Version GetSchemaVersion(string connectionString)
         {
             try
             {
-                var connectionStringName = ConfigurationManager.AppSettings[ConstNames.PostgresqlDefaultDb];
-                var defaultConnectionString = ConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString;
-                var defaultDbConnectionStrBuilder = new NpgsqlConnectionStringBuilder(defaultConnectionString);
-
-                var chromatographyConnName = ConfigurationManager.AppSettings[ConstNames.ChromatographyConn];
-                var chromatographyConnection = ConfigurationManager.ConnectionStrings[chromatographyConnName].ConnectionString;
-                var appDbConnectionStrBuilder = new NpgsqlConnectionStringBuilder(chromatographyConnection);
-
-                using (var connection = new NpgsqlConnection(defaultDbConnectionStrBuilder.ConnectionString))
-                {
-                    connection.Open();
-
-                    var chromatographyDatabaseExists = connection.ExecuteScalar<bool>(
-                        $"SELECT EXISTS(SELECT 1 FROM pg_catalog.pg_database where datname = '{appDbConnectionStrBuilder.Database}');");
-                    connection.Close();
-
-                    if (chromatographyDatabaseExists == false)
-                        throw new ArgumentException("Chromatogram database not exist!");
-                }
+                var appDbConnectionStrBuilder = new NpgsqlConnectionStringBuilder(connectionString);
 
                 using (IDbConnection connection = new NpgsqlConnection(appDbConnectionStrBuilder.ConnectionString))
                 {
@@ -177,6 +141,34 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationCont
                 Log.Error(ex.Message, ex);
             }
             return null;
+        }
+
+        private bool NeedMigrateAuditTrail(Version schemaVersion)
+        {
+            var toVersionTargetHost = _controller.MigrationTargetHost[_toVersion];
+            if(toVersionTargetHost is PostgresqlTargetHost postgresqlTargetHost)
+            {
+                if(postgresqlTargetHost.AuditTrailSchemaVersion > schemaVersion)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private bool NeedMigrateSecurity(Version schemaVersion)
+        {
+            var toVersionTargetHost = _controller.MigrationTargetHost[_toVersion];
+            if (toVersionTargetHost is PostgresqlTargetHost postgresqlTargetHost)
+            {
+                if (postgresqlTargetHost.SecuritySchemaVersion > schemaVersion)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

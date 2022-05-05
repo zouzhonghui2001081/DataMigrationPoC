@@ -13,14 +13,12 @@ namespace PerkinElmer.Simplicity.DataMigrationAssistant
 
         static void Main(string[] args)
         {
-            var upgradeTargetVersion = MigrationVersion.Version16;
+            var upgradeFromVersion = MigrationVersion.Version15;
+            var upgradeToVersion = MigrationVersion.Version16;
             var cancellationTokenSource = new CancellationTokenSource();
 
-            var postgresqlDbUpgradeContextFactory = new PostgresqlDbUpgradeContextFactory(upgradeTargetVersion, cancellationTokenSource);
-            var dbUpgradeContext = postgresqlDbUpgradeContextFactory.GetMigrationContext();
-
             var migrationManager = new MigrationManager();
-            migrationManager.Migration(dbUpgradeContext);
+            migrationManager.Migration( MigrationType.Upgrade, upgradeFromVersion, upgradeToVersion, cancellationTokenSource);
         }
     }
 }
