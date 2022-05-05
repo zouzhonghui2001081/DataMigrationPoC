@@ -5,7 +5,6 @@ using PerkinElmer.Simplicity.Data.Version15.DataTargets.Postgresql;
 using PerkinElmer.Simplicity.Data.Version16.DataSources.Postgresql;
 using PerkinElmer.Simplicity.Data.Version16.DataTargets.Postgresql;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Migration;
-using PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationContext;
 using PerkinElmer.Simplicity.DataMigration.Contracts.PipelineBuilder;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Source;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Source.SourceContext;
@@ -43,15 +42,15 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation.Controllers
                 {MigrationVersions.Version16, new FileTargetHostVer16()}
             };
 
-        public override MigrationTypes MigrationType => MigrationTypes.Export;
+        public override MigrationType MigrationType => MigrationType.Export;
 
-        public override void Migration(MigrationContextBase migrationContext)
+        public override void Migration(MigrationContext migrationContext)
         {
-            if (!(migrationContext is ExportContext upgradeMigrationContext))
+            if (migrationContext.MigrationType != MigrationType.Export)
                 throw new ArgumentException();
 
-            var postgresqlSourceContext = upgradeMigrationContext.SourceContext as PostgresqlSourceContext;
-            var fileTargetContext = upgradeMigrationContext.TargetContext as FileTargetContext;
+            var postgresqlSourceContext = migrationContext.SourceContext as PostgresqlSourceContext;
+            var fileTargetContext = migrationContext.TargetContext as FileTargetContext;
 
             throw new NotImplementedException();
         }

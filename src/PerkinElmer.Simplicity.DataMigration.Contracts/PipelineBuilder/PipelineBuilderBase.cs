@@ -18,7 +18,7 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.PipelineBuilder
         protected abstract IDictionary<MigrationVersions, IDictionary<MigrationVersions, TransformBlockCreatorBase>> TransformMaps { get; }
 
         public (IPropagatorBlock<SourceParamBase, MigrationDataBase>, Task) CreateTransformationPipeline(
-            MigrationContextBase migrationContextBase)
+            MigrationContext migrationContextBase)
         {
             var sourceVersion = migrationContextBase.SourceContext.MigrateFromVersion;
             var sourceType = migrationContextBase.SourceContext.SourceType;

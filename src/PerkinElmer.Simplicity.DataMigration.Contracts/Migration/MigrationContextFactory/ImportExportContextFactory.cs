@@ -1,10 +1,8 @@
-﻿using PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationContext;
-
-namespace PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationContextFactory
+﻿namespace PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationContextFactory
 {
     public class ImportExportContextFactory : ContextFactocyBase
     {
-        public override MigrationContextBase GetMigrationContext()
+        public override MigrationContext GetMigrationContext()
         {
             throw new System.NotImplementedException();
         }

@@ -1,17 +1,16 @@
-﻿using System;
+﻿using Dapper;
+using log4net;
+using Npgsql;
+using PerkinElmer.Simplicity.DataMigration.Contracts.Common;
+using PerkinElmer.Simplicity.DataMigration.Contracts.Source.SourceContext;
+using PerkinElmer.Simplicity.DataMigration.Contracts.Targets.TargetContext;
+using PerkinElmer.Simplicity.DataMigration.Contracts.Transform.TransformContext;
+using System;
 using System.Configuration;
 using System.Data;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks.Dataflow;
-using Dapper;
-using log4net;
-using Npgsql;
-using PerkinElmer.Simplicity.DataMigration.Contracts.Common;
-using PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationContext;
-using PerkinElmer.Simplicity.DataMigration.Contracts.Source.SourceContext;
-using PerkinElmer.Simplicity.DataMigration.Contracts.Targets.TargetContext;
-using PerkinElmer.Simplicity.DataMigration.Contracts.Transform.TransformContext;
 
 namespace PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationContextFactory
 {
@@ -28,12 +27,12 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationCont
             _cancellationTokenSource = cancellationTokenSource;
         }
 
-        public override MigrationContextBase GetMigrationContext()
+        public override MigrationContext GetMigrationContext()
         {
             var sourceContext = GeneratePostgresqlSourceContext();
             var targetContext = GeneratePostgresqlTargetContext();
             var transformContext = GeneratePostgresqlTransformContext();
-            var migrationContext = new UpgradeContext
+            var migrationContext = new MigrationContext(MigrationType.Upgrade)
             {
                 SourceContext = sourceContext,
                 TargetContext = targetContext,
