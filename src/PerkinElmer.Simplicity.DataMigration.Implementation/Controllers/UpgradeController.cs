@@ -52,10 +52,10 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation.Controllers
             if (!(migrationContext is UpgradeContext upgradeMigrationContext))
                 throw new ArgumentException();
 
-            var targetHost = _postgresqlTargetHosts[migrationContext.TargetContext.TargetMigrationVersion];
+            var targetHost = _postgresqlTargetHosts[migrationContext.TargetContext.MigrateToVersion];
             targetHost.PrepareTargetHost(migrationContext.TargetContext);
 
-            var sourceHost = _postgresqlSourceHosts[migrationContext.SourceContext.FromMigrationVersion];
+            var sourceHost = _postgresqlSourceHosts[migrationContext.SourceContext.MigrateFromVersion];
             var sourceParams = sourceHost.GetSourceBlockInputParams(migrationContext.SourceContext);
             foreach (var sourceParam in sourceParams)
             {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace PerkinElmer.Simplicity.DataMigration.Contracts.Source.SourceBlockParams
 {
-    public class ProjectSourceEntitiesParams : SourceParamBase
+    public class ProjectEntitiesSourceParams : SourceParamBase
     {
         public override SourceParamTypes SourceKeyType => SourceParamTypes.ProjectAndEntitiesGuid;
 

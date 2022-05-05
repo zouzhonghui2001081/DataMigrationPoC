@@ -20,9 +20,9 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.PipelineBuilder
         public (IPropagatorBlock<SourceParamBase, MigrationDataBase>, Task) CreateTransformationPipeline(
             MigrationContextBase migrationContextBase)
         {
-            var sourceVersion = migrationContextBase.SourceContext.FromMigrationVersion;
+            var sourceVersion = migrationContextBase.SourceContext.MigrateFromVersion;
             var sourceType = migrationContextBase.SourceContext.SourceType;
-            var targetVersion = migrationContextBase.TargetContext.TargetMigrationVersion;
+            var targetVersion = migrationContextBase.TargetContext.MigrateToVersion;
             var targetType = migrationContextBase.TargetContext.TargetType;
 
             var sourceBlockCreator = GenerateSourceBlock(sourceVersion, sourceType);

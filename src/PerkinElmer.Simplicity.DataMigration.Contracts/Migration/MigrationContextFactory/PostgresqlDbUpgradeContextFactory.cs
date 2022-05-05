@@ -68,7 +68,7 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationCont
             return new PostgresqlSourceContext
             {
                 BlockOption = blockOption,
-                FromMigrationVersion = migrationVersion,
+                MigrateFromVersion = migrationVersion,
                 SourceParamType = Source.SourceParamTypes.ProjectGuid,
                 ChromatographyConnection = ConfigurationManager.ConnectionStrings[chromatographyConnName].ConnectionString,
                 AuditTrailConnection = ConfigurationManager.ConnectionStrings[auditTrailConnName].ConnectionString,
@@ -93,7 +93,7 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationCont
                     return new PostgresqlTargetContext
                     {
                         BlockOption = blockOption,
-                        TargetMigrationVersion = _toVersion,
+                        MigrateToVersion = _toVersion,
                         ChromatographyConnection = ConfigurationManager.ConnectionStrings[chromatographyConnNameV15].ConnectionString,
                         AuditTrailConnection = ConfigurationManager.ConnectionStrings[auditTrailConnNameV15].ConnectionString,
                         SecurityConnection = ConfigurationManager.ConnectionStrings[securityConnNameV15].ConnectionString
@@ -105,7 +105,7 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationCont
                     return new PostgresqlTargetContext
                     {
                         BlockOption = blockOption,
-                        TargetMigrationVersion = _toVersion,
+                        MigrateToVersion = _toVersion,
                         ChromatographyConnection = ConfigurationManager.ConnectionStrings[chromatographyConnNameV16].ConnectionString,
                         AuditTrailConnection = ConfigurationManager.ConnectionStrings[auditTrailConnNameV16].ConnectionString,
                         SecurityConnection = ConfigurationManager.ConnectionStrings[securityConnNameV16].ConnectionString,

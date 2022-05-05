@@ -49,7 +49,7 @@ namespace PerkinElmer.Simplicity.Data.Version16.DataSources.Postgresql.Chromatog
 
                             break;
                         case SourceParamTypes.ProjectAndEntitiesGuid:
-                            if (sourceParamBase is ProjectSourceEntitiesParams projectEntitiesParams)
+                            if (sourceParamBase is ProjectEntitiesSourceParams projectEntitiesParams)
                             {
                                 var projectGuids = projectEntitiesParams.EntityGuids;
                                 foreach (var projectGuid in projectGuids)
