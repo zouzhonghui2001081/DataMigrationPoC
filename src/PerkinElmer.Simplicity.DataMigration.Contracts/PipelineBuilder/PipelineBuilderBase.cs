@@ -15,7 +15,7 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.PipelineBuilder
 
         protected abstract IList<TargetBlockCreatorBase> Targets { get; }
 
-        protected abstract IDictionary<MigrationVersions, IDictionary<MigrationVersions, TransformBlockCreatorBase>> TransformMaps { get; }
+        protected abstract IDictionary<MigrationVersion, IDictionary<MigrationVersion, TransformBlockCreatorBase>> TransformMaps { get; }
 
         public (IPropagatorBlock<SourceParamBase, MigrationDataBase>, Task) CreateTransformationPipeline(
             MigrationContext migrationContextBase)
@@ -56,21 +56,21 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.PipelineBuilder
             return (sourceBlock, targetBlock.Completion);
         }
 
-        protected SourceBlockCreatorBase GenerateSourceBlock(MigrationVersions startMigrationVersion,
+        protected SourceBlockCreatorBase GenerateSourceBlock(MigrationVersion startMigrationVersion,
             SourceTypes sourceType)
         {
             return Sources.FirstOrDefault(source => source.SourceVersion == startMigrationVersion && 
                                                     source.SourceType == sourceType);
         }
 
-        protected TargetBlockCreatorBase GenerateTargetBlock(MigrationVersions targetMigrationVersion,
+        protected TargetBlockCreatorBase GenerateTargetBlock(MigrationVersion targetMigrationVersion,
             TargetTypes targetType)
         {
             return Targets.FirstOrDefault(target => target.TargetVersion == targetMigrationVersion &&
                                                     target.TargetType == targetType);
         }
 
-        protected Stack<TransformBlockCreatorBase> GenerateTransformBlock(MigrationVersions startMigrationVersion, MigrationVersions endMigrationVersion)
+        protected Stack<TransformBlockCreatorBase> GenerateTransformBlock(MigrationVersion startMigrationVersion, MigrationVersion endMigrationVersion)
         {
             var transformBlocks = new Stack<TransformBlockCreatorBase>();
             if (!TransformMaps.ContainsKey(startMigrationVersion)) return transformBlocks;
@@ -83,8 +83,8 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.PipelineBuilder
             return transformBlocks;
         }
 
-        private Stack<TransformBlockCreatorBase> GetTransformBlocksRecursively(MigrationVersions endMigrationVersion,
-            IDictionary<MigrationVersions, TransformBlockCreatorBase> targets)
+        private Stack<TransformBlockCreatorBase> GetTransformBlocksRecursively(MigrationVersion endMigrationVersion,
+            IDictionary<MigrationVersion, TransformBlockCreatorBase> targets)
         {
             var transformBlocks = new Stack<TransformBlockCreatorBase>();
             foreach (var target in targets)

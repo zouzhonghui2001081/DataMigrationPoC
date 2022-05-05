@@ -14,15 +14,15 @@ namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.Chromatography
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public override MigrationVersions FromVersion => MigrationVersions.Version15;
+        public override MigrationVersion FromVersion => MigrationVersion.Version15;
 
-        public override MigrationVersions ToVersion => MigrationVersions.Version16;
+        public override MigrationVersion ToVersion => MigrationVersion.Version16;
 
         public override TransformBlock<MigrationDataBase, MigrationDataBase> CreateTransform(TransformContextBase transformContext)
         {
             var sequenceTransformBlock = new TransformBlock<MigrationDataBase, MigrationDataBase>(fromVersionData =>
             {
-                if (fromVersionData.MigrationVersion != MigrationVersions.Version15 ||
+                if (fromVersionData.MigrationVersion != MigrationVersion.Version15 ||
                     !(fromVersionData is Data.Version15.MigrationData.Chromatography.SequenceMigrationData sequenceData15))
                     throw new ArgumentException("From version data is incorrect!");
                 return Transform(sequenceData15);

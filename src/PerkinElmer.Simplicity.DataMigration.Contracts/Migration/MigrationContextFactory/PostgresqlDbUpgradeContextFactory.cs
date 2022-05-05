@@ -3,6 +3,7 @@ using log4net;
 using Npgsql;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Common;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Source.SourceContext;
+using PerkinElmer.Simplicity.DataMigration.Contracts.Source.SourceHost;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Targets.TargetContext;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Transform.TransformContext;
 using System;
@@ -16,15 +17,17 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationCont
 {
     public class PostgresqlDbUpgradeContextFactory : ContextFactocyBase
     {
-        private readonly MigrationVersions _toVersion;
+        private readonly MigrationVersion _toVersion;
         private readonly CancellationTokenSource _cancellationTokenSource;
+        private readonly MigrationControllerBase _controller;
 
         protected readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public PostgresqlDbUpgradeContextFactory(MigrationVersions toVersion, CancellationTokenSource cancellationTokenSource)
+        public PostgresqlDbUpgradeContextFactory(MigrationVersion toVersion, CancellationTokenSource cancellationTokenSource, MigrationControllerBase controller)
         {
             _toVersion = toVersion;
             _cancellationTokenSource = cancellationTokenSource;
+            _controller = controller;
         }
 
         public override MigrationContext GetMigrationContext()
@@ -54,14 +57,20 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationCont
             var auditTrailConnName = ConfigurationManager.AppSettings[ConstNames.AuditTrailConn];
             var securityConnName = ConfigurationManager.AppSettings[ConstNames.SecurityConn];
 
-            var migrationVersion = MigrationVersions.Unknown;
-            if (fromVersion == SchemaVersions.ChromatographySchemaVersion15)
-                migrationVersion = MigrationVersions.Version15;
-                
-            if (fromVersion == SchemaVersions.ChromatographySchemaVersion16)
-                migrationVersion = MigrationVersions.Version16;
+            var migrationVersion = MigrationVersion.Unknown;
+            foreach(var sourceHost in _controller.MigrationSourceHost)
+            {
+                if(sourceHost.Value is PostgresqlSourceHost postgresqlSourceHost)
+                {
+                    if (fromVersion == postgresqlSourceHost.ChromatographySchemaVersion)
+                    {
+                        migrationVersion = sourceHost.Key;
+                        break;
+                    }
+                }
+            }
 
-            if (migrationVersion == MigrationVersions.Unknown)
+            if (migrationVersion == MigrationVersion.Unknown)
                 throw new ArgumentException("Failed to get release version from CDS application database! ");
 
             return new PostgresqlSourceContext
@@ -85,7 +94,7 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationCont
             };
             switch (_toVersion)
             {
-                case MigrationVersions.Version15:
+                case MigrationVersion.Version15:
                     var chromatographyConnNameV15 = ConfigurationManager.AppSettings[ConstNames.ChromatographyConnVer15];
                     var auditTrailConnNameV15 = ConfigurationManager.AppSettings[ConstNames.AuditTrailConnVer15];
                     var securityConnNameV15 = ConfigurationManager.AppSettings[ConstNames.SecurityConnVer15];
@@ -97,7 +106,7 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationCont
                         AuditTrailConnection = ConfigurationManager.ConnectionStrings[auditTrailConnNameV15].ConnectionString,
                         SecurityConnection = ConfigurationManager.ConnectionStrings[securityConnNameV15].ConnectionString
                     };
-                case MigrationVersions.Version16:
+                case MigrationVersion.Version16:
                     var chromatographyConnNameV16 = ConfigurationManager.AppSettings[ConstNames.ChromatographyConnVer16];
                     var auditTrailConnNameV16 = ConfigurationManager.AppSettings[ConstNames.AuditTrailConnVer16];
                     var securityConnNameV16 = ConfigurationManager.AppSettings[ConstNames.SecurityConnVer16];

@@ -5,7 +5,7 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Source
 {
     public abstract class SourceContextBase
     {
-        public MigrationVersions MigrateFromVersion { get; set; }
+        public MigrationVersion MigrateFromVersion { get; set; }
 
         public ExecutionDataflowBlockOptions BlockOption { get; set; }
 

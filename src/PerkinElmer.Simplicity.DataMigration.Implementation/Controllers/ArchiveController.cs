@@ -29,18 +29,18 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation.Controllers
                 {MigrationDataTypes.ReportTemplate, new ReportTemplatePipelineBuilder()},
             };
 
-        protected override IDictionary<MigrationVersions, SourceHostBase> MigrationSourceHost =>
-            new Dictionary<MigrationVersions, SourceHostBase>
+        protected override IDictionary<MigrationVersion, SourceHostBase> MigrationSourceHost =>
+            new Dictionary<MigrationVersion, SourceHostBase>
             {
-                {MigrationVersions.Version15, new PostgresqlSourceHostVer15()},
-                {MigrationVersions.Version16, new PostgresqlSourceHostVer16()}
+                {MigrationVersion.Version15, new PostgresqlSourceHostVer15()},
+                {MigrationVersion.Version16, new PostgresqlSourceHostVer16()}
             };
 
-        protected override IDictionary<MigrationVersions, TargetHostBase> MigrationTargetHost =>
-            new Dictionary<MigrationVersions, TargetHostBase>
+        protected override IDictionary<MigrationVersion, TargetHostBase> MigrationTargetHost =>
+            new Dictionary<MigrationVersion, TargetHostBase>
             {
-                {MigrationVersions.Version15, new SqliteTargetHostVer15()},
-                {MigrationVersions.Version16, new SqliteTargetHostVer16()}
+                {MigrationVersion.Version15, new SqliteTargetHostVer15()},
+                {MigrationVersion.Version16, new SqliteTargetHostVer16()}
             };
 
         public override MigrationType MigrationType => MigrationType.Archive;

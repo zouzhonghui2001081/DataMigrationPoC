@@ -11,6 +11,16 @@ namespace PerkinElmer.Simplicity.Data.Version16.DataSources.Postgresql
 {
     public class PostgresqlSourceHostVer16 : PostgresqlSourceHost
     {
+        public override Version AuditTrailSchemaVersion => new Version(0, 6);
+
+        public override Version SecuritySchemaVersion => new Version(1, 8);
+
+        public override Version ChromatographySchemaVersion => new Version(1, 10);
+
+        public override int ChromatographyMajorDataVersion => -1;
+
+        public override int ChromatographyMinorDataVersion => 33;
+
         public override IList<SourceParamBase> GetSourceBlockInputParams(SourceContextBase sourceContext)
         {
             if (!(sourceContext is PostgresqlSourceContext postgresqlSourceContext))

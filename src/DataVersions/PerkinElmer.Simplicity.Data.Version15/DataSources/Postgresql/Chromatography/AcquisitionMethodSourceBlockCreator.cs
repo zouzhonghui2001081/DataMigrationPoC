@@ -23,7 +23,7 @@ namespace PerkinElmer.Simplicity.Data.Version15.DataSources.Postgresql.Chromatog
 
         public override SourceTypes SourceType => SourceTypes.Posgresql;
 
-        public override MigrationVersions SourceVersion => MigrationVersions.Version15;
+        public override MigrationVersion SourceVersion => MigrationVersion.Version15;
 
         public override IPropagatorBlock<SourceParamBase, MigrationDataBase> CreateSourceBlock(SourceContextBase sourceContext)
         {

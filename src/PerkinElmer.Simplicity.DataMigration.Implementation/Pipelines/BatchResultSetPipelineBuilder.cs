@@ -22,11 +22,11 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation.Pipelines
             new Data.Version16.DataTargets.Postgresql.Chromatography.BatchResultSetTargetBlockCreator()
         };
 
-        protected override IDictionary<MigrationVersions, IDictionary<MigrationVersions, TransformBlockCreatorBase>> TransformMaps => new Dictionary<MigrationVersions, IDictionary<MigrationVersions, TransformBlockCreatorBase>>
+        protected override IDictionary<MigrationVersion, IDictionary<MigrationVersion, TransformBlockCreatorBase>> TransformMaps => new Dictionary<MigrationVersion, IDictionary<MigrationVersion, TransformBlockCreatorBase>>
         {
-            { MigrationVersions.Version15, new Dictionary<MigrationVersions, TransformBlockCreatorBase>
+            { MigrationVersion.Version15, new Dictionary<MigrationVersion, TransformBlockCreatorBase>
                 {
-                    { MigrationVersions.Version16, new BatchResultSetDataTransform() }
+                    { MigrationVersion.Version16, new BatchResultSetDataTransform() }
                 }
             }
         };

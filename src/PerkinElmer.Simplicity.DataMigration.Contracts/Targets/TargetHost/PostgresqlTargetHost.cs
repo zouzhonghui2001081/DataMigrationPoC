@@ -25,6 +25,10 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Targets.TargetHost
 
         public override TargetTypes TargetType => TargetTypes.Posgresql;
 
+        public abstract string AuditTrailConnectionString { get; }
+        public abstract string SecurityConnectionString { get; }
+        public abstract string ChromatographyCConnectionString { get; }
+
         protected abstract Version AuditTrailSchemaVersion { get; }
 
         protected abstract string AuditTrailDbSchema { get; }

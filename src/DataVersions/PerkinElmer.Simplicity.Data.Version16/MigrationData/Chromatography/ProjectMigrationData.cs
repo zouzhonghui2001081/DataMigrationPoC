@@ -7,7 +7,7 @@ namespace PerkinElmer.Simplicity.Data.Version16.MigrationData.Chromatography
 {
     public class ProjectMigrationData : MigrationDataBase
     {
-        public override MigrationVersions MigrationVersion => MigrationVersions.Version16;
+        public override MigrationVersion MigrationVersion => MigrationVersion.Version16;
 
         public override MigrationDataTypes MigrationDataTypes => MigrationDataTypes.Project;
 

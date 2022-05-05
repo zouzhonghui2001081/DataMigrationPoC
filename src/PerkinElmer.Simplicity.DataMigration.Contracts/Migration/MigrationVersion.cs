@@ -1,6 +1,6 @@
 ﻿namespace PerkinElmer.Simplicity.DataMigration.Contracts.Migration
 {
-    public enum MigrationVersions
+    public enum MigrationVersion
     {
         Version15 = 1,
         Version16 = 2,

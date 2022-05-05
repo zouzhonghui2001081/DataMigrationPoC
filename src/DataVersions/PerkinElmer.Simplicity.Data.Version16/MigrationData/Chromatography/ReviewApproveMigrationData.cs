@@ -12,7 +12,7 @@ namespace PerkinElmer.Simplicity.Data.Version16.MigrationData.Chromatography
             ReviewApprovableDataSubEntities = new List<ReviewApprovableDataEntitySubItem>();
         }
 
-        public override MigrationVersions MigrationVersion => MigrationVersions.Version16;
+        public override MigrationVersion MigrationVersion => MigrationVersion.Version16;
 
         public override MigrationDataTypes MigrationDataTypes => MigrationDataTypes.ReviewApprove;
 

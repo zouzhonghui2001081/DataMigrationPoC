@@ -6,9 +6,9 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Transform
 {
     public abstract class TransformBlockCreatorBase
     {
-        public abstract MigrationVersions FromVersion { get; }
+        public abstract MigrationVersion FromVersion { get; }
 
-        public abstract MigrationVersions ToVersion { get; }
+        public abstract MigrationVersion ToVersion { get; }
 
         public abstract TransformBlock<MigrationDataBase, MigrationDataBase> CreateTransform(
             TransformContextBase transformContext);

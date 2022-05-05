@@ -1,12 +1,11 @@
 ﻿using PerkinElmer.Simplicity.DataMigration.Contracts.Migration;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace PerkinElmer.Simplicity.DataMigration.Contracts
 {
     public interface IMigrationManager
     {
-        IDictionary<MigrationType, MigrationControllerBase> MigrationControllers { get; }
-
-        void Migration (MigrationContext migrationContext);
+        void Migration (MigrationType migrationType, MigrationVersion toVersion, CancellationTokenSource cancellationTokenSource);
     }
 }

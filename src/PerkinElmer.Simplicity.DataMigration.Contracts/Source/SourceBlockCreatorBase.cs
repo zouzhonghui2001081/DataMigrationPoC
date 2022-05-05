@@ -5,7 +5,7 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Source
 {
     public abstract class SourceBlockCreatorBase
     {
-        public abstract MigrationVersions SourceVersion { get; }
+        public abstract MigrationVersion SourceVersion { get; }
 
         public abstract SourceTypes SourceType { get; }
 

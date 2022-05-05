@@ -37,7 +37,7 @@ namespace PerkinElmer.Simplicity.Data.Version15.MigrationData.Chromatography
             BatchRuns = new List<BatchRunData>();
         }
 
-        public override MigrationVersions MigrationVersion => MigrationVersions.Version15;
+        public override MigrationVersion MigrationVersion => MigrationVersion.Version15;
 
         public override MigrationDataTypes MigrationDataTypes => MigrationDataTypes.BatchResultSet;
 

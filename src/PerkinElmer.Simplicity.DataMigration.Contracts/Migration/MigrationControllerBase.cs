@@ -9,9 +9,9 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Migration
     {
         protected abstract IDictionary<MigrationDataTypes, PipelineBuilderBase> MigrationPipelines { get; }
 
-        protected abstract IDictionary<MigrationVersions, SourceHostBase> MigrationSourceHost { get; }
+        public abstract IDictionary<MigrationVersion, SourceHostBase> MigrationSourceHost { get; }
 
-        protected abstract IDictionary<MigrationVersions, TargetHostBase> MigrationTargetHost { get; }
+        public abstract IDictionary<MigrationVersion, TargetHostBase> MigrationTargetHost { get; }
 
         public abstract MigrationType MigrationType { get; }
 

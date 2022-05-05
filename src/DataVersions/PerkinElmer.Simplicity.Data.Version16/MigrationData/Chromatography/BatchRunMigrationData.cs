@@ -15,7 +15,7 @@ namespace PerkinElmer.Simplicity.Data.Version16.MigrationData.Chromatography
             StreamDataBatchResults = new List<StreamDataBatchResult>();
         }
 
-        public override MigrationVersions MigrationVersion => MigrationVersions.Version16;
+        public override MigrationVersion MigrationVersion => MigrationVersion.Version16;
 
         public override MigrationDataTypes MigrationDataTypes => MigrationDataTypes.BatchResultSet;
 
@@ -41,7 +41,7 @@ namespace PerkinElmer.Simplicity.Data.Version16.MigrationData.Chromatography
             BatchRuns = new List<BatchRunMigrationData>();
         }
 
-        public override MigrationVersions MigrationVersion => MigrationVersions.Version16;
+        public override MigrationVersion MigrationVersion => MigrationVersion.Version16;
 
         public override MigrationDataTypes MigrationDataTypes => MigrationDataTypes.BatchResultSet;
 

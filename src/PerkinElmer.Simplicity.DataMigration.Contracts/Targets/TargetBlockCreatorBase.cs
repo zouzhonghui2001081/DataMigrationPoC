@@ -6,7 +6,7 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Targets
 {
     public abstract class TargetBlockCreatorBase
     {
-        public abstract MigrationVersions TargetVersion { get; }
+        public abstract MigrationVersion TargetVersion { get; }
 
         public abstract TargetTypes TargetType { get; }
 

@@ -15,7 +15,7 @@ namespace PerkinElmer.Simplicity.Data.Version16.MigrationData.Chromatography
             SuitabilityResults = new List<SuitabilityResult>();
         }
 
-        public override MigrationVersions MigrationVersion => MigrationVersions.Version15;
+        public override MigrationVersion MigrationVersion => MigrationVersion.Version15;
 
         public override MigrationDataTypes MigrationDataTypes => MigrationDataTypes.AnlysisResultSet;
 
@@ -56,7 +56,7 @@ namespace PerkinElmer.Simplicity.Data.Version16.MigrationData.Chromatography
             AuditTrailLogs = new List<AuditTrailLogEntry>();
         }
 
-        public override MigrationVersions MigrationVersion => MigrationVersions.Version16;
+        public override MigrationVersion MigrationVersion => MigrationVersion.Version16;
 
         public override MigrationDataTypes MigrationDataTypes => MigrationDataTypes.AnlysisResultSet;
 

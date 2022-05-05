@@ -18,7 +18,7 @@ namespace PerkinElmer.Simplicity.Data.Version16.DataTargets.Postgresql.Chromatog
 
         public override TargetTypes TargetType => TargetTypes.Posgresql;
 
-        public override MigrationVersions TargetVersion => MigrationVersions.Version16;
+        public override MigrationVersion TargetVersion => MigrationVersion.Version16;
 
         public override ITargetBlock<MigrationDataBase> CreateTargetBlock(TargetContextBase targetContext)
         {
@@ -28,7 +28,7 @@ namespace PerkinElmer.Simplicity.Data.Version16.DataTargets.Postgresql.Chromatog
             var actionBlock = new ActionBlock<MigrationDataBase>(versionData =>
             {
                 if (versionData == null || versionData.MigrationDataTypes != MigrationDataTypes.Project) return;
-                if (versionData.MigrationVersion != MigrationVersions.Version16) return;
+                if (versionData.MigrationVersion != MigrationVersion.Version16) return;
                 if (!(versionData is ProjectMigrationData projectData)) return;
 
                 using (var connection = new NpgsqlConnection(postgresqlTargetContext.ChromatographyConnection))

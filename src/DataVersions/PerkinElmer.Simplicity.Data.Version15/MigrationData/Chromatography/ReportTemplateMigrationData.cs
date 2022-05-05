@@ -13,7 +13,7 @@ namespace PerkinElmer.Simplicity.Data.Version15.MigrationData.Chromatography
             AuditTrailLogs = new List<AuditTrailLogEntry>();
         }
 
-        public override MigrationVersions MigrationVersion => MigrationVersions.Version15;
+        public override MigrationVersion MigrationVersion => MigrationVersion.Version15;
 
         public override MigrationDataTypes MigrationDataTypes => MigrationDataTypes.ReportTemplate;
 
