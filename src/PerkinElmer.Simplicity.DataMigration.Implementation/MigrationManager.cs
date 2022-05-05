@@ -7,17 +7,17 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation
 {
     public class MigrationManager : IMigrationManager
     {
-        public IDictionary<MigrationTypes, MigrationControllerBase> MigrationControllers =>
-            new Dictionary<MigrationTypes, MigrationControllerBase>
+        public IDictionary<MigrationType, MigrationControllerBase> MigrationControllers =>
+            new Dictionary<MigrationType, MigrationControllerBase>
             {
-                {MigrationTypes.Upgrade, new UpgradeController()},
-                {MigrationTypes.Archive, new ArchiveController()},
-                {MigrationTypes.Retrieve, new RetrieveController()},
-                {MigrationTypes.Import, new ImportController()},
-                {MigrationTypes.Export, new ExportController()},
+                {MigrationType.Upgrade, new UpgradeController()},
+                {MigrationType.Archive, new ArchiveController()},
+                {MigrationType.Retrieve, new RetrieveController()},
+                {MigrationType.Import, new ImportController()},
+                {MigrationType.Export, new ExportController()},
             };
 
-        public void Migration(MigrationContextBase migrationContext)
+        public void Migration(MigrationContext migrationContext)
         {
             var upgradeController = MigrationControllers[migrationContext.MigrationType];
             upgradeController.Migration(migrationContext);

@@ -13,8 +13,8 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Migration
 
         protected abstract IDictionary<MigrationVersions, TargetHostBase> MigrationTargetHost { get; }
 
-        public abstract MigrationTypes MigrationType { get; }
+        public abstract MigrationType MigrationType { get; }
 
-        public abstract void Migration(MigrationContextBase migrationContext);
+        public abstract void Migration(MigrationContext migrationContext);
     }
 }

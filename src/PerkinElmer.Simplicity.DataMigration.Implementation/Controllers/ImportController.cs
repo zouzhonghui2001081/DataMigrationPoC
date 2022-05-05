@@ -7,7 +7,6 @@ using PerkinElmer.Simplicity.Data.Version15.DataSources.Postgresql;
 using PerkinElmer.Simplicity.Data.Version15.DataTargets.Postgresql;
 using PerkinElmer.Simplicity.Data.Version16.DataSources.Postgresql;
 using PerkinElmer.Simplicity.Data.Version16.DataTargets.Postgresql;
-using PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationContext;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Source;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Source.SourceContext;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Targets;
@@ -29,7 +28,7 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation.Controllers
                 {MigrationDataTypes.ReportTemplate, new ReportTemplatePipelineBuilder()},
             };
 
-        public override MigrationTypes MigrationType => MigrationTypes.Import;
+        public override MigrationType MigrationType => MigrationType.Import;
 
         protected override IDictionary<MigrationVersions, SourceHostBase> MigrationSourceHost =>
             new Dictionary<MigrationVersions, SourceHostBase>
@@ -45,13 +44,13 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation.Controllers
                 {MigrationVersions.Version16, new PostgresqlTargetHostVer16()}
             };
 
-        public override void Migration(MigrationContextBase migrationContext)
+        public override void Migration(MigrationContext migrationContext)
         {
-            if (!(migrationContext is ImportContext importContext))
+            if (migrationContext.MigrationType != MigrationType.Import)
                 throw new ArgumentException(nameof(migrationContext));
 
-            var fileSourceContext = importContext.SourceContext as FileSourceContext;
-            var postgresqlTargetContext = importContext.TargetContext as PostgresqlTargetContext;
+            var fileSourceContext = migrationContext.SourceContext as FileSourceContext;
+            var postgresqlTargetContext = migrationContext.TargetContext as PostgresqlTargetContext;
 
             throw new NotImplementedException();
 

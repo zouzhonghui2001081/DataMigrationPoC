@@ -53,8 +53,10 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Targets.TargetHost
                 throw new ArgumentException(nameof(targetContext));
 
             ResetChromatographyDatabase(new NpgsqlConnectionStringBuilder(postgresqlTargetContext.ChromatographyConnection));
-            ResetAuditTrailDatabase(new NpgsqlConnectionStringBuilder(postgresqlTargetContext.AuditTrailConnection));
-            ResetSecurityDatabase(new NpgsqlConnectionStringBuilder(postgresqlTargetContext.SecurityConnection));
+            if(postgresqlTargetContext.IsMigrateAuditTrail)
+                ResetAuditTrailDatabase(new NpgsqlConnectionStringBuilder(postgresqlTargetContext.AuditTrailConnection));
+            if(postgresqlTargetContext.IsMigrateSecurity)
+                ResetSecurityDatabase(new NpgsqlConnectionStringBuilder(postgresqlTargetContext.SecurityConnection));
         }
 
         protected void InitializeDatabase(string databaseName)

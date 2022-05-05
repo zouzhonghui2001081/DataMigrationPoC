@@ -1,13 +1,12 @@
-﻿using System.Collections.Generic;
-using PerkinElmer.Simplicity.DataMigration.Contracts.Migration;
-using PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationContext;
+﻿using PerkinElmer.Simplicity.DataMigration.Contracts.Migration;
+using System.Collections.Generic;
 
 namespace PerkinElmer.Simplicity.DataMigration.Contracts
 {
     public interface IMigrationManager
     {
-        IDictionary<MigrationTypes, MigrationControllerBase> MigrationControllers { get; }
+        IDictionary<MigrationType, MigrationControllerBase> MigrationControllers { get; }
 
-        void Migration (MigrationContextBase migrationContext);
+        void Migration (MigrationContext migrationContext);
     }
 }

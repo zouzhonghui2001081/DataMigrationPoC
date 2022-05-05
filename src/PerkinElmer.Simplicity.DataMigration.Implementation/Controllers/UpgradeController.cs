@@ -3,7 +3,6 @@ using PerkinElmer.Simplicity.Data.Version15.DataTargets.Postgresql;
 using PerkinElmer.Simplicity.Data.Version16.DataSources.Postgresql;
 using PerkinElmer.Simplicity.Data.Version16.DataTargets.Postgresql;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Migration;
-using PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationContext;
 using PerkinElmer.Simplicity.DataMigration.Contracts.PipelineBuilder;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Source.SourceBlockParams;
 using PerkinElmer.Simplicity.DataMigration.Implementation.Pipelines;
@@ -45,17 +44,17 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation.Controllers
                 {MigrationVersions.Version16, new PostgresqlTargetHostVer16()}
             };
 
-        public override MigrationTypes MigrationType => MigrationTypes.Upgrade;
+        public override MigrationType MigrationType => MigrationType.Upgrade;
 
-        public override void Migration(MigrationContextBase migrationContext)
+        public override void Migration(MigrationContext migrationContext)
         {
-            if (!(migrationContext is UpgradeContext upgradeMigrationContext))
+            if (migrationContext.MigrationType != MigrationType.Upgrade)
                 throw new ArgumentException();
 
-            var targetHost = MigrationTargetHost[migrationContext.TargetContext.TargetMigrationVersion];
+            var targetHost = MigrationTargetHost[migrationContext.TargetContext.MigrateToVersion];
             targetHost.PrepareTargetHost(migrationContext.TargetContext);
 
-            var sourceHost = MigrationSourceHost[migrationContext.SourceContext.FromMigrationVersion];
+            var sourceHost = MigrationSourceHost[migrationContext.SourceContext.MigrateFromVersion];
             var sourceParams = sourceHost.GetSourceBlockInputParams(migrationContext.SourceContext);
             foreach (var sourceParam in sourceParams)
             {
@@ -65,7 +64,7 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation.Controllers
             }
         }
 
-        private bool MigrateProject(ProjectSourceParams projectSourceParam, MigrationContextBase migrationContextBase)
+        private bool MigrateProject(ProjectSourceParams projectSourceParam, MigrationContext migrationContextBase)
         {
             //Migrate project first.
             var projectPipelineBuilder = MigrationPipelines[MigrationDataTypes.Project];
