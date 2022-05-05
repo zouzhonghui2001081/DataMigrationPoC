@@ -50,9 +50,10 @@ namespace PerkinElmer.Simplicity.Data.Version16.DataSources.Postgresql.Chromatog
                                     var sequenceSource = new SequenceMigrationData
                                     {
                                         ProjectGuid = projectGuid,
-                                        Sequence = sequence,
-                                        AuditTrailLogs = EntityAssociatedAuditTrailSource.GetAuditTrail(posgresqlContext, sequence.Guid.ToString(), EntityTypeConstants.Sequence)
+                                        Sequence = sequence
                                     };
+                                    if (posgresqlContext.IsMigrateAuditTrail)
+                                        sequenceSource.AuditTrailLogs = EntityAssociatedAuditTrailSource.GetAuditTrail(posgresqlContext, sequence.Guid.ToString(), EntityTypeConstants.Sequence);
                                     bufferBlock.Post(sequenceSource);
                                 }
                             }
@@ -70,9 +71,10 @@ namespace PerkinElmer.Simplicity.Data.Version16.DataSources.Postgresql.Chromatog
                                     var sequenceSource = new SequenceMigrationData
                                     {
                                         ProjectGuid = projectGuid,
-                                        Sequence = sequence,
-                                        AuditTrailLogs = EntityAssociatedAuditTrailSource.GetAuditTrail(posgresqlContext, sequence.Guid.ToString(), EntityTypeConstants.Sequence)
+                                        Sequence = sequence
                                     };
+                                    if (posgresqlContext.IsMigrateAuditTrail)
+                                        sequenceSource.AuditTrailLogs = EntityAssociatedAuditTrailSource.GetAuditTrail(posgresqlContext, sequence.Guid.ToString(), EntityTypeConstants.Sequence);
                                     bufferBlock.Post(sequenceSource);
                                 }
                             }

@@ -5,9 +5,13 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Targets.TargetContext
     {
         public override TargetTypes TargetType => TargetTypes.Posgresql;
 
+        public bool IsMigrateAuditTrail { get; set; }
+
         public string AuditTrailConnection { get; set; }
 
         public string ChromatographyConnection { get; set; }
+
+        public bool IsMigrateSecurity { get; set; }
 
         public string SecurityConnection { get; set; }
     }

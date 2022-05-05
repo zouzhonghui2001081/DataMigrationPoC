@@ -51,7 +51,8 @@ namespace PerkinElmer.Simplicity.Data.Version15.DataSources.Postgresql.Chromatog
                                 foreach (var analysisResultSet in analysisResultSets)
                                 {
                                     var analysisResultSetData = CreateAnalysisResultSetData(connection, projectGuid, analysisResultSet);
-                                    analysisResultSetData.AuditTrailLogs = EntityAssociatedAuditTrailSource.GetAuditTrail(posgresqlContext, analysisResultSet.Guid.ToString(), EntityTypeConstants.AnalysisResultSet);
+                                    if (posgresqlContext.IsMigrateAuditTrail)
+                                        analysisResultSetData.AuditTrailLogs = EntityAssociatedAuditTrailSource.GetAuditTrail(posgresqlContext, analysisResultSet.Guid.ToString(), EntityTypeConstants.AnalysisResultSet);
                                     bufferBlock.Post(analysisResultSetData);
                                 }
                             }
@@ -66,7 +67,8 @@ namespace PerkinElmer.Simplicity.Data.Version15.DataSources.Postgresql.Chromatog
                                 {
                                     var analysisResultSet = analysisResultSetDao.Get(connection, projectGuid, analysisResultSetId);
                                     var analysisResultSetData = CreateAnalysisResultSetData(connection, projectGuid, analysisResultSet);
-                                    analysisResultSetData.AuditTrailLogs = EntityAssociatedAuditTrailSource.GetAuditTrail(posgresqlContext, analysisResultSet.Guid.ToString(), EntityTypeConstants.AnalysisResultSet);
+                                    if (posgresqlContext.IsMigrateAuditTrail)
+                                        analysisResultSetData.AuditTrailLogs = EntityAssociatedAuditTrailSource.GetAuditTrail(posgresqlContext, analysisResultSet.Guid.ToString(), EntityTypeConstants.AnalysisResultSet);
                                     bufferBlock.Post(analysisResultSetData);
                                 }
                             }

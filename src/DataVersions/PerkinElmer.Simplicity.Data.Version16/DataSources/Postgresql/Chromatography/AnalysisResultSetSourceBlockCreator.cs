@@ -51,9 +51,8 @@ namespace PerkinElmer.Simplicity.Data.Version16.DataSources.Postgresql.Chromatog
                                 {
                                     var analysisResultSetData =
                                         CreateAnalysisResultSetData(connection, projectGuid, analysisResultSet);
-                                    analysisResultSetData.AuditTrailLogs =
-                                        EntityAssociatedAuditTrailSource.GetAuditTrail(posgresqlContext,
-                                            analysisResultSet.Guid.ToString(), EntityTypeConstants.AnalysisResultSet);
+                                    if (posgresqlContext.IsMigrateAuditTrail)
+                                        analysisResultSetData.AuditTrailLogs = EntityAssociatedAuditTrailSource.GetAuditTrail(posgresqlContext, analysisResultSet.Guid.ToString(), EntityTypeConstants.AnalysisResultSet);
                                     bufferBlock.Post(analysisResultSetData);
                                 }
                             }
@@ -70,9 +69,8 @@ namespace PerkinElmer.Simplicity.Data.Version16.DataSources.Postgresql.Chromatog
                                         analysisResultSetDao.Get(connection, projectGuid, analysisResultSetId);
                                     var analysisResultSetData =
                                         CreateAnalysisResultSetData(connection, projectGuid, analysisResultSet);
-                                    analysisResultSetData.AuditTrailLogs =
-                                        EntityAssociatedAuditTrailSource.GetAuditTrail(posgresqlContext,
-                                            analysisResultSet.Guid.ToString(), EntityTypeConstants.AnalysisResultSet);
+                                    if (posgresqlContext.IsMigrateAuditTrail)
+                                        analysisResultSetData.AuditTrailLogs = EntityAssociatedAuditTrailSource.GetAuditTrail(posgresqlContext, analysisResultSet.Guid.ToString(), EntityTypeConstants.AnalysisResultSet);
                                     bufferBlock.Post(analysisResultSetData);
                                 }
                             }

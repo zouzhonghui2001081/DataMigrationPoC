@@ -52,9 +52,12 @@ namespace PerkinElmer.Simplicity.Data.Version15.DataSources.Postgresql.Chromatog
                                     {
                                         ProjectGuid = projectGuid,
                                         ReportTemplate = reportTemplate,
-                                        ReviewApproveData = reviewApproveData,
-                                        AuditTrailLogs = EntityAssociatedAuditTrailSource.GetAuditTrail(posgresqlContext, reportTemplate.Id.ToString(), EntityTypeConstants.ReportTemplate)
+                                        ReviewApproveData = reviewApproveData
                                     };
+
+                                    if (posgresqlContext.IsMigrateAuditTrail)
+                                        reportTemplateData.AuditTrailLogs = EntityAssociatedAuditTrailSource.GetAuditTrail(posgresqlContext, reportTemplate.Id.ToString(), EntityTypeConstants.ReportTemplate);
+                                        
                                     bufferBlock.Post(reportTemplateData);
                                 }
                             }
@@ -75,9 +78,11 @@ namespace PerkinElmer.Simplicity.Data.Version15.DataSources.Postgresql.Chromatog
                                     {
                                         ProjectGuid = projectGuid,
                                         ReportTemplate = reportTemplate,
-                                        ReviewApproveData = reviewApproveData,
-                                        AuditTrailLogs = EntityAssociatedAuditTrailSource.GetAuditTrail(posgresqlContext, reportTemplate.Id.ToString(), EntityTypeConstants.ReportTemplate)
+                                        ReviewApproveData = reviewApproveData
                                     };
+                                    if (posgresqlContext.IsMigrateAuditTrail)
+                                        reportTemplateData.AuditTrailLogs = EntityAssociatedAuditTrailSource.GetAuditTrail(posgresqlContext, reportTemplate.Id.ToString(), EntityTypeConstants.ReportTemplate);
+
                                     bufferBlock.Post(reportTemplateData);
                                 }
                             }

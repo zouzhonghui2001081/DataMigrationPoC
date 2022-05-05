@@ -52,9 +52,11 @@ namespace PerkinElmer.Simplicity.Data.Version16.DataSources.Postgresql.Chromatog
                                     {
                                         ProjectGuid = projectGuid,
                                         ProcessingMethod = processingMethod,
-                                        ReviewApproveData = reviewApproveData,
-                                        AuditTrailLogs = EntityAssociatedAuditTrailSource.GetAuditTrail(posgresqlContext, processingMethod.Guid.ToString(), EntityTypeConstants.ProcessingMethod)
+                                        ReviewApproveData = reviewApproveData
                                     };
+                                    if (posgresqlContext.IsMigrateAuditTrail)
+                                        processingMethodData.AuditTrailLogs = EntityAssociatedAuditTrailSource.GetAuditTrail(posgresqlContext, processingMethod.Guid.ToString(), EntityTypeConstants.ProcessingMethod);
+
                                     bufferBlock.Post(processingMethodData);
                                 }
                             }
@@ -73,9 +75,11 @@ namespace PerkinElmer.Simplicity.Data.Version16.DataSources.Postgresql.Chromatog
                                     {
                                         ProjectGuid = projectGuid,
                                         ProcessingMethod = processingMethod,
-                                        ReviewApproveData = reviewApproveData,
-                                        AuditTrailLogs = EntityAssociatedAuditTrailSource.GetAuditTrail(posgresqlContext, processingMethod.Guid.ToString(), EntityTypeConstants.ProcessingMethod)
+                                        ReviewApproveData = reviewApproveData
                                     };
+                                    if (posgresqlContext.IsMigrateAuditTrail)
+                                        processingMethodData.AuditTrailLogs = EntityAssociatedAuditTrailSource.GetAuditTrail(posgresqlContext, processingMethod.Guid.ToString(), EntityTypeConstants.ProcessingMethod);
+
                                     bufferBlock.Post(processingMethodData);
                                 }
                             }
