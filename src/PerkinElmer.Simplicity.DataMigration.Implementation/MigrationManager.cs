@@ -7,9 +7,9 @@ using System.Threading;
 
 namespace PerkinElmer.Simplicity.DataMigration.Implementation
 {
-    public class MigrationManager : IMigrationManager
+    public sealed class MigrationManager : IMigrationManager
     {
-        public IDictionary<MigrationType, MigrationControllerBase> MigrationControllers =>
+        private IDictionary<MigrationType, MigrationControllerBase> MigrationControllers =>
             new Dictionary<MigrationType, MigrationControllerBase>
             {
                 {MigrationType.Upgrade, new UpgradeController()},
@@ -18,12 +18,6 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation
                 {MigrationType.Import, new ImportController()},
                 {MigrationType.Export, new ExportController()},
             };
-
-        public void Migration(MigrationContext migrationContext)
-        {
-            var upgradeController = MigrationControllers[migrationContext.MigrationType];
-            upgradeController.Migration(migrationContext);
-        }
 
         public void Migration(MigrationType migrationType, MigrationVersion fromVersion, MigrationVersion toVersion, CancellationTokenSource cancellationTokenSource)
         {
@@ -41,8 +35,8 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation
             switch(migrationType)
             {
                 case MigrationType.Upgrade:
-                    var postgresqlDbUpgradeContextFactory = new PostgresqlDbUpgradeContextFactory(fromVersion, toVersion, cancellationTokenSource, controller);
-                    return postgresqlDbUpgradeContextFactory.GetMigrationContext();
+                    var upgradeContextFactory = new UpgradeContextFactory(fromVersion, toVersion, cancellationTokenSource, controller);
+                    return upgradeContextFactory.GetMigrationContext();
                 case MigrationType.Retrieve:
                 case MigrationType.Archive:
                 case MigrationType.Import:

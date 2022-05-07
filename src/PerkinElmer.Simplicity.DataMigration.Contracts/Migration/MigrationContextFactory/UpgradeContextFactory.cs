@@ -16,14 +16,7 @@ using System.Threading.Tasks.Dataflow;
 
 namespace PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationContextFactory
 {
-    internal enum PostgresqlDatabases
-    {
-        Chromatography,
-        AuditTrail,
-        Security
-    }
-
-    public class PostgresqlDbUpgradeContextFactory : ContextFactocyBase
+    public class UpgradeContextFactory : MigrationContextFactocyBase
     {
         private readonly MigrationVersion _fromVersion;
         private readonly MigrationVersion _toVersion;
@@ -32,7 +25,7 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationCont
 
         protected readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public PostgresqlDbUpgradeContextFactory(MigrationVersion fromVersion, MigrationVersion toVersion, CancellationTokenSource cancellationTokenSource, MigrationControllerBase controller)
+        public UpgradeContextFactory(MigrationVersion fromVersion, MigrationVersion toVersion, CancellationTokenSource cancellationTokenSource, MigrationControllerBase controller)
         {
             _fromVersion = fromVersion;
             _toVersion = toVersion;

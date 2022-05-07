@@ -1,6 +1,6 @@
 ﻿namespace PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationContextFactory
 {
-    public class ArchiveRetrieveContextFactory : ContextFactocyBase
+    public class ImportContextFactory : MigrationContextFactocyBase
     {
         public override MigrationContext GetMigrationContext()
         {
