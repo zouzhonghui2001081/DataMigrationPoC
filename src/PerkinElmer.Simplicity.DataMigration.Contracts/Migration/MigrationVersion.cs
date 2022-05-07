@@ -2,8 +2,9 @@
 {
     public enum MigrationVersion
     {
+        Unknown = 0,
         Version15 = 1,
         Version16 = 2,
-        Unknown = 3
+        Version20 = 3,
     }
 }

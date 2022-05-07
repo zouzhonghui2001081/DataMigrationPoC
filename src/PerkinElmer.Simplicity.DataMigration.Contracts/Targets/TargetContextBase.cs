@@ -9,6 +9,6 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Targets
 
         public ExecutionDataflowBlockOptions BlockOption { get; set; }
 
-        public abstract TargetTypes TargetType { get; }
+        public abstract TargetType TargetType { get; }
     }
 }

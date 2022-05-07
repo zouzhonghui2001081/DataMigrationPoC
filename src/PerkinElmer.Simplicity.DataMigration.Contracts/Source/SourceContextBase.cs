@@ -9,6 +9,6 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Source
 
         public ExecutionDataflowBlockOptions BlockOption { get; set; }
 
-        public abstract SourceTypes SourceType { get; }
+        public abstract SourceType SourceType { get; }
     }
 }

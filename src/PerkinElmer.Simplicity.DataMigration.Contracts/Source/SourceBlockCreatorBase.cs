@@ -7,7 +7,7 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Source
     {
         public abstract MigrationVersion SourceVersion { get; }
 
-        public abstract SourceTypes SourceType { get; }
+        public abstract SourceType SourceType { get; }
 
         public abstract IPropagatorBlock<SourceParamBase, MigrationDataBase> CreateSourceBlock(SourceContextBase sourceContext);
     }

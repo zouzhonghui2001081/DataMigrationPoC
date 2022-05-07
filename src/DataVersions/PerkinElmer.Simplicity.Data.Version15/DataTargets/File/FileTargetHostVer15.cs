@@ -5,7 +5,7 @@ namespace PerkinElmer.Simplicity.Data.Version15.DataTargets.Postgresql
 {
     public class FileTargetHostVer15 : FileTargetHost
     {
-        public override TargetTypes TargetType { get; }
+        public override TargetType TargetType { get; }
 
         public override void PrepareTargetHost(TargetContextBase targetContext)
         {

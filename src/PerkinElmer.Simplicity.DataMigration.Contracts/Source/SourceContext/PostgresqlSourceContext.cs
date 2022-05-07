@@ -3,7 +3,7 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Source.SourceContext
 {
     public class PostgresqlSourceContext : SourceContextBase
     {
-        public override SourceTypes SourceType => SourceTypes.Posgresql;
+        public override SourceType SourceType => SourceType.Posgresql;
 
         public bool IsMigrateAuditTrail { get; set; }
 

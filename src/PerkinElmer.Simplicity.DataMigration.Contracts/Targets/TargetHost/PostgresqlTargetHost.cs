@@ -30,7 +30,7 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Targets.TargetHost
         {
         }
 
-        public override TargetTypes TargetType => TargetTypes.Posgresql;
+        public override TargetType TargetType => TargetType.Posgresql;
 
         private ConnectionStrings _connectionStrings = null;
         public ConnectionStrings ConnectionStrings

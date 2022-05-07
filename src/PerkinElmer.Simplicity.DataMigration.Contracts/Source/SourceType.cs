@@ -1,7 +1,7 @@
 ﻿
 namespace PerkinElmer.Simplicity.DataMigration.Contracts.Source
 {
-    public enum SourceTypes
+    public enum SourceType
     {
         Posgresql,
         Sqlite,

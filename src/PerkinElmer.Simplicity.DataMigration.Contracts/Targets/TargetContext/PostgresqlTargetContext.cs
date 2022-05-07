@@ -3,7 +3,7 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Targets.TargetContext
 {
     public class PostgresqlTargetContext : TargetContextBase
     {
-        public override TargetTypes TargetType => TargetTypes.Posgresql;
+        public override TargetType TargetType => TargetType.Posgresql;
 
         public bool IsMigrateAuditTrail { get; set; }
 

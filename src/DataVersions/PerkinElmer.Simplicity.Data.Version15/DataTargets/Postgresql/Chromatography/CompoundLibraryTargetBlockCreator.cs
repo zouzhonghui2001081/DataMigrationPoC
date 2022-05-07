@@ -17,7 +17,7 @@ namespace PerkinElmer.Simplicity.Data.Version15.DataTargets.Postgresql.Chromatog
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public override TargetTypes TargetType => TargetTypes.Posgresql;
+        public override TargetType TargetType => TargetType.Posgresql;
 
         public override MigrationVersion TargetVersion => MigrationVersion.Version15;
 

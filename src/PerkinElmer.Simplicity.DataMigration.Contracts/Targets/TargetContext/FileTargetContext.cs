@@ -5,6 +5,6 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Targets.TargetContext
     {
         public string FilePath { get; set; }
 
-        public override TargetTypes TargetType => TargetTypes.Files;
+        public override TargetType TargetType => TargetType.Files;
     }
 }

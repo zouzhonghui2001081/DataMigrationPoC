@@ -6,7 +6,7 @@ namespace PerkinElmer.Simplicity.Data.Version15.DataTargets.Sqlite
 {
     public class SqliteTargetHostVer15 : SqliteTargetHost
     {
-        public override TargetTypes TargetType { get; }
+        public override TargetType TargetType { get; }
 
         public override void PrepareTargetHost(TargetContextBase targetContext)
         {

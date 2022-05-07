@@ -4,15 +4,6 @@ using PerkinElmer.Simplicity.DataMigration.Contracts.Transform.TransformContext;
 
 namespace PerkinElmer.Simplicity.DataMigration.Contracts.Migration
 {
-    public enum MigrationType
-    {
-        Upgrade,
-        Archive,
-        Retrieve,
-        Import,
-        Export
-    }
-
     public class MigrationContext
     {
         public MigrationContext(MigrationType migrationType)

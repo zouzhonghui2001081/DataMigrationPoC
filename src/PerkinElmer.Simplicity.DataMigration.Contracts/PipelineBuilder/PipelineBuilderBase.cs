@@ -57,14 +57,14 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.PipelineBuilder
         }
 
         protected SourceBlockCreatorBase GenerateSourceBlock(MigrationVersion startMigrationVersion,
-            SourceTypes sourceType)
+            SourceType sourceType)
         {
             return Sources.FirstOrDefault(source => source.SourceVersion == startMigrationVersion && 
                                                     source.SourceType == sourceType);
         }
 
         protected TargetBlockCreatorBase GenerateTargetBlock(MigrationVersion targetMigrationVersion,
-            TargetTypes targetType)
+            TargetType targetType)
         {
             return Targets.FirstOrDefault(target => target.TargetVersion == targetMigrationVersion &&
                                                     target.TargetType == targetType);

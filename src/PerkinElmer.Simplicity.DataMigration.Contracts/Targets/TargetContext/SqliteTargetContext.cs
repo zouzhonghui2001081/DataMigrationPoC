@@ -6,6 +6,6 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Targets.TargetContext
     {
         public string SqliteFileLocation { get; set; }
 
-        public override TargetTypes TargetType => TargetTypes.Sqlite;
+        public override TargetType TargetType => TargetType.Sqlite;
     }
 }

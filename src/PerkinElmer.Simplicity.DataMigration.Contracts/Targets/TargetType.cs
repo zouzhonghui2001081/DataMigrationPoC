@@ -2,7 +2,7 @@
 
 namespace PerkinElmer.Simplicity.DataMigration.Contracts.Targets
 {
-    public enum TargetTypes
+    public enum TargetType
     {
         Posgresql,
         Sqlite,

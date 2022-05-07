@@ -4,6 +4,6 @@
     {
         public string SqliteFileLocation { get; set; }
 
-        public override SourceTypes SourceType => SourceTypes.Sqlite;
+        public override SourceType SourceType => SourceType.Sqlite;
     }
 }

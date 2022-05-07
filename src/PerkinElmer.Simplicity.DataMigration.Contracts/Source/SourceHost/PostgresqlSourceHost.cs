@@ -7,7 +7,7 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Source.SourceHost
 {
     public abstract class PostgresqlSourceHost : SourceHostBase
     {
-        public override SourceTypes SourceType => SourceTypes.Posgresql;
+        public override SourceType SourceType => SourceType.Posgresql;
         public abstract Version AuditTrailSchemaVersion { get; }
         public abstract Version SecuritySchemaVersion { get; }
         public abstract Version ChromatographySchemaVersion { get; }

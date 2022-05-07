@@ -6,6 +6,6 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Source.SourceContext
     {
         public string FileLocation { get; set; }
 
-        public override SourceTypes SourceType => SourceTypes.Files;
+        public override SourceType SourceType => SourceType.Files;
     }
 }
