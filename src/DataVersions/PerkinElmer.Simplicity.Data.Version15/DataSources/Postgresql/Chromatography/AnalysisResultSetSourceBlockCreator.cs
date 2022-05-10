@@ -48,11 +48,20 @@ namespace PerkinElmer.Simplicity.Data.Version15.DataSources.Postgresql.Chromatog
                                 var analysisResultSetDao = new AnalysisResultSetDao();
                                 var analysisResultSets = analysisResultSetDao.GetAll(connection, projectGuid);
 
+                                var batchResultSetGuids = new List<Guid>();
                                 foreach (var analysisResultSet in analysisResultSets)
                                 {
                                     var analysisResultSetData = CreateAnalysisResultSetData(connection, projectGuid, analysisResultSet);
                                     if (posgresqlContext.IsMigrateAuditTrail)
                                         analysisResultSetData.AuditTrailLogs = EntityAssociatedAuditTrailSource.GetAuditTrail(posgresqlContext, analysisResultSet.Guid.ToString(), EntityTypeConstants.AnalysisResultSet);
+                                    foreach (var batchResultSetData in analysisResultSetData.BatchResultSetData)
+                                    {
+                                        var batchResultSetGuid = batchResultSetData.BatchResultSet.Guid;
+                                        if (batchResultSetGuids.Contains(batchResultSetGuid))
+                                            batchResultSetData.CreateBatchResultSet = false;
+                                        else
+                                            batchResultSetGuids.Add(batchResultSetGuid);
+                                    }
                                     bufferBlock.Post(analysisResultSetData);
                                 }
                             }
@@ -63,12 +72,21 @@ namespace PerkinElmer.Simplicity.Data.Version15.DataSources.Postgresql.Chromatog
                                 var projectGuid = projectEntitiesParams.ProjectGuid;
                                 var analysisResultSetIds = projectEntitiesParams.EntityGuids;
                                 var analysisResultSetDao = new AnalysisResultSetDao();
+                                var batchResultSetGuids = new List<Guid>();
                                 foreach (var analysisResultSetId in analysisResultSetIds)
                                 {
                                     var analysisResultSet = analysisResultSetDao.Get(connection, projectGuid, analysisResultSetId);
                                     var analysisResultSetData = CreateAnalysisResultSetData(connection, projectGuid, analysisResultSet);
                                     if (posgresqlContext.IsMigrateAuditTrail)
                                         analysisResultSetData.AuditTrailLogs = EntityAssociatedAuditTrailSource.GetAuditTrail(posgresqlContext, analysisResultSet.Guid.ToString(), EntityTypeConstants.AnalysisResultSet);
+                                    foreach (var batchResultSetData in analysisResultSetData.BatchResultSetData)
+                                    {
+                                        var batchResultSetGuid = batchResultSetData.BatchResultSet.Guid;
+                                        if (batchResultSetGuids.Contains(batchResultSetGuid))
+                                            batchResultSetData.CreateBatchResultSet = false;
+                                        else
+                                            batchResultSetGuids.Add(batchResultSetGuid);
+                                    }
                                     bufferBlock.Post(analysisResultSetData);
                                 }
                             }

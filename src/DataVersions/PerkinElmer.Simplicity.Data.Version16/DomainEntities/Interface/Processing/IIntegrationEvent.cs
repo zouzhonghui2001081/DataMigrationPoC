@@ -1,6 +1,5 @@
 ﻿
 using System;
-using PerkinElmer.Domain.Contracts.Processing;
 
 namespace PerkinElmer.Simplicity.Data.Version16.DomainEntities.Interface.Processing
 {

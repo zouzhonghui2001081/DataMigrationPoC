@@ -2,7 +2,6 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
-using PerkinElmer.Domain.Contracts.Processing;
 using PerkinElmer.Simplicity.Data.Version16.DomainEntities.Factory;
 using PerkinElmer.Simplicity.Data.Version16.DomainEntities.Interface.Processing;
 

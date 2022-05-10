@@ -78,42 +78,36 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation.Controllers
             var (acqusitionMethodSource, acqusitionMethodTarget) = acqusitionMethodPilpeLineBuilder.CreateTransformationPipeline(migrationContextBase);
             acqusitionMethodSource.Post(projectSourceParam);
             acqusitionMethodSource.Complete();
-            //acqusitionMethodTarget.Wait();
             migrationTasks.Add(acqusitionMethodTarget);
 
             var sequencePilpeLineBuilder = MigrationPipelines[MigrationDataTypes.Sequence];
             var (sequenceSource, sequenceTarget) = sequencePilpeLineBuilder.CreateTransformationPipeline(migrationContextBase);
             sequenceSource.Post(projectSourceParam);
             sequenceSource.Complete();
-            //sequenceTarget.Wait();
             migrationTasks.Add(sequenceTarget);
 
             var anlysisResultSetPipleLineBuilder = MigrationPipelines[MigrationDataTypes.AnlysisResultSet];
             var (analysisResultSetSource, analysisResultSetTarget) = anlysisResultSetPipleLineBuilder.CreateTransformationPipeline(migrationContextBase);
             analysisResultSetSource.Post(projectSourceParam);
             analysisResultSetSource.Complete();
-            //analysisResultSetTarget.Wait();
             migrationTasks.Add(analysisResultSetTarget);
 
             var compoundLibraryPipelineBuilder = MigrationPipelines[MigrationDataTypes.CompoundLibrary];
             var (compoundLibarySource, compoundLibarySourceTarget) = compoundLibraryPipelineBuilder.CreateTransformationPipeline(migrationContextBase);
             compoundLibarySource.Post(projectSourceParam);
             compoundLibarySource.Complete();
-            //compoundLibarySourceTarget.Wait();
             migrationTasks.Add(compoundLibarySourceTarget);
 
             var processingMethodPipelineBuilder = MigrationPipelines[MigrationDataTypes.ProcessingMethod];
             var (processingMethodSource, processingMethodTarget) = processingMethodPipelineBuilder.CreateTransformationPipeline(migrationContextBase);
             processingMethodSource.Post(projectSourceParam);
             processingMethodSource.Complete();
-            //processingMethodTarget.Wait();
             migrationTasks.Add(processingMethodTarget);
 
             var reportTemplatePipelineBuilder = MigrationPipelines[MigrationDataTypes.ReportTemplate];
             var (reportTemplateSource, reportTemplateTarget) = reportTemplatePipelineBuilder.CreateTransformationPipeline(migrationContextBase);
             reportTemplateSource.Post(projectSourceParam);
             reportTemplateSource.Complete();
-            //reportTemplateTarget.Wait();
             migrationTasks.Add(reportTemplateTarget);
 
             Task.WaitAll(migrationTasks.ToArray());

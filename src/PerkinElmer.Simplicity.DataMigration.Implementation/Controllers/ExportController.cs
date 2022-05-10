@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using PerkinElmer.Simplicity.Data.Version15.DataSources.Postgresql;
+using PerkinElmer.Simplicity.Data.Version15.DataTargets.File;
 using PerkinElmer.Simplicity.Data.Version15.DataTargets.Postgresql;
 using PerkinElmer.Simplicity.Data.Version16.DataSources.Postgresql;
+using PerkinElmer.Simplicity.Data.Version16.DataTargets.File;
 using PerkinElmer.Simplicity.Data.Version16.DataTargets.Postgresql;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Migration;
 using PerkinElmer.Simplicity.DataMigration.Contracts.PipelineBuilder;

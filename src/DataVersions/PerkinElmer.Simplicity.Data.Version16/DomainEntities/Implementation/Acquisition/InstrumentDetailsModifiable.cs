@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using PerkinElmer.Domain.Contracts.Acquisition;
 using PerkinElmer.Simplicity.Data.Version16.DomainEntities.Interface.Acquisition;
 using PerkinElmer.Simplicity.Data.Version16.DomainEntities.Interface.Shared;
 

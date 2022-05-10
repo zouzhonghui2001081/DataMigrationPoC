@@ -8,7 +8,6 @@ using PerkinElmer.Simplicity.DataMigration.Contracts.Targets.TargetContext;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Targets.TargetHost;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Transform.TransformContext;
 using System;
-using System.Configuration;
 using System.Data;
 using System.Reflection;
 using System.Threading;
@@ -87,7 +86,7 @@ namespace PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationCont
                 CancellationToken = _cancellationTokenSource.Token
             };
 
-            var targetHost = _controller.MigrationTargetHost[_fromVersion] as PostgresqlTargetHost;
+            var targetHost = _controller.MigrationTargetHost[_toVersion] as PostgresqlTargetHost;
             return new PostgresqlTargetContext
             {
                 BlockOption = blockOption,

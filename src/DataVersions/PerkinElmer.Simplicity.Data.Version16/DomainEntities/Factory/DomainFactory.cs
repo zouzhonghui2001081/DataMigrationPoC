@@ -4,8 +4,6 @@ using System.Globalization;
 using System.Reflection;
 using log4net;
 using PerkinElmer.Acquisition.Devices;
-using PerkinElmer.Domain.Contracts.Acquisition;
-using PerkinElmer.Domain.Contracts.Processing;
 using PerkinElmer.Simplicity.Data.Version16.DomainEntities.Implementation.Acquisition;
 using PerkinElmer.Simplicity.Data.Version16.DomainEntities.Implementation.LabManagement;
 using PerkinElmer.Simplicity.Data.Version16.DomainEntities.Implementation.Processing;

@@ -45,6 +45,8 @@ namespace PerkinElmer.Simplicity.Data.Version15.MigrationData.Chromatography
 
         public BatchResultSet BatchResultSet { get; set; }
 
+        public bool CreateBatchResultSet { get; set; } = true;
+
         public IList<BatchResultDeviceModuleDetails> DeviceModuleDetails { get; set; }
 
         public IList<DeviceDriverItemDetails> DeviceDriverItemDetails { get; set; }

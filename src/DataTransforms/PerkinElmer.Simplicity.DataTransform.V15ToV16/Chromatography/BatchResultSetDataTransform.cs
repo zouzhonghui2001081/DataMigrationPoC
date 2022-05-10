@@ -53,6 +53,7 @@ namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.Chromatography
             {
                 ProjectGuid = batchResultSetMigrationData.ProjectGuid,
                 BatchResultSet = BatchResultSet.Transform(batchResultSetMigrationData.BatchResultSet),
+                CreateBatchResultSet = batchResultSetMigrationData.CreateBatchResultSet
             };
             
             foreach (var deviceModuleDetails in batchResultSetMigrationData.DeviceModuleDetails)

@@ -3,8 +3,8 @@ using System.IO;
 using System.Text.Json;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Common;
 using PerkinElmer.Simplicity.DataMigration.Contracts.Targets.TargetHost;
-using SchemaVersions = PerkinElmer.Simplicity.Data.Version15.DataAccess.Postgresql.SchemaVersions;
-using DataVersions = PerkinElmer.Simplicity.Data.Version15.DataAccess.Postgresql.DataVersions;
+using SchemaVersions = PerkinElmer.Simplicity.Data.Version16.DataAccess.Postgresql.SchemaVersions;
+using DataVersions = PerkinElmer.Simplicity.Data.Version16.DataAccess.Postgresql.DataVersions;
 
 namespace PerkinElmer.Simplicity.Data.Version16.DataTargets.Postgresql
 {

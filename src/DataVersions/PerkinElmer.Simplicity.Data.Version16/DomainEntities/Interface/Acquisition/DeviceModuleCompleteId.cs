@@ -1,6 +1,5 @@
 using System;
 using System.Runtime.Serialization;
-using PerkinElmer.Domain.Contracts.Acquisition;
 
 namespace PerkinElmer.Simplicity.Data.Version16.DomainEntities.Interface.Acquisition
 {

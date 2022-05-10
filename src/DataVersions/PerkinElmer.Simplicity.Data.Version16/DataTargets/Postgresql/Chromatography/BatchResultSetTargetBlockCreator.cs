@@ -59,14 +59,16 @@ namespace PerkinElmer.Simplicity.Data.Version16.DataTargets.Postgresql.Chromatog
             var streamDataBatchResultDao = new StreamDataBatchResultDao();
             var deviceDriverItemDetailsDao = new DeviceDriverItemDetailsDao();
             var batchResultDeviceModuleDetailsDao = new BatchResultDeviceModuleDetailsDao();
+
+            if (batchResultSetMigrationData.CreateBatchResultSet == false) return;
+            if (batchResultSetDao.IsExists(connection, batchResultSetMigrationData.ProjectGuid, batchResultSetMigrationData.BatchResultSet.Guid))
+                return;
+
             using (var transaction = connection.BeginTransaction())
             {
                 var project = projectDao.GetProject(connection, batchResultSetMigrationData.ProjectGuid);
                 if (project == null) throw new ArgumentNullException(nameof(project));
                 batchResultSetMigrationData.BatchResultSet.ProjectId = project.Id;
-
-                if (batchResultSetDao.IsExists(connection, batchResultSetMigrationData.ProjectGuid, batchResultSetMigrationData.BatchResultSet.Guid))
-                    return;
 
                 var batchResultSet = batchResultSetDao.CreateBatchResultSet(connection, batchResultSetMigrationData.BatchResultSet);
                 var batchResultSetId = batchResultSet.Id;

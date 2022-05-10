@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using PerkinElmer.Domain.Contracts.Processing;
 using PerkinElmer.Simplicity.Data.Version16.DomainEntities.Interface.Processing;
 
 namespace PerkinElmer.Simplicity.Data.Version16.DomainEntities.Implementation.Processing

@@ -1,5 +1,4 @@
 using System;
-using PerkinElmer.Domain.Contracts.Acquisition;
 using PerkinElmer.Simplicity.Data.Version16.DomainEntities.Interface.Acquisition;
 
 namespace PerkinElmer.Simplicity.Data.Version16.DomainEntities.Interface.Processing

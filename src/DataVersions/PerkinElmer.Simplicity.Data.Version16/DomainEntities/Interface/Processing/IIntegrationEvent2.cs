@@ -1,6 +1,4 @@
-﻿using PerkinElmer.Simplicity.Data.Version16.DomainEntities.Interface.Processing;
-
-namespace PerkinElmer.Domain.Contracts.Processing
+﻿namespace PerkinElmer.Simplicity.Data.Version16.DomainEntities.Interface.Processing
 {
 	public interface IIntegrationEvent2 : IUniqueIntegrationEvent
 	{
