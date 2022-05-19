@@ -1,9 +1,8 @@
 ﻿using log4net;
-using PerkinElmer.Simplicity.DataMigration.Contracts.Migration.MigrationContextFactory;
-using PerkinElmer.Simplicity.DataMigration.Implementation;
 using System.Reflection;
-using System.Threading;
-using PerkinElmer.Simplicity.DataMigration.Contracts.Migration;
+using PerkinElmer.Simplicity.Data.Version16;
+using PerkinElmer.Simplicity.DataMigration.Implementation;
+using PerkinElmer.Simplicity.DataMigration.Implementation.Common;
 
 namespace PerkinElmer.Simplicity.DataMigrationAssistant
 {
@@ -13,12 +12,9 @@ namespace PerkinElmer.Simplicity.DataMigrationAssistant
 
         static void Main(string[] args)
         {
-            var upgradeFromVersion = MigrationVersion.Version15;
-            var upgradeToVersion = MigrationVersion.Version16;
-            var cancellationTokenSource = new CancellationTokenSource();
-
-            var migrationManager = new MigrationManager();
-            migrationManager.Migration( MigrationType.Upgrade, upgradeFromVersion, upgradeToVersion, cancellationTokenSource);
+            Version16Host.PreparePostgresqlHost();
+            var migrationManager = new MigrationManager(VersionNames.Version15, VersionNames.Version16);
+            migrationManager.StartDataFlow(string.Empty);
         }
     }
 }

@@ -1,12 +1,12 @@
 ﻿using System.Data;
 using PerkinElmer.Simplicity.Data.Version16.DataAccess.Postgresql.Chromatography;
-using PerkinElmer.Simplicity.Data.Version16.MigrationData.Chromatography;
+using PerkinElmer.Simplicity.Data.Version16.Version.Data.Chromatography;
 
 namespace PerkinElmer.Simplicity.Data.Version16.DataTargets.Postgresql.Chromatography
 {
-    public class EntityAssociatedReviewApproveTarget
+    internal class EntityAssociatedReviewApproveTarget
     {
-        public static void CreateReviewApproveEntity(IDbConnection connection, ReviewApproveMigrationData reviewApproveData)
+        public static void CreateReviewApproveEntity(IDbConnection connection, ReviewApproveVersion16Data reviewApproveData)
         {
             if (reviewApproveData == null) return;
             var entityReviewApproveDao = new EntityReviewApproveDao();

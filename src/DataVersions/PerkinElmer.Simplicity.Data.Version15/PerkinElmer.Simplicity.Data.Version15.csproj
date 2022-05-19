@@ -57,9 +57,8 @@
     <Folder Include="DataEntities\Chromatography\AcquisitionMethod\" />
     <Folder Include="DataEntities\Chromatography\CalibrationMethod\" />
     <Folder Include="DataEntities\Chromatography\ProcessingMethod\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\PerkinElmer.Simplicity.DataMigration.Contracts\PerkinElmer.Simplicity.DataMigration.Contracts.csproj" />
+    <Folder Include="DataSources\Sqlite\" />
+    <Folder Include="DataTargets\Sqlite\" />
   </ItemGroup>
 
 </Project>

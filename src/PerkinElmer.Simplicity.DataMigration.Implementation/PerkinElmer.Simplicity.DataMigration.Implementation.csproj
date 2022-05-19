@@ -11,6 +11,7 @@
     <PackageReference Include="log4net" Version="$(Log4net)" />   
     <PackageReference Include="Dapper.StrongName" Version="$(DapperStrongName)" />
 	<PackageReference Include="Npgsql" Version="$(Npgsql)" />   
+	<PackageReference Include="System.Threading.Tasks.Dataflow" Version="$(SystemThreadingTasksDataflow)" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="$(SystemDataDataSetExtensions)" />  
     <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="$(SystemRuntimeCompilerServicesUnsafe)" />
 	<PackageReference Include="System.Threading.Tasks.Dataflow" Version="$(SystemThreadingTasksDataflow)" />
@@ -21,7 +22,6 @@
     <ProjectReference Include="..\DataTransforms\PerkinElmer.Simplicity.DataTransform.V15ToV16\PerkinElmer.Simplicity.DataTransform.V15ToV16.csproj" />
     <ProjectReference Include="..\DataVersions\PerkinElmer.Simplicity.Data.Version15\PerkinElmer.Simplicity.Data.Version15.csproj" />
     <ProjectReference Include="..\DataVersions\PerkinElmer.Simplicity.Data.Version16\PerkinElmer.Simplicity.Data.Version16.csproj" />
-    <ProjectReference Include="..\PerkinElmer.Simplicity.DataMigration.Contracts\PerkinElmer.Simplicity.DataMigration.Contracts.csproj" />
   </ItemGroup>
   
   

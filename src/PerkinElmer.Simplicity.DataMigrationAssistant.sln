@@ -11,13 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PerkinElmer.Simplicity.Data
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PerkinElmer.Simplicity.DataMigrationAssistant", "PerkinElmer.Simplicity.DataMigrationAssistant\PerkinElmer.Simplicity.DataMigrationAssistant.csproj", "{BB7EB6F3-8316-4728-BAC3-82086FA22736}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PerkinElmer.Simplicity.DataMigration.Implementation", "PerkinElmer.Simplicity.DataMigration.Implementation\PerkinElmer.Simplicity.DataMigration.Implementation.csproj", "{DF2CD748-CEA2-45A5-A241-7B3AD3AD4651}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PerkinElmer.Simplicity.DataMigration.Contracts", "PerkinElmer.Simplicity.DataMigration.Contracts\PerkinElmer.Simplicity.DataMigration.Contracts.csproj", "{AD42E104-4799-4D3D-9F4F-D92AE48F08EB}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataTransforms", "DataTransforms", "{88390252-11A2-4161-A0BD-AE38AB6402C1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PerkinElmer.Simplicity.DataTransform.V15ToV16", "DataTransforms\PerkinElmer.Simplicity.DataTransform.V15ToV16\PerkinElmer.Simplicity.DataTransform.V15ToV16.csproj", "{7F38E682-DB08-48AB-A630-80828B24A05F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PerkinElmer.Simplicity.DataMigration.Implementation", "PerkinElmer.Simplicity.DataMigration.Implementation\PerkinElmer.Simplicity.DataMigration.Implementation.csproj", "{E28683D5-D7BF-46A2-89DE-1D8663EDE4B4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,18 +35,14 @@ Global
 		{BB7EB6F3-8316-4728-BAC3-82086FA22736}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BB7EB6F3-8316-4728-BAC3-82086FA22736}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BB7EB6F3-8316-4728-BAC3-82086FA22736}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DF2CD748-CEA2-45A5-A241-7B3AD3AD4651}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DF2CD748-CEA2-45A5-A241-7B3AD3AD4651}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DF2CD748-CEA2-45A5-A241-7B3AD3AD4651}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DF2CD748-CEA2-45A5-A241-7B3AD3AD4651}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AD42E104-4799-4D3D-9F4F-D92AE48F08EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AD42E104-4799-4D3D-9F4F-D92AE48F08EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AD42E104-4799-4D3D-9F4F-D92AE48F08EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AD42E104-4799-4D3D-9F4F-D92AE48F08EB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7F38E682-DB08-48AB-A630-80828B24A05F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7F38E682-DB08-48AB-A630-80828B24A05F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7F38E682-DB08-48AB-A630-80828B24A05F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7F38E682-DB08-48AB-A630-80828B24A05F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E28683D5-D7BF-46A2-89DE-1D8663EDE4B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E28683D5-D7BF-46A2-89DE-1D8663EDE4B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E28683D5-D7BF-46A2-89DE-1D8663EDE4B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E28683D5-D7BF-46A2-89DE-1D8663EDE4B4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

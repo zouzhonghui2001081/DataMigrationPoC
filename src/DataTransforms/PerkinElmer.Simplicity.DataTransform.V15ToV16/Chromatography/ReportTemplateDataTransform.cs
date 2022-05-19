@@ -1,55 +1,31 @@
 ﻿using System;
 using System.Reflection;
-using System.Threading.Tasks.Dataflow;
 using log4net;
-using PerkinElmer.Simplicity.DataMigration.Contracts.Migration;
-using PerkinElmer.Simplicity.DataMigration.Contracts.Transform;
-using PerkinElmer.Simplicity.DataMigration.Contracts.Transform.TransformContext;
-using PerkinElmer.Simplicity.Data.Version16.MigrationData.Chromatography;
 using PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.AuditTrail;
 using PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatography;
+using ReportTemplateData = PerkinElmer.Simplicity.Data.Version16.Version.Data.Chromatography.ReportTemplateData;
 
 namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.Chromatography
 {
-    public class ReportTemplateDataTransform : TransformBlockCreatorBase
+    internal class ReportTemplateDataTransform 
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
-        public override MigrationVersion FromVersion => MigrationVersion.Version15;
-
-        public override MigrationVersion ToVersion => MigrationVersion.Version16;
-
-        public override TransformBlock<MigrationDataBase, MigrationDataBase> CreateTransform(TransformContextBase transformContext)
+       
+        public static ReportTemplateData Transform(Data.Version15.Version.Data.Chromatography.ReportTemplateData reportTemplate)
         {
-            var reportTemplateTransform = new TransformBlock<MigrationDataBase, MigrationDataBase>(fromVersionData=>
+            if(reportTemplate == null) throw new ArgumentNullException(nameof(reportTemplate));
+            var reportTemplate16 = new ReportTemplateData
             {
-                if (fromVersionData.MigrationVersion != MigrationVersion.Version15 ||
-                    !(fromVersionData is Data.Version15.MigrationData.Chromatography.ReportTemplateMigrationData reportTemplateData))
-                    throw new ArgumentException("From version data is incorrect!");
-                return Transform(reportTemplateData);
-            }, transformContext.BlockOption);
-            reportTemplateTransform.Completion.ContinueWith(_ =>
-            {
-                Log.Info($"report templates transform complete with State{_.Status}");
-            });
-            return reportTemplateTransform;
-        }
-
-        internal static ReportTemplateMigrationData Transform(Data.Version15.MigrationData.Chromatography.ReportTemplateMigrationData reportTemplateMigration)
-        {
-            if(reportTemplateMigration == null) throw new ArgumentNullException(nameof(reportTemplateMigration));
-            var reportTemplate16 = new ReportTemplateMigrationData
-            {
-                ProjectGuid = reportTemplateMigration.ProjectGuid,
-                ReportTemplate = ReportTemplate.Transform(reportTemplateMigration.ReportTemplate),
+                ProjectGuid = reportTemplate.ProjectGuid,
+                ReportTemplate = ReportTemplate.Transform(reportTemplate.ReportTemplate),
             };
-            if (reportTemplateMigration.AuditTrailLogs != null)
+            if (reportTemplate.AuditTrailLogs != null)
             {
-                foreach (var auditTrailLog in reportTemplateMigration.AuditTrailLogs)
+                foreach (var auditTrailLog in reportTemplate.AuditTrailLogs)
                     reportTemplate16.AuditTrailLogs.Add(AuditTrailLogEntry.Transform(auditTrailLog));
             }
-            if (reportTemplateMigration.ReviewApproveData != null)
-                reportTemplate16.ReviewApproveData = ReviewApproveDataTransform.Transform(reportTemplateMigration.ReviewApproveData);
+            if (reportTemplate.ReviewApproveData != null)
+                reportTemplate16.ReviewApproveData = ReviewApproveDataTransform.Transform(reportTemplate.ReviewApproveData);
             return reportTemplate16;
         }
     }

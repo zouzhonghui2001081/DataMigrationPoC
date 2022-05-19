@@ -1,41 +1,25 @@
 ﻿using System;
 using System.Reflection;
-using System.Threading.Tasks.Dataflow;
 using log4net;
-using PerkinElmer.Simplicity.DataMigration.Contracts.Migration;
-using PerkinElmer.Simplicity.DataMigration.Contracts.Transform;
-using PerkinElmer.Simplicity.DataMigration.Contracts.Transform.TransformContext;
-using PerkinElmer.Simplicity.Data.Version16.MigrationData.Chromatography;
 using PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatography;
+using ProjectData15 = PerkinElmer.Simplicity.Data.Version15.Version.Data.Chromatography.ProjectData;
+using ProjectData16 = PerkinElmer.Simplicity.Data.Version16.Version.Data.Chromatography.ProjectData;
 
 namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.Chromatography
 {
-    public class ProjectDataTransform : TransformBlockCreatorBase
+    internal class ProjectDataTransform 
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public override MigrationVersion FromVersion => MigrationVersion.Version15;
-
-        public override MigrationVersion ToVersion => MigrationVersion.Version16;
-
-        public override TransformBlock<MigrationDataBase, MigrationDataBase> CreateTransform(TransformContextBase transformContext)
+        public static ProjectData16 Transform(ProjectData15 projectData)
         {
-            var projectTransformBlock = new TransformBlock<MigrationDataBase, MigrationDataBase>(fromVersionData =>
+            if (projectData == null) throw new ArgumentNullException(nameof(projectData));
+
+            return new ProjectData16
             {
-                if (fromVersionData.MigrationVersion != MigrationVersion.Version15 ||
-                    !(fromVersionData is Data.Version15.MigrationData.Chromatography.ProjectMigrationData projectData))
-                    throw new ArgumentException("From version data is incorrect!");
-                return new ProjectMigrationData
-                {
-                    Project = Project.Transform(projectData.Project),
-                    AuditTrailLogs = null
-                };
-            }, transformContext.BlockOption);
-            projectTransformBlock.Completion.ContinueWith(_ =>
-            {
-                Log.Info($"project transform complete with State{_.Status}");
-            });
-            return projectTransformBlock;
+                Project = Project.Transform(projectData.Project),
+                AuditTrailLogs = null
+            };
         }
     }
 }

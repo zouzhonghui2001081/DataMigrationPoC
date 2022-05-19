@@ -62,13 +62,11 @@
     <Folder Include="DataEntities\AuditTrail\" />
     <Folder Include="DataEntities\Chromatography\ReviewApprove\" />
     <Folder Include="DataEntities\Chromatography\ProcessingMethod\" />
+    <Folder Include="DataSources\Sqlite\" />
+    <Folder Include="DataTargets\Sqlite\" />
     <Folder Include="DomainEntities\Factory\" />
     <Folder Include="DomainEntities\Implementation\" />
     <Folder Include="DomainEntities\Interface\" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <ProjectReference Include="..\..\PerkinElmer.Simplicity.DataMigration.Contracts\PerkinElmer.Simplicity.DataMigration.Contracts.csproj" />
   </ItemGroup>
 
 </Project>

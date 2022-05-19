@@ -1,51 +1,25 @@
-﻿using System;
-using System.Reflection;
-using System.Threading.Tasks.Dataflow;
+﻿using System.Reflection;
 using log4net;
-using PerkinElmer.Simplicity.DataMigration.Contracts.Migration;
-using PerkinElmer.Simplicity.DataMigration.Contracts.Transform;
-using PerkinElmer.Simplicity.DataMigration.Contracts.Transform.TransformContext;
-using PerkinElmer.Simplicity.Data.Version16.MigrationData.Chromatography;
 using PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatography;
-using SnapshotCompoundLibraryData15 = PerkinElmer.Simplicity.Data.Version15.MigrationData.Chromatography.SnapshotCompoundLibraryData;
-using SnapshotCompoundLibraryData16 = PerkinElmer.Simplicity.Data.Version16.MigrationData.Chromatography.SnapshotCompoundLibraryData;
+using CompoundLibraryData = PerkinElmer.Simplicity.Data.Version15.Version.Data.Chromatography.CompoundLibraryData;
+using SnapshotCompoundLibraryData15 = PerkinElmer.Simplicity.Data.Version15.Version.Data.Chromatography.SnapshotCompoundLibraryData;
+using SnapshotCompoundLibraryData16 = PerkinElmer.Simplicity.Data.Version16.Version.Data.Chromatography.SnapshotCompoundLibraryData;
 namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.Chromatography
 {
-    public class CompoundLibraryDataTransform : TransformBlockCreatorBase
+    internal class CompoundLibraryDataTransform 
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public override MigrationVersion FromVersion => MigrationVersion.Version15;
-
-        public override MigrationVersion ToVersion => MigrationVersion.Version16;
-
-        public override TransformBlock<MigrationDataBase, MigrationDataBase> CreateTransform(TransformContextBase transformContext)
+        public static Data.Version16.Version.Data.Chromatography.CompoundLibraryData Transform(CompoundLibraryData compoundLibraryData)
         {
-            var projectCompoundLibraryTransformBlock = new TransformBlock<MigrationDataBase, MigrationDataBase>(
-                fromVersionData =>
-                {
-                    if (fromVersionData.MigrationVersion != MigrationVersion.Version15 ||
-                        !(fromVersionData is Data.Version15.MigrationData.Chromatography.ProjectCompoundLibraryMigrationData compoundLibraryData))
-                        throw new ArgumentException("From version data is incorrect!");
-                    return Transform(compoundLibraryData);
-                }, transformContext.BlockOption);
-            projectCompoundLibraryTransformBlock.Completion.ContinueWith(_ =>
+            return new Data.Version16.Version.Data.Chromatography.CompoundLibraryData
             {
-                Log.Info($"project compound library transform complete with State{_.Status}");
-            });
-            return projectCompoundLibraryTransformBlock;
-        }
-
-        internal static ProjectCompoundLibraryMigrationData Transform(Data.Version15.MigrationData.Chromatography.ProjectCompoundLibraryMigrationData projectProjectCompoundLibraryMigrationData)
-        {
-            return new ProjectCompoundLibraryMigrationData
-            {
-                ProjectGuid = projectProjectCompoundLibraryMigrationData.ProjectGuid,
-                ProjectCompoundLibrary = ProjectCompoundLibrary.Transform(projectProjectCompoundLibraryMigrationData.ProjectCompoundLibrary)
+                ProjectGuid = compoundLibraryData.ProjectGuid,
+                ProjectCompoundLibrary = ProjectCompoundLibrary.Transform(compoundLibraryData.ProjectCompoundLibrary)
             };
         }
 
-        internal static SnapshotCompoundLibraryData16 TransformSnapshotCompoundLibary(
+        public static SnapshotCompoundLibraryData16 TransformSnapshotCompoundLibary(
             SnapshotCompoundLibraryData15 snapshotCompoundLibraryData)
         {
             var snapshotCompoundLibraryData16 = new SnapshotCompoundLibraryData16
