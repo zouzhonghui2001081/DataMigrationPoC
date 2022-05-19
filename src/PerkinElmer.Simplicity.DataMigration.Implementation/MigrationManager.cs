@@ -50,17 +50,38 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation
             }
         };
 
-        public void StartDataFlow(string dataFlowConfig)
+        public void Start(MigrationContext migrationContext)
+        {
+            SetTargetType(migrationContext.TargetConfig);
+            StartDataflowInternal(migrationContext.SourceConfig);
+        }
+
+        private void SetTargetType(string targetConfig)
+        {
+            switch (_targetVersionBlockInfo.BlockName)
+            {
+                case VersionNames.Version15:
+                    if (_targetVersionBlockInfo.DataflowBlock is Version15 version15)
+                        version15.ApplyTargetConfiguration(targetConfig);
+                    break;
+                case VersionNames.Version16:
+                    if (_targetVersionBlockInfo.DataflowBlock is Version16 version16)
+                        version16.ApplyTargetConfiguration(targetConfig);
+                    break;
+            }
+        }
+
+        private void StartDataflowInternal(string sourceFlowConfig)
         {
             switch (_sourceVersionBlockInfo.BlockName)
             {
                 case VersionNames.Version15:
                     if (_sourceVersionBlockInfo.DataflowBlock is Version15 version15)
-                        version15.StartSourceDataflow(dataFlowConfig);
+                        version15.StartSourceDataflow(sourceFlowConfig);
                     break;
                 case VersionNames.Version16:
                     if (_sourceVersionBlockInfo.DataflowBlock is Version16 version16)
-                        version16.StartSourceDataflow(dataFlowConfig);
+                        version16.StartSourceDataflow(sourceFlowConfig);
                     break;
             }
         }

@@ -15,7 +15,8 @@
     <PackageReference Include="log4net" Version="$(Log4net)" />    
     <PackageReference Include="Microsoft.CSharp" Version="$(MicrosoftCSharp)" />    
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="$(MicrosoftExtensionsLoggingAbstractions)" />
-    <PackageReference Include="Npgsql" Version="$(Npgsql)" />    
+    <PackageReference Include="Npgsql" Version="$(Npgsql)" />   
+	<PackageReference Include="Newtonsoft.Json" Version="$(NewtonsoftJson)" />	
     <PackageReference Include="System.Data.DataSetExtensions" Version="$(SystemDataDataSetExtensions)" />  
     <PackageReference Include="System.Data.SQLite.Core" Version="$(SystemDataSQLite)" />
     <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="$(SystemRuntimeCompilerServicesUnsafe)" />

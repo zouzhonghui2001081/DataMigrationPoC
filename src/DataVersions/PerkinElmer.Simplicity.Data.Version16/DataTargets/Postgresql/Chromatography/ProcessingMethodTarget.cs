@@ -6,6 +6,7 @@ using Npgsql;
 using PerkinElmer.Simplicity.Data.Version16.DataAccess.Postgresql.Chromatography;
 using PerkinElmer.Simplicity.Data.Version16.DataEntities.Chromatography.ProcessingMethod;
 using PerkinElmer.Simplicity.Data.Version16.DataTargets.Postgresql.AuditTrail;
+using PerkinElmer.Simplicity.Data.Version16.Version;
 using PerkinElmer.Simplicity.Data.Version16.Version.Data.Chromatography;
 
 namespace PerkinElmer.Simplicity.Data.Version16.DataTargets.Postgresql.Chromatography

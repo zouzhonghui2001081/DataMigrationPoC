@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
+using Newtonsoft.Json;
 using PerkinElmer.Simplicity.Data.Version16.DataSources.Postgresql.Chromatography;
 using PerkinElmer.Simplicity.Data.Version16.DataTargets;
 using PerkinElmer.Simplicity.Data.Version16.DataTargets.Postgresql.Chromatography;
+using PerkinElmer.Simplicity.Data.Version16.Version;
+using PerkinElmer.Simplicity.Data.Version16.Version.Context;
 using PerkinElmer.Simplicity.Data.Version16.Version.Data;
 using PerkinElmer.Simplicity.Data.Version16.Version.Data.Chromatography;
 
@@ -22,13 +25,29 @@ namespace PerkinElmer.Simplicity.Data.Version16
 
         public void StartSourceDataflow(string sourceConfig)
         {
-            //TODO: Hard code now.
-            UpgradePostgresql();
+            var migrationSourceContext = JsonConvert.DeserializeObject<MigrationSourceContext>(sourceConfig);
+            switch (migrationSourceContext.MigrationType)
+            {
+                case MigrationTypes.Upgrade:
+                    UpgradePostgresql(migrationSourceContext.IsIncludeAuditTrailLog);
+                    break;
+            }
         }
 
-        
+        public void ApplyTargetConfiguration(string targetConfig)
+        {
+            var migrationTargetContext = JsonConvert.DeserializeObject<MigrationTargetContext>(targetConfig);
+            switch (migrationTargetContext.MigrationType)
+            {
+                case MigrationTypes.Upgrade:
+                    TargetType = TargetType.Posgresql;
+                    Version16Host.PreparePostgresqlHost();
+                    break;
+            }
+        }
 
-        public TargetType TargetType { get; set; } = TargetType.Posgresql;
+
+        public TargetType TargetType { get; set; } = TargetType.Unknown;
 
         #region ISourceBlock members
 
@@ -80,7 +99,7 @@ namespace PerkinElmer.Simplicity.Data.Version16
 
         #endregion
 
-        private void UpgradePostgresql()
+        private void UpgradePostgresql(bool isIncludeAuditTrail)
         {
             var projects = ProjectSource.GetAllProjects();
 
@@ -91,11 +110,11 @@ namespace PerkinElmer.Simplicity.Data.Version16
                 var projectGuid = projectData.Project.Guid;
                 Task.Run(async () => { await _source.SendAsync(projectData); });
 
-                var acqusitionMethods = AcquisitionMethodSource.GetAcqusitionMethods(projectGuid, true);
+                var acqusitionMethods = AcquisitionMethodSource.GetAcqusitionMethods(projectGuid, isIncludeAuditTrail);
                 foreach (var acqusitionMethod in acqusitionMethods)
                     _source.Post(acqusitionMethod);
 
-                var analysisResultSets = AnalysisResultSetSource.GetAnalysisResultSets(projectGuid, true);
+                var analysisResultSets = AnalysisResultSetSource.GetAnalysisResultSets(projectGuid, isIncludeAuditTrail);
                 foreach (var analysisResultSet in analysisResultSets)
                     Task.Run(async () => { await _source.SendAsync(analysisResultSet); });
 
@@ -103,15 +122,15 @@ namespace PerkinElmer.Simplicity.Data.Version16
                 foreach (var compoundLibrary in compoundLibraries)
                     _source.Post(compoundLibrary);
 
-                var processingMethods = ProcessingMethodSource.GetProcessingMethods(projectGuid, true);
+                var processingMethods = ProcessingMethodSource.GetProcessingMethods(projectGuid, isIncludeAuditTrail);
                 foreach (var processingMethod in processingMethods)
                     _source.Post(processingMethod);
 
-                var reportTemplates = ReportTemplateSource.GetReportTemplates(projectGuid, true);
+                var reportTemplates = ReportTemplateSource.GetReportTemplates(projectGuid, isIncludeAuditTrail);
                 foreach (var reportTemplate in reportTemplates)
                     _source.Post(reportTemplate);
 
-                var sequences = SequenceSource.GetSequence(projectGuid, true);
+                var sequences = SequenceSource.GetSequence(projectGuid, isIncludeAuditTrail);
                 foreach (var sequence in sequences)
                     _source.Post(sequence);
             }

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Data;
 using System.IO;
 using System.Reflection;
@@ -6,39 +6,39 @@ using System.Text.Json;
 using Dapper;
 using log4net;
 using Npgsql;
-using PerkinElmer.Simplicity.Data.Version16.DataAccess.Postgresql;
+using ConnectionStrings = PerkinElmer.Simplicity.Data.Version15.DataAccess.Postgresql.ConnectionStrings;
 
-namespace PerkinElmer.Simplicity.Data.Version16
+namespace PerkinElmer.Simplicity.Data.Version15.Version
 {
-    public class Version16Host
+    internal class Version15Host
     {
-        private const string AuditTrailDbSchema = "PerkinElmer.Simplicity.Data.Version16.DataAccess.Postgresql.SQL.AuditTrailDBSchema.sql";
+        private const string AuditTrailDbSchema = "PerkinElmer.Simplicity.Data.Version15.DataAccess.Postgresql.SQL.AuditTrailDBSchema.sql";
 
-        private const string SecurityDbSchema = "PerkinElmer.Simplicity.Data.Version16.DataAccess.Postgresql.SQL.SecurityDbSchema.sql";
+        private const string SecurityDbSchema = "PerkinElmer.Simplicity.Data.Version15.DataAccess.Postgresql.SQL.SecurityDbSchema.sql";
 
-        private const string SecurityData = "PerkinElmer.Simplicity.Data.Version16.DataAccess.Postgresql.SQL.SecurityDbData.sql";
+        private const string SecurityData = "PerkinElmer.Simplicity.Data.Version15.DataAccess.Postgresql.SQL.SecurityDbData.sql";
 
-        private const string ChromatographyDbSchema = "PerkinElmer.Simplicity.Data.Version16.DataAccess.Postgresql.SQL.ChromatographyDBSchema.sql";
+        private const string ChromatographyDbSchema = "PerkinElmer.Simplicity.Data.Version15.DataAccess.Postgresql.SQL.ChromatographyDBSchema.sql";
 
-        private const string ChromatographyNotificationFunctionTriggers = "PerkinElmer.Simplicity.Data.Version16.DataAccess.Postgresql.SQL.Version15.NotificationFunctionTriggers.sql";
+        private const string ChromatographyNotificationFunctionTriggers = "PerkinElmer.Simplicity.Data.Version15.DataAccess.Postgresql.SQL.Version15.NotificationFunctionTriggers.sql";
 
-        private const string ChromatographyDummyData = "PerkinElmer.Simplicity.Data.Version16.DataAccess.Postgresql.SQL.DummyRuns.sql";
+        private const string ChromatographyDummyData = "PerkinElmer.Simplicity.Data.Version15.DataAccess.Postgresql.SQL.DummyRuns.sql";
 
-        private const string ConnectionStringResourceName = "PerkinElmer.Simplicity.Data.Version16.DataAccess.Postgresql.ConnectionStrings.json";
+        private const string ConnectionStringResourceName = "PerkinElmer.Simplicity.Data.Version15.DataAccess.Postgresql.ConnectionStrings.json";
 
-        private const string SchemaTableName = "SchemaVersion";
+        public const string SchemaTableName = "SchemaVersion";
 
-        protected static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
-        public static readonly System.Version AuditTrailSchemaVersion = new System.Version(0, 6);
+        public static readonly System.Version AuditTrailSchemaVersion = new System.Version(0, 5);
 
         public static readonly System.Version SecuritySchemaVersion = new System.Version(1, 8);
 
-        public static readonly System.Version ChromatographySchemaVersion = new System.Version(1, 10);
+        public static readonly System.Version ChromatographySchemaVersion = new System.Version(1, 7);
 
         public const int ChromatographyMajorDataVersion = -1;
 
-        public const int ChromatographyMinorDataVersion = 33;
+        public const int ChromatographyMinorDataVersion = 29;
+
+        protected static ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         #region Postgresql
 
@@ -48,14 +48,13 @@ namespace PerkinElmer.Simplicity.Data.Version16
         private static NpgsqlConnectionStringBuilder _systemDbConnectionStringBuilder;
         private static NpgsqlConnectionStringBuilder SystemDbConnectionStrBuilder =>
             _systemDbConnectionStringBuilder ?? (_systemDbConnectionStringBuilder =
-                new NpgsqlConnectionStringBuilder(ConnectionStrings.System) { Pooling = false });
+                new NpgsqlConnectionStringBuilder(ConnectionStrings.System) {Pooling = false});
 
         internal static string ChromatographyConnection => ConnectionStrings.Chromatography;
 
         internal static string AuditTrailConnection => ConnectionStrings.AuditTrail;
 
         internal static string SecurityConnection => ConnectionStrings.Security;
-
 
         public static void PreparePostgresqlHost()
         {
@@ -241,7 +240,7 @@ namespace PerkinElmer.Simplicity.Data.Version16
 
         private static ConnectionStrings GetConnectionStrings()
         {
-            var assembly = typeof(Version16Host).Assembly;
+            var assembly = typeof(Version15Host).Assembly;
 
             using (var stream = assembly.GetManifestResourceStream(ConnectionStringResourceName))
             {
@@ -258,7 +257,7 @@ namespace PerkinElmer.Simplicity.Data.Version16
         {
             Log.Info("GetSqlScript() called");
 
-            var assembly = typeof(Version16Host).Assembly;
+            var assembly = typeof(Version15Host).Assembly;
 
             using (var stream = assembly.GetManifestResourceStream(resourceName))
             {
@@ -272,4 +271,7 @@ namespace PerkinElmer.Simplicity.Data.Version16
 
         #endregion
     }
+
+
+
 }

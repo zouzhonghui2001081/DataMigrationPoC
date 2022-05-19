@@ -9,6 +9,7 @@ using PerkinElmer.Simplicity.Data.Version16.DataEntities.AuditTrail;
 using PerkinElmer.Simplicity.Data.Version16.DataEntities.Chromatography.AcquisitionMethod;
 using PerkinElmer.Simplicity.Data.Version16.DataEntities.Chromatography.ReviewApprove;
 using PerkinElmer.Simplicity.Data.Version16.DataSources.Postgresql.AuditTrail;
+using PerkinElmer.Simplicity.Data.Version16.Version;
 using PerkinElmer.Simplicity.Data.Version16.Version.Data;
 using PerkinElmer.Simplicity.Data.Version16.Version.Data.Chromatography;
 

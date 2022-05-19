@@ -7,6 +7,7 @@ using Npgsql;
 using PerkinElmer.Simplicity.Data.Version15.DataAccess.Postgresql.Chromatography;
 using PerkinElmer.Simplicity.Data.Version15.DataEntities.AuditTrail;
 using PerkinElmer.Simplicity.Data.Version15.DataSources.Postgresql.AuditTrail;
+using PerkinElmer.Simplicity.Data.Version15.Version;
 using PerkinElmer.Simplicity.Data.Version15.Version.Data;
 using PerkinElmer.Simplicity.Data.Version15.Version.Data.Chromatography;
 

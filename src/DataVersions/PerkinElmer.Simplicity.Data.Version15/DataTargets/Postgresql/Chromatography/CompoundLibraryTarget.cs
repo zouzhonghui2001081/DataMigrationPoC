@@ -5,6 +5,7 @@ using log4net;
 using Npgsql;
 using PerkinElmer.Simplicity.Data.Version15.DataAccess.Postgresql.Chromatography;
 using PerkinElmer.Simplicity.Data.Version15.DataEntities.Chromatography;
+using PerkinElmer.Simplicity.Data.Version15.Version;
 using PerkinElmer.Simplicity.Data.Version15.Version.Data.Chromatography;
 
 namespace PerkinElmer.Simplicity.Data.Version15.DataTargets.Postgresql.Chromatography
