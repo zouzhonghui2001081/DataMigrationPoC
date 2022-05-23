@@ -67,7 +67,6 @@
     <Folder Include="DomainEntities\Factory\" />
     <Folder Include="DomainEntities\Implementation\" />
     <Folder Include="DomainEntities\Interface\" />
-    <Folder Include="Version\Context\" />
   </ItemGroup>
 
 </Project>

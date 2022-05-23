@@ -1,54 +1,67 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks.Dataflow;
-using PerkinElmer.Simplicity.Data.Version15;
-using PerkinElmer.Simplicity.Data.Version16;
+using Newtonsoft.Json;
 using PerkinElmer.Simplicity.DataMigration.Implementation.Common;
-using PerkinElmer.Simplicity.DataTransform.V15ToV16;
 
 namespace PerkinElmer.Simplicity.DataMigration.Implementation
 {
-    internal class VersionBlockInfo
-    {
-        public string BlockName { get; set; }
-
-        public IDataflowBlock DataflowBlock { get; set; }
-    }
-
-    internal class TransformBlockInfo
-    {
-        public string FromVersionBlockName { get; set; }
-
-        public string ToVersionBlockName { get; set; }
-
-        public IDataflowBlock DataflowBlock { get; set; }
-    }
-
     public class MigrationManager
     {
-        private readonly VersionBlockInfo _sourceVersionBlockInfo;
+        private readonly VersionComponent _sourceComponent;
 
-        private readonly Stack<TransformBlockInfo> _transformBlockInfos;
+        private readonly Stack<TransformComponent> _transformComponenents;
 
-        private readonly VersionBlockInfo _targetVersionBlockInfo;
+        private readonly VersionComponent _targetComponents;
 
         public MigrationManager(string startVersion, string endVersion)
         {
-            _sourceVersionBlockInfo = GenerateSourceBlock(startVersion);
-            _transformBlockInfos = GenerateTransformBlock(startVersion, endVersion);
-            _targetVersionBlockInfo = GenerateTargetBlock(endVersion);
+            LoadMigrationComponents();
+            _sourceComponent = GenerateSourceBlock(startVersion);
+            _transformComponenents = GenerateTransformBlock(startVersion, endVersion);
+            _targetComponents = GenerateTargetBlock(endVersion);
             if (!BuildPipeline())
                 throw new ArgumentException($"Failed setup pipeline from {startVersion} to {endVersion}");
         }
 
-        private IDictionary<string, IDictionary<string, TransformBlockInfo>> TransformMaps => new Dictionary<string, IDictionary<string, TransformBlockInfo>>
+        private IList<VersionComponent> Versions { get; set; }
+
+        private IDictionary<string, IDictionary<string, TransformComponent>> Transforms { get; set; }
+
+        private void LoadMigrationComponents()
         {
-            { VersionNames.Version15, new Dictionary<string, TransformBlockInfo>
+            var assembly = typeof(MigrationManager).Assembly;
+            var resource = "PerkinElmer.Simplicity.DataMigration.Implementation.MigrationComponents.json";
+            using (var stream = assembly.GetManifestResourceStream(resource))
+            {
+                using (var reader = new StreamReader(stream ?? throw new InvalidOperationException(
+                                                         $"Failed to load resource {resource}")))
                 {
-                    { VersionNames.Version16, new TransformBlockInfo{FromVersionBlockName = VersionNames.Version15, ToVersionBlockName = VersionNames.Version16, DataflowBlock = new Version15ToVersion16()} }
+                    var componentConfig = reader.ReadToEnd();
+                    var migrationComponent = JsonConvert.DeserializeObject<MigrationComponents>(componentConfig);
+
+                    Versions = migrationComponent.VersionComponents;
+                    var transforms = new Dictionary<string, IDictionary<string, TransformComponent>>();
+                    foreach (var transformComponent in migrationComponent.TransformComponents)
+                    {
+                        if (!transforms.ContainsKey(transformComponent.FromVersion))
+                        {
+                            transforms[transformComponent.FromVersion] = new Dictionary<string, TransformComponent>
+                            {
+                                [transformComponent.ToVersion] = transformComponent
+                            };
+                            continue;
+                        }
+                        transforms[transformComponent.FromVersion][transformComponent.ToVersion] = transformComponent;
+                    }
+
+                    Transforms = transforms;
                 }
             }
-        };
+        }
 
         public void Start(MigrationContext migrationContext)
         {
@@ -58,223 +71,147 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation
 
         private void SetTargetType(string targetConfig)
         {
-            switch (_targetVersionBlockInfo.BlockName)
-            {
-                case VersionNames.Version15:
-                    if (_targetVersionBlockInfo.DataflowBlock is Version15 version15)
-                        version15.ApplyTargetConfiguration(targetConfig);
-                    break;
-                case VersionNames.Version16:
-                    if (_targetVersionBlockInfo.DataflowBlock is Version16 version16)
-                        version16.ApplyTargetConfiguration(targetConfig);
-                    break;
-            }
+            var outputPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var assembly = Assembly.LoadFile(Path.Combine(outputPath, _targetComponents.DllName));
+
+            var typeInstance = assembly.GetType(_targetComponents.MigrationClassName);
+
+            if (typeInstance == null) return;
+            var methodInfo = typeInstance.GetMethod(_targetComponents.ApplyTargetConfigMethodName);
+            if (methodInfo != null && _targetComponents.VersionBlock != null)
+                methodInfo.Invoke(_targetComponents.VersionBlock, new object[] { targetConfig });
         }
 
         private void StartDataflowInternal(string sourceFlowConfig)
         {
-            switch (_sourceVersionBlockInfo.BlockName)
-            {
-                case VersionNames.Version15:
-                    if (_sourceVersionBlockInfo.DataflowBlock is Version15 version15)
-                        version15.StartSourceDataflow(sourceFlowConfig);
-                    break;
-                case VersionNames.Version16:
-                    if (_sourceVersionBlockInfo.DataflowBlock is Version16 version16)
-                        version16.StartSourceDataflow(sourceFlowConfig);
-                    break;
-            }
+            var outputPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var assembly = Assembly.LoadFile(Path.Combine(outputPath, _sourceComponent.DllName));
+            var typeInstance = assembly.GetType(_sourceComponent.MigrationClassName);
+
+            if (typeInstance == null) return;
+            var methodInfo = typeInstance.GetMethod(_sourceComponent.SourceStartMethodName);
+            if (methodInfo != null && _sourceComponent.VersionBlock != null)
+                methodInfo.Invoke(_sourceComponent.VersionBlock, new object[] { sourceFlowConfig } );
         }
 
         private bool BuildPipeline()
         {
-            if (_sourceVersionBlockInfo == null || _targetVersionBlockInfo == null) return false;
-            if (_sourceVersionBlockInfo.BlockName != _targetVersionBlockInfo.BlockName && _transformBlockInfos.Count == 0) return false;
+            if (_sourceComponent == null || _targetComponents == null) return false;
 
-            if (_transformBlockInfos != null && _transformBlockInfos.Count > 0)
+            if (!(_sourceComponent.VersionBlock is ISourceBlock<object> sourceBlock))
+                throw new ArgumentException("Version component is incorrect!");
+            if(!(_targetComponents.VersionBlock is ITargetBlock<object> targetBlock))
+                throw new ArgumentException("Version component is incorrect!");
+
+            if (_transformComponenents != null && _transformComponenents.Count > 0)
             {
-                var previousTransformInfo = _transformBlockInfos.Pop();
-                if (!LinkTo(previousTransformInfo, _targetVersionBlockInfo))
-                    return false;
-                while (_transformBlockInfos.Count > 0)
-                {
-                    var currentTransoformInfo = _transformBlockInfos.Pop();
-                    if (!LinkTo(previousTransformInfo, currentTransoformInfo))
-                        return false;
+                var currentTransformInfo = _transformComponenents.Pop();
+                if(!(currentTransformInfo.PropagatorBlock is IPropagatorBlock<object, object> currentPropagator))
+                    throw new ArgumentException("Version component is incorrect!");
+                currentPropagator.LinkTo(targetBlock);
 
-                    previousTransformInfo = currentTransoformInfo;
+                while (_transformComponenents.Count > 0)
+                {
+                    var previousTransoformComponent = _transformComponenents.Pop();
+                    if (!(previousTransoformComponent.PropagatorBlock is IPropagatorBlock<object, object> previousPropagator))
+                        throw new ArgumentException("Version component is incorrect!");
+                    previousPropagator.LinkTo(currentPropagator);
+                    currentPropagator = previousPropagator;
                 }
-                if (!LinkTo(_sourceVersionBlockInfo, previousTransformInfo)) return false;
+
+                sourceBlock.LinkTo(currentPropagator);
             }
             else
-            {
-                if (!LinkTo(_sourceVersionBlockInfo, _targetVersionBlockInfo)) return false;
-            }
+                sourceBlock.LinkTo(targetBlock);
             return true;
         }
-
-        private bool LinkTo(TransformBlockInfo currentTransformInfo, TransformBlockInfo nextTransformInfo)
+       
+        private VersionComponent GenerateSourceBlock(string sourceVersionName)
         {
-            return false;
+            var versionComponentInfo = Versions.FirstOrDefault(version => version.Version == sourceVersionName);
+            if (versionComponentInfo == null) throw new ArgumentException("Source version should not be null!");
+
+            var versionInstance = CreateInstance(versionComponentInfo.DllName, versionComponentInfo.MigrationClassName);
+            versionComponentInfo.VersionBlock = versionInstance;
+            return versionComponentInfo;
         }
 
-        private bool LinkTo(VersionBlockInfo sourceBlockInfo, TransformBlockInfo transformBlock)
+        private VersionComponent GenerateTargetBlock(string targetVersionName)
         {
-            if (sourceBlockInfo.BlockName != transformBlock.FromVersionBlockName)
-                throw new ArgumentException(nameof(transformBlock));
+            var versionComponentInfo = Versions.FirstOrDefault(version => version.Version == targetVersionName);
+            if (versionComponentInfo == null) throw new ArgumentException("Source version should not be null!");
 
-            switch (sourceBlockInfo.BlockName)
+            var versionInstance = CreateInstance(versionComponentInfo.DllName, versionComponentInfo.MigrationClassName);
+            versionComponentInfo.VersionBlock = versionInstance;
+            return versionComponentInfo;
+        }
+
+        private Stack<TransformComponent> GenerateTransformBlock(string startVersionName, string endVersionName)
+        {
+            var transformComponents = new Stack<TransformComponent>();
+            if (!Transforms.ContainsKey(startVersionName)) return transformComponents;
+
+            var transformMap = Transforms[startVersionName];
+            if (!transformMap.ContainsKey(endVersionName))
+                return GetTransformBlocksRecursively(endVersionName, transformMap);
+
+            var transformComponent = transformMap[endVersionName];
+            var transformInstance = CreateInstance(transformComponent.DllName, transformComponent.MigrationClassName);
+            transformComponent.PropagatorBlock = transformInstance;
+            transformComponents.Push(transformComponent);
+            return transformComponents;
+        }
+
+        private Stack<TransformComponent> GetTransformBlocksRecursively(string endVersionName,
+            IDictionary<string, TransformComponent> transformMap)
+        {
+            var transformBlocks = new Stack<TransformComponent>();
+            foreach (var transform in transformMap)
             {
-                case VersionNames.Version15:
-                    if (sourceBlockInfo.DataflowBlock is Version15 sourceVersion15)
-                    {
-                        switch (transformBlock.ToVersionBlockName)
-                        {
-                            case VersionNames.Version16:
-                                if (transformBlock.DataflowBlock is Version15ToVersion16 version15To16)
-                                {
-                                    sourceVersion15.LinkTo(version15To16, new DataflowLinkOptions { PropagateCompletion = true });
-                                    return true;
-                                }
-                                break;
-                        }
-                    }
-                    break;
-            }
-            return false;
-        }
-
-        private bool LinkTo(TransformBlockInfo transformBlock, VersionBlockInfo targetBlockInfo)
-        {
-            if (transformBlock.ToVersionBlockName != targetBlockInfo.BlockName)
-                throw new ArgumentException(nameof(targetBlockInfo));
-            switch (targetBlockInfo.BlockName)
-            {
-                case VersionNames.Version16:
-                    if (targetBlockInfo.DataflowBlock is Version16 targetVersion16)
-                    {
-                        switch (transformBlock.FromVersionBlockName)
-                        {
-                            case VersionNames.Version15:
-                                if (transformBlock.DataflowBlock is Version15ToVersion16 ver15ToVer16)
-                                {
-                                    ver15ToVer16.LinkTo(targetVersion16, new DataflowLinkOptions { PropagateCompletion = true });
-                                    return true;
-                                }
-                                break;
-                        }
-                    }
-                    break;
-            }
-            return false;
-        }
-
-        private bool LinkTo(VersionBlockInfo sourceBlockInfo, VersionBlockInfo targetBlockInfo)
-        {
-            switch (sourceBlockInfo.BlockName)
-            {
-                case VersionNames.Version15:
-                    if (sourceBlockInfo.DataflowBlock is Version15 sourceVersion15)
-                    {
-                        switch (targetBlockInfo.BlockName)
-                        {
-                            case VersionNames.Version15:
-                                if (targetBlockInfo.DataflowBlock is Version15 targetVersion15)
-                                {
-                                    sourceVersion15.LinkTo(targetVersion15, new DataflowLinkOptions { PropagateCompletion = true });
-                                    return true;
-                                }
-                                break;
-                        }
-                    }
-                    break;
-                case VersionNames.Version16:
-                    if (sourceBlockInfo.DataflowBlock is Version16 sourceVersion16)
-                    {
-                        switch (targetBlockInfo.BlockName)
-                        {
-                            case VersionNames.Version16:
-                                if (targetBlockInfo.DataflowBlock is Version16 targetVersion16)
-                                {
-                                    sourceVersion16.LinkTo(targetVersion16, new DataflowLinkOptions { PropagateCompletion = true });
-                                    return true;
-                                }
-                                break;
-                        }
-                    }
-                    break;
-            }
-
-            return false;
-        }
-
-        private VersionBlockInfo GenerateSourceBlock(string sourceVersionName)
-        {
-            switch (sourceVersionName)
-            {
-                case VersionNames.Version15:
-                    return new VersionBlockInfo{BlockName = sourceVersionName, DataflowBlock = new Version15()};
-                case VersionNames.Version16:
-                    return new VersionBlockInfo{BlockName = sourceVersionName, DataflowBlock = new Version16()};
-            }
-            return null;
-        }
-
-        private VersionBlockInfo GenerateTargetBlock(string targetVersionName)
-        {
-            switch (targetVersionName)
-            {
-                case VersionNames.Version15:
-                    return new VersionBlockInfo { BlockName = targetVersionName, DataflowBlock = new Version15() };
-                case VersionNames.Version16:
-                    return new VersionBlockInfo { BlockName = targetVersionName, DataflowBlock = new Version16() };
-            }
-            return null;
-        }
-
-        private Stack<TransformBlockInfo> GenerateTransformBlock(string startVersionName, string endVersionName)
-        {
-            var transformBlocks = new Stack<TransformBlockInfo>();
-            if (!TransformMaps.ContainsKey(startVersionName)) return transformBlocks;
-
-            var endBlockMaps = TransformMaps[startVersionName];
-            if (!endBlockMaps.ContainsKey(endVersionName))
-                return GetTransformBlocksRecursively(endVersionName, endBlockMaps);
-
-            transformBlocks.Push(endBlockMaps[endVersionName]);
-            return transformBlocks;
-        }
-
-        private Stack<TransformBlockInfo> GetTransformBlocksRecursively(string endVersionName,
-            IDictionary<string, TransformBlockInfo> targets)
-        {
-            var transformBlocks = new Stack<TransformBlockInfo>();
-            foreach (var target in targets)
-            {
-                if (TransformMaps.ContainsKey(target.Key))
+                if (Transforms.ContainsKey(transform.Key))
                 {
-                    var nextTargets = TransformMaps[target.Key];
-                    if (nextTargets != null && nextTargets.Count > 0)
+                    var nextTransformMap = Transforms[transform.Key];
+                    if (nextTransformMap != null && nextTransformMap.Count > 0)
                     {
-                        if (nextTargets.ContainsKey(endVersionName))
+                        if (nextTransformMap.ContainsKey(endVersionName))
                         {
-                            transformBlocks.Push(nextTargets[endVersionName]);
-                            transformBlocks.Push(targets[target.Key]);
+                            var nextTransformComponet = nextTransformMap[endVersionName];
+                            var nextPropagator = CreateInstance(nextTransformComponet.DllName, nextTransformComponet.MigrationClassName);
+                            nextTransformComponet.PropagatorBlock = nextPropagator;
+                            transformBlocks.Push(nextTransformComponet);
+
+                            var currentTransformComponent = transformMap[transform.Key];
+                            var currentPropagator = CreateInstance(currentTransformComponent.DllName, currentTransformComponent.MigrationClassName);
+                            currentTransformComponent.PropagatorBlock = currentPropagator;
+                            transformBlocks.Push(currentTransformComponent);
                             return transformBlocks;
                         }
 
-                        var subResult = GetTransformBlocksRecursively(endVersionName, nextTargets);
+                        var subResult = GetTransformBlocksRecursively(endVersionName, nextTransformMap);
                         if (subResult != null && subResult.Count > 0)
                         {
                             transformBlocks = subResult;
-                            transformBlocks.Push(targets[target.Key]);
-
+                            var component = transformMap[transform.Key];
+                            var propagator = CreateInstance(component.DllName, component.MigrationClassName);
+                            component.PropagatorBlock = propagator;
+                            transformBlocks.Push(component);
                             return transformBlocks;
                         }
                     }
                 }
             }
             return transformBlocks;
+        }
+
+        private object CreateInstance(string dllName, string className)
+        {
+            var outputPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var assembly = Assembly.LoadFile(Path.Combine(outputPath ,dllName));
+            var typeInstance = assembly.GetType(className);
+            if (typeInstance != null)
+                return Activator.CreateInstance(typeInstance, null);
+
+            throw new ArgumentException("Component configuration is incorrect!");
         }
     }
 }

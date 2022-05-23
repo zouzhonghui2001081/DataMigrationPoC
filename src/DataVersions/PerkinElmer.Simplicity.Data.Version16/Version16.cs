@@ -12,15 +12,15 @@ using PerkinElmer.Simplicity.Data.Version16.Version.Data.Chromatography;
 
 namespace PerkinElmer.Simplicity.Data.Version16
 {
-    public class Version16 : ISourceBlock<Version16DataBase>, ITargetBlock<Version16DataBase>
+    public class Version16 : ISourceBlock<object>, ITargetBlock<object>
     {
-        private readonly ActionBlock<Version16DataBase> _target;
-        private readonly BufferBlock<Version16DataBase> _source;
+        private readonly ActionBlock<object> _target;
+        private readonly BufferBlock<object> _source;
 
         public Version16()
         {
-            _source = new BufferBlock<Version16DataBase>();
-            _target = new ActionBlock<Version16DataBase>(SaveVersionData);
+            _source = new BufferBlock<object>();
+            _target = new ActionBlock<object>(SaveVersionData);
         }
 
         public void StartSourceDataflow(string sourceConfig)
@@ -46,39 +46,38 @@ namespace PerkinElmer.Simplicity.Data.Version16
             }
         }
 
-
         public TargetType TargetType { get; set; } = TargetType.Unknown;
 
         #region ISourceBlock members
 
-        public Version16DataBase ConsumeMessage(DataflowMessageHeader messageHeader, ITargetBlock<Version16DataBase> target, out bool messageConsumed)
+        public object ConsumeMessage(DataflowMessageHeader messageHeader, ITargetBlock<object> target, out bool messageConsumed)
         {
-            return ((ISourceBlock<Version16DataBase>)_source).ConsumeMessage(messageHeader, target, out messageConsumed);
+            return ((ISourceBlock<object>)_source).ConsumeMessage(messageHeader, target, out messageConsumed);
         }
 
-        public IDisposable LinkTo(ITargetBlock<Version16DataBase> target, DataflowLinkOptions linkOptions)
+        public IDisposable LinkTo(ITargetBlock<object> target, DataflowLinkOptions linkOptions)
         {
             return _source.LinkTo(target, linkOptions);
         }
 
-        public bool ReserveMessage(DataflowMessageHeader messageHeader, ITargetBlock<Version16DataBase> target)
+        public bool ReserveMessage(DataflowMessageHeader messageHeader, ITargetBlock<object> target)
         {
-            return ((ISourceBlock<Version16DataBase>)_source).ReserveMessage(messageHeader, target);
+            return ((ISourceBlock<object>)_source).ReserveMessage(messageHeader, target);
         }
 
-        public void ReleaseReservation(DataflowMessageHeader messageHeader, ITargetBlock<Version16DataBase> target)
+        public void ReleaseReservation(DataflowMessageHeader messageHeader, ITargetBlock<object> target)
         {
-            ((ISourceBlock<Version16DataBase>)_source).ReleaseReservation(messageHeader, target);
+            ((ISourceBlock<object>)_source).ReleaseReservation(messageHeader, target);
         }
 
         #endregion
 
         #region ITargetBlock members
 
-        public DataflowMessageStatus OfferMessage(DataflowMessageHeader messageHeader, Version16DataBase messageValue, ISourceBlock<Version16DataBase> source,
+        public DataflowMessageStatus OfferMessage(DataflowMessageHeader messageHeader, object messageValue, ISourceBlock<object> source,
             bool consumeToAccept)
         {
-            return ((ITargetBlock<Version16DataBase>)_target).OfferMessage(messageHeader, messageValue, source, consumeToAccept);
+            return ((ITargetBlock<object>)_target).OfferMessage(messageHeader, messageValue, source, consumeToAccept);
         }
 
         #endregion
@@ -136,15 +135,17 @@ namespace PerkinElmer.Simplicity.Data.Version16
             }
         }
 
-        private void SaveVersionData(Version16DataBase versionData)
+        private void SaveVersionData(object versionData)
         {
-            if (TargetType == TargetType.Unknown)
+            if (!(versionData is Version16DataBase version16DataBase))
+                throw new ArgumentException("Version data type is incorrect!");
+            if(TargetType == TargetType.Unknown)
                 throw new ArgumentException("Target type not set!");
 
             switch (TargetType)
             {
                 case TargetType.Posgresql:
-                    SavePostgresqlVersionData(versionData);
+                    SavePostgresqlVersionData(version16DataBase);
                     break;
             }
         }

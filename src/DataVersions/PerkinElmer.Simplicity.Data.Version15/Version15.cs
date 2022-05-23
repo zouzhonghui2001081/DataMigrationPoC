@@ -12,15 +12,15 @@ using PerkinElmer.Simplicity.Data.Version15.Version.Data.Chromatography;
 
 namespace PerkinElmer.Simplicity.Data.Version15
 {
-    public sealed class Version15 : ISourceBlock<Version15DataBase>, ITargetBlock<Version15DataBase>
+    public sealed class Version15 : ISourceBlock<object>, ITargetBlock<object>
     {
-        private readonly ActionBlock<Version15DataBase> _target;
-        private readonly BufferBlock<Version15DataBase> _source;
+        private readonly ActionBlock<object> _target;
+        private readonly BufferBlock<object> _source;
 
         public Version15()
         {
-            _source = new BufferBlock<Version15DataBase>();
-            _target = new ActionBlock<Version15DataBase>(SaveVersionData);
+            _source = new BufferBlock<object>();
+            _target = new ActionBlock<object>(SaveVersionData);
         }
 
         internal TargetType TargetType { get; set; } = TargetType.Unknown;
@@ -50,34 +50,34 @@ namespace PerkinElmer.Simplicity.Data.Version15
 
         #region ISourceBlock members
 
-        public Version15DataBase ConsumeMessage(DataflowMessageHeader messageHeader, ITargetBlock<Version15DataBase> target, out bool messageConsumed)
+        public object ConsumeMessage(DataflowMessageHeader messageHeader, ITargetBlock<object> target, out bool messageConsumed)
         {
-            return ((ISourceBlock<Version15DataBase>)_source).ConsumeMessage(messageHeader, target, out messageConsumed);
+            return ((ISourceBlock<object>)_source).ConsumeMessage(messageHeader, target, out messageConsumed);
         }
 
-        public IDisposable LinkTo(ITargetBlock<Version15DataBase> target, DataflowLinkOptions linkOptions)
+        public IDisposable LinkTo(ITargetBlock<object> target, DataflowLinkOptions linkOptions)
         {
             return _source.LinkTo(target, linkOptions);
         }
 
-        public bool ReserveMessage(DataflowMessageHeader messageHeader, ITargetBlock<Version15DataBase> target)
+        public bool ReserveMessage(DataflowMessageHeader messageHeader, ITargetBlock<object> target)
         {
-            return ((ISourceBlock<Version15DataBase>)_source).ReserveMessage(messageHeader, target);
+            return ((ISourceBlock<object>)_source).ReserveMessage(messageHeader, target);
         }
 
-        public void ReleaseReservation(DataflowMessageHeader messageHeader, ITargetBlock<Version15DataBase> target)
+        public void ReleaseReservation(DataflowMessageHeader messageHeader, ITargetBlock<object> target)
         {
-            ((ISourceBlock<Version15DataBase>)_source).ReleaseReservation(messageHeader, target);
+            ((ISourceBlock<object>)_source).ReleaseReservation(messageHeader, target);
         }
 
         #endregion
 
         #region ITargetBlock members
 
-        public DataflowMessageStatus OfferMessage(DataflowMessageHeader messageHeader, Version15DataBase messageValue, ISourceBlock<Version15DataBase> source,
+        public DataflowMessageStatus OfferMessage(DataflowMessageHeader messageHeader, object messageValue, ISourceBlock<object> source,
             bool consumeToAccept)
         {
-            return ((ITargetBlock<Version15DataBase>)_target).OfferMessage(messageHeader, messageValue, source, consumeToAccept);
+            return ((ITargetBlock<object>)_target).OfferMessage(messageHeader, messageValue, source, consumeToAccept);
         }
 
         #endregion
@@ -135,15 +135,16 @@ namespace PerkinElmer.Simplicity.Data.Version15
             }
         }
 
-        private void SaveVersionData(Version15DataBase versionData)
+        private void SaveVersionData(object versionData)
         {
+            if (!(versionData is Version15DataBase version15DataBase))
+                throw new ArgumentException("Version data type is incorrect!");
             if (TargetType == TargetType.Unknown)
                 throw new ArgumentException("Target type not set!");
-
             switch (TargetType)
             {
                 case TargetType.Posgresql:
-                    SavePostgresqlVersionData(versionData);
+                    SavePostgresqlVersionData(version15DataBase);
                     break;
             }
         }
@@ -188,5 +189,4 @@ namespace PerkinElmer.Simplicity.Data.Version15
             }
         }
     }
-
 }

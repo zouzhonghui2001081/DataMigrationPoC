@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using PerkinElmer.Simplicity.Data.Version15.Version.Data;
-using PerkinElmer.Simplicity.Data.Version16.Version.Data;
 using PerkinElmer.Simplicity.DataTransform.V15ToV16.Chromatography;
 using AcqusitionMethodData15 = PerkinElmer.Simplicity.Data.Version15.Version.Data.Chromatography.AcqusitionMethodData;
 using AnalysisResultSetData15 = PerkinElmer.Simplicity.Data.Version15.Version.Data.Chromatography.AnalysisResultSetData;
@@ -15,41 +14,41 @@ using SequenceData15 = PerkinElmer.Simplicity.Data.Version15.Version.Data.Chroma
 
 namespace PerkinElmer.Simplicity.DataTransform.V15ToV16
 {
-    public sealed class Version15ToVersion16 : IPropagatorBlock<Version15DataBase, Version16DataBase>
+    public sealed class Version15ToVersion16 : IPropagatorBlock<object, object>
     {
-        private readonly TransformBlock<Version15DataBase, Version16DataBase> _transformBlock;
+        private readonly TransformBlock<object, object> _transformBlock;
 
         public Version15ToVersion16()
         {
-            _transformBlock = new TransformBlock<Version15DataBase, Version16DataBase>(Transform);
+            _transformBlock = new TransformBlock<object, object>(Transform);
         }
 
         #region IPropagatorBlock members
 
-        public DataflowMessageStatus OfferMessage(DataflowMessageHeader messageHeader, Version15DataBase messageValue, ISourceBlock<Version15DataBase> source,
+        public DataflowMessageStatus OfferMessage(DataflowMessageHeader messageHeader, object messageValue, ISourceBlock<object> source,
             bool consumeToAccept)
         {
-            return ((ITargetBlock<Version15DataBase>)_transformBlock).OfferMessage(messageHeader, messageValue, source, consumeToAccept);
+            return ((ITargetBlock<object>)_transformBlock).OfferMessage(messageHeader, messageValue, source, consumeToAccept);
         }
 
-        public IDisposable LinkTo(ITargetBlock<Version16DataBase> target, DataflowLinkOptions linkOptions)
+        public IDisposable LinkTo(ITargetBlock<object> target, DataflowLinkOptions linkOptions)
         {
             return _transformBlock.LinkTo(target, linkOptions);
         }
 
-        public Version16DataBase ConsumeMessage(DataflowMessageHeader messageHeader, ITargetBlock<Version16DataBase> target, out bool messageConsumed)
+        public object ConsumeMessage(DataflowMessageHeader messageHeader, ITargetBlock<object> target, out bool messageConsumed)
         {
-            return ((ISourceBlock<Version16DataBase>)_transformBlock).ConsumeMessage(messageHeader, target, out messageConsumed);
+            return ((ISourceBlock<object>)_transformBlock).ConsumeMessage(messageHeader, target, out messageConsumed);
         }
 
-        public bool ReserveMessage(DataflowMessageHeader messageHeader, ITargetBlock<Version16DataBase> target)
+        public bool ReserveMessage(DataflowMessageHeader messageHeader, ITargetBlock<object> target)
         {
-            return ((ISourceBlock<Version16DataBase>)_transformBlock).ReserveMessage(messageHeader, target);
+            return ((ISourceBlock<object>)_transformBlock).ReserveMessage(messageHeader, target);
         }
 
-        public void ReleaseReservation(DataflowMessageHeader messageHeader, ITargetBlock<Version16DataBase> target)
+        public void ReleaseReservation(DataflowMessageHeader messageHeader, ITargetBlock<object> target)
         {
-            ((ISourceBlock<Version16DataBase>)_transformBlock).ReleaseReservation(messageHeader, target);
+            ((ISourceBlock<object>)_transformBlock).ReleaseReservation(messageHeader, target);
         }
 
         #endregion
@@ -70,11 +69,11 @@ namespace PerkinElmer.Simplicity.DataTransform.V15ToV16
 
         #endregion
 
-        public Version16DataBase Transform(Version15DataBase input)
+        public object Transform(object input)
         {
-            if (input == null) return null;
+            if(!(input is Version15DataBase version15DataBase)) throw new ArgumentException("The input type is incorrect!");
 
-            switch (input.Version15DataTypes)
+            switch (version15DataBase.Version15DataTypes)
             {
                 case Version15DataTypes.AcqusitionMethod:
                     if (!(input is AcqusitionMethodData15 acqusitionMethodData)) return null;
