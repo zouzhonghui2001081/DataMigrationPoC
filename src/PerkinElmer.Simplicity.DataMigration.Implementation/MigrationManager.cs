@@ -96,6 +96,8 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation
             var versionComponentInfo = _migrationComponenetsFactory.Versions.FirstOrDefault(version => version.Version == sourceVersionName);
             if (versionComponentInfo == null) throw new ArgumentException("Source version should not be null!");
 
+            if (versionComponentInfo.VersionBlock != null) return versionComponentInfo;
+
             var versionInstance = _migrationComponenetsFactory.CreateInstance(versionComponentInfo.DllName, versionComponentInfo.VersionClassName);
             versionComponentInfo.VersionBlock = versionInstance;
             return versionComponentInfo;
@@ -105,6 +107,8 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation
         {
             var versionComponentInfo = _migrationComponenetsFactory.Versions.FirstOrDefault(version => version.Version == targetVersionName);
             if (versionComponentInfo == null) throw new ArgumentException("Source version should not be null!");
+
+            if (versionComponentInfo.VersionBlock != null) return versionComponentInfo;
 
             var versionInstance = _migrationComponenetsFactory.CreateInstance(versionComponentInfo.DllName, versionComponentInfo.VersionClassName);
             versionComponentInfo.VersionBlock = versionInstance;
