@@ -36,7 +36,7 @@ namespace PerkinElmer.Simplicity.Data.Version15
             }
         }
 
-        public void ApplyTargetConfiguration(string targetConfig)
+        public void PrepareTarget(string targetConfig)
         {
             var migrationTargetContext = JsonConvert.DeserializeObject<MigrationTargetContext>(targetConfig);
             switch (migrationTargetContext.MigrationType)

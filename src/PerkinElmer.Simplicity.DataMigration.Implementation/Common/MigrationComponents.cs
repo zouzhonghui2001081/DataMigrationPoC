@@ -27,11 +27,11 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation.Common
 
         public string DllName { get; set; }
 
-        public string MigrationClassName { get; set; }
+        public string VersionClassName { get; set; }
 
-        public string SourceStartMethodName { get; set; }
+        public string SourceVersionMethodName { get; set; }
 
-        public string ApplyTargetConfigMethodName { get; set; }
+        public string TargetVersionMethodName { get; set; }
 
         public object VersionBlock { get; set; }
     }

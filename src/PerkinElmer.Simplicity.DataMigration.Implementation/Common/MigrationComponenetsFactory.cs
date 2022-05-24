@@ -8,7 +8,6 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation.Common
 {
     internal class MigrationComponenetsFactory
     {
-         
         public MigrationComponenetsFactory()
         {
             LoadMigrationComponents();

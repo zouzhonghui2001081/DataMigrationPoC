@@ -22,9 +22,9 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation
         {
             _migrationComponenetsFactory = new MigrationComponenetsFactory();
             _sourceComponent = GenerateSourceBlock(startVersion);
-            _transformComponenents = GenerateTransformBlock(startVersion, endVersion);
+            _transformComponenents = GenerateTransformBlocks(startVersion, endVersion);
             _targetComponents = GenerateTargetBlock(endVersion);
-            if (!BuildPipeline())
+            if (!BuildTransformPipeline())
                 throw new ArgumentException($"Failed setup pipeline from {startVersion} to {endVersion}");
         }
 
@@ -39,10 +39,10 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation
             var outputPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             var assembly = Assembly.LoadFile(Path.Combine(outputPath, _targetComponents.DllName));
 
-            var typeInstance = assembly.GetType(_targetComponents.MigrationClassName);
+            var typeInstance = assembly.GetType(_targetComponents.VersionClassName);
             if (typeInstance == null) return;
 
-            var methodInfo = typeInstance.GetMethod(_targetComponents.ApplyTargetConfigMethodName);
+            var methodInfo = typeInstance.GetMethod(_targetComponents.TargetVersionMethodName);
             if (methodInfo != null && _targetComponents.VersionBlock != null)
                 methodInfo.Invoke(_targetComponents.VersionBlock, new object[] { targetConfig });
         }
@@ -51,15 +51,15 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation
         {
             var outputPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             var assembly = Assembly.LoadFile(Path.Combine(outputPath, _sourceComponent.DllName));
-            var typeInstance = assembly.GetType(_sourceComponent.MigrationClassName);
+            var typeInstance = assembly.GetType(_sourceComponent.VersionClassName);
 
             if (typeInstance == null) return;
-            var methodInfo = typeInstance.GetMethod(_sourceComponent.SourceStartMethodName);
+            var methodInfo = typeInstance.GetMethod(_sourceComponent.SourceVersionMethodName);
             if (methodInfo != null && _sourceComponent.VersionBlock != null)
                 methodInfo.Invoke(_sourceComponent.VersionBlock, new object[] { sourceFlowConfig } );
         }
 
-        private bool BuildPipeline()
+        private bool BuildTransformPipeline()
         {
             if (_sourceComponent == null || _targetComponents == null) return false;
 
@@ -96,7 +96,7 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation
             var versionComponentInfo = _migrationComponenetsFactory.Versions.FirstOrDefault(version => version.Version == sourceVersionName);
             if (versionComponentInfo == null) throw new ArgumentException("Source version should not be null!");
 
-            var versionInstance = _migrationComponenetsFactory.CreateInstance(versionComponentInfo.DllName, versionComponentInfo.MigrationClassName);
+            var versionInstance = _migrationComponenetsFactory.CreateInstance(versionComponentInfo.DllName, versionComponentInfo.VersionClassName);
             versionComponentInfo.VersionBlock = versionInstance;
             return versionComponentInfo;
         }
@@ -106,12 +106,12 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation
             var versionComponentInfo = _migrationComponenetsFactory.Versions.FirstOrDefault(version => version.Version == targetVersionName);
             if (versionComponentInfo == null) throw new ArgumentException("Source version should not be null!");
 
-            var versionInstance = _migrationComponenetsFactory.CreateInstance(versionComponentInfo.DllName, versionComponentInfo.MigrationClassName);
+            var versionInstance = _migrationComponenetsFactory.CreateInstance(versionComponentInfo.DllName, versionComponentInfo.VersionClassName);
             versionComponentInfo.VersionBlock = versionInstance;
             return versionComponentInfo;
         }
 
-        private Stack<TransformComponent> GenerateTransformBlock(string startVersionName, string endVersionName)
+        private Stack<TransformComponent> GenerateTransformBlocks(string startVersionName, string endVersionName)
         {
             var transformComponents = new Stack<TransformComponent>();
             if (!_migrationComponenetsFactory.Transforms.ContainsKey(startVersionName)) return transformComponents;
