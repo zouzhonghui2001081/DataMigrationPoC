@@ -6,8 +6,7 @@
       "DllName": "PerkinElmer.Simplicity.Data.Version15.dll",
       "MigrationClassName": "PerkinElmer.Simplicity.Data.Version15.Version15",
       "SourceStartMethodName": "StartSourceDataflow",
-      "ApplyTargetConfigMethodName": "ApplyTargetConfiguration",
-      "VersionBlock": null
+      "ApplyTargetConfigMethodName": "ApplyTargetConfiguration"
     },
     {
       "Name": "Version16Component",
@@ -15,8 +14,7 @@
       "DllName": "PerkinElmer.Simplicity.Data.Version16.dll",
       "MigrationClassName": "PerkinElmer.Simplicity.Data.Version16.Version16",
       "SourceStartMethodName": "StartSourceDataflow",
-      "ApplyTargetConfigMethodName": "ApplyTargetConfiguration",
-      "VersionBlock": null
+      "ApplyTargetConfigMethodName": "ApplyTargetConfiguration"
     }
   ],
   "TransformComponents": [
@@ -25,8 +23,7 @@
       "FromVersion": "Version15",
       "ToVersion": "Version16",
       "DllName": "PerkinElmer.Simplicity.DataTransform.V15ToV16.dll",
-      "MigrationClassName": "PerkinElmer.Simplicity.DataTransform.V15ToV16.Version15ToVersion16",
-      "PropagatorBlock": null
+      "MigrationClassName": "PerkinElmer.Simplicity.DataTransform.V15ToV16.Version15ToVersion16"
     }
   ]
 }

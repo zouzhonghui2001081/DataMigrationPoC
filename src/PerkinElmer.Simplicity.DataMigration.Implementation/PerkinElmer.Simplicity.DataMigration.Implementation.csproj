@@ -14,14 +14,6 @@
      <OutputPath>..\..\Output\Debug\</OutputPath>
    </PropertyGroup>
 
-   <ItemGroup>
-     <None Remove="MigrationComponents.json" />
-   </ItemGroup>
-
-   <ItemGroup>
-     <EmbeddedResource Include="MigrationComponents.json" />
-   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="DotNetZip" Version="$(DotNetZip)" />
     <PackageReference Include="log4net" Version="$(Log4net)" />   
@@ -32,6 +24,12 @@
     <PackageReference Include="System.Data.DataSetExtensions" Version="$(SystemDataDataSetExtensions)" />  
     <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="$(SystemRuntimeCompilerServicesUnsafe)" />
 	<PackageReference Include="System.Threading.Tasks.Dataflow" Version="$(SystemThreadingTasksDataflow)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="MigrationComponents.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   
 </Project>
