@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks.Dataflow;
 using PerkinElmer.Simplicity.DataMigration.Implementation.Common;
 
@@ -16,17 +17,33 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation
 
         private readonly VersionComponent _targetComponents;
 
+        private readonly BroadcastBlock<string> _msgBroadcaseBlock;
+
+        private readonly ActionBlock<string> _migrationAuditBlock;
+
+        private readonly ActionBlock<string> _progressUpdateBlock;
+
         private readonly MigrationComponenetsFactory _migrationComponenetsFactory;
 
         public MigrationManager(string startVersion, string endVersion)
         {
             _migrationComponenetsFactory = new MigrationComponenetsFactory();
+            var executeBlockOption = new ExecutionDataflowBlockOptions { CancellationToken = Cancellation.Token };
             _sourceComponent = GenerateSourceBlock(startVersion);
             _transformComponenents = GenerateTransformBlocks(startVersion, endVersion);
             _targetComponents = GenerateTargetBlock(endVersion);
-            if (!BuildTransformPipeline())
+            _msgBroadcaseBlock = new BroadcastBlock<string>(message => message, executeBlockOption);
+            _migrationAuditBlock = new ActionBlock<string>(AuditMigration, executeBlockOption);
+            _progressUpdateBlock = new ActionBlock<string>(ProcessUpdate, executeBlockOption);
+            if (!BuildPipeline())
                 throw new ArgumentException($"Failed setup pipeline from {startVersion} to {endVersion}");
         }
+
+        public CancellationTokenSource Cancellation => new CancellationTokenSource();
+
+        private int TotalMigrationItemCount { get; }
+
+        private int ProcessedMigrationItem { get; }
 
         public void Start(MigrationContext migrationContext)
         {
@@ -59,7 +76,7 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation
                 methodInfo.Invoke(_sourceComponent.VersionBlock, new object[] { sourceFlowConfig } );
         }
 
-        private bool BuildTransformPipeline()
+        private bool BuildPipeline()
         {
             if (_sourceComponent == null || _targetComponents == null) return false;
 
@@ -68,18 +85,30 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation
             if(!(_targetComponents.VersionBlock is ITargetBlock<object> targetBlock))
                 throw new ArgumentException("Version component is incorrect!");
 
+            _msgBroadcaseBlock.LinkTo(_migrationAuditBlock);
+            _msgBroadcaseBlock.LinkTo(_progressUpdateBlock);
+
+            if (_sourceComponent.VersionBlock is ISourceBlock<string> sourceMsgBlock)
+                sourceMsgBlock.LinkTo(_msgBroadcaseBlock);
+            if (_targetComponents.VersionBlock is ISourceBlock<string> targetMsgBlock)
+                targetMsgBlock.LinkTo(_msgBroadcaseBlock);
+
             if (_transformComponenents != null && _transformComponenents.Count > 0)
             {
                 var currentTransformInfo = _transformComponenents.Pop();
                 if(!(currentTransformInfo.PropagatorBlock is IPropagatorBlock<object, object> currentPropagator))
                     throw new ArgumentException("Version component is incorrect!");
                 currentPropagator.LinkTo(targetBlock);
+                if (currentTransformInfo.PropagatorBlock is ISourceBlock<string> transformMsgSource)
+                    transformMsgSource.LinkTo(_msgBroadcaseBlock);
 
                 while (_transformComponenents.Count > 0)
                 {
                     var previousTransoformComponent = _transformComponenents.Pop();
                     if (!(previousTransoformComponent.PropagatorBlock is IPropagatorBlock<object, object> previousPropagator))
                         throw new ArgumentException("Version component is incorrect!");
+                    if (previousTransoformComponent.PropagatorBlock is ISourceBlock<string> previousMsgSource)
+                        previousMsgSource.LinkTo(_msgBroadcaseBlock);
                     previousPropagator.LinkTo(currentPropagator);
                     currentPropagator = previousPropagator;
                 }
@@ -90,7 +119,17 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation
                 sourceBlock.LinkTo(targetBlock);
             return true;
         }
-       
+
+        private void ProcessUpdate(string message)
+        {
+            
+        }
+
+        private void AuditMigration(string message)
+        {
+            
+        }
+
         private VersionComponent GenerateSourceBlock(string sourceVersionName)
         {
             var versionComponentInfo = _migrationComponenetsFactory.Versions.FirstOrDefault(version => version.Version == sourceVersionName);
@@ -98,7 +137,7 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation
 
             if (versionComponentInfo.VersionBlock != null) return versionComponentInfo;
 
-            var versionInstance = _migrationComponenetsFactory.CreateInstance(versionComponentInfo.DllName, versionComponentInfo.VersionClassName);
+            var versionInstance = _migrationComponenetsFactory.CreateBlockInstance(Cancellation.Token, versionComponentInfo.DllName, versionComponentInfo.VersionClassName);
             versionComponentInfo.VersionBlock = versionInstance;
             return versionComponentInfo;
         }
@@ -110,7 +149,7 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation
 
             if (versionComponentInfo.VersionBlock != null) return versionComponentInfo;
 
-            var versionInstance = _migrationComponenetsFactory.CreateInstance(versionComponentInfo.DllName, versionComponentInfo.VersionClassName);
+            var versionInstance = _migrationComponenetsFactory.CreateBlockInstance(Cancellation.Token, versionComponentInfo.DllName, versionComponentInfo.VersionClassName);
             versionComponentInfo.VersionBlock = versionInstance;
             return versionComponentInfo;
         }
@@ -125,7 +164,7 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation
                 return GetTransformBlocksRecursively(endVersionName, transformMap);
 
             var transformComponent = transformMap[endVersionName];
-            var transformInstance = _migrationComponenetsFactory.CreateInstance(transformComponent.DllName, transformComponent.MigrationClassName);
+            var transformInstance = _migrationComponenetsFactory.CreateBlockInstance(Cancellation.Token, transformComponent.DllName, transformComponent.MigrationClassName);
             transformComponent.PropagatorBlock = transformInstance;
             transformComponents.Push(transformComponent);
             return transformComponents;
@@ -145,12 +184,12 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation
                         if (nextTransformMap.ContainsKey(endVersionName))
                         {
                             var nextTransformComponet = nextTransformMap[endVersionName];
-                            var nextPropagator = _migrationComponenetsFactory.CreateInstance(nextTransformComponet.DllName, nextTransformComponet.MigrationClassName);
+                            var nextPropagator = _migrationComponenetsFactory.CreateBlockInstance(Cancellation.Token, nextTransformComponet.DllName, nextTransformComponet.MigrationClassName);
                             nextTransformComponet.PropagatorBlock = nextPropagator;
                             transformBlocks.Push(nextTransformComponet);
 
                             var currentTransformComponent = transformMap[transform.Key];
-                            var currentPropagator = _migrationComponenetsFactory.CreateInstance(currentTransformComponent.DllName, currentTransformComponent.MigrationClassName);
+                            var currentPropagator = _migrationComponenetsFactory.CreateBlockInstance(Cancellation.Token, currentTransformComponent.DllName, currentTransformComponent.MigrationClassName);
                             currentTransformComponent.PropagatorBlock = currentPropagator;
                             transformBlocks.Push(currentTransformComponent);
                             return transformBlocks;
@@ -161,7 +200,7 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation
                         {
                             transformBlocks = subResult;
                             var component = transformMap[transform.Key];
-                            var propagator = _migrationComponenetsFactory.CreateInstance(component.DllName, component.MigrationClassName);
+                            var propagator = _migrationComponenetsFactory.CreateBlockInstance(Cancellation.Token, component.DllName, component.MigrationClassName);
                             component.PropagatorBlock = propagator;
                             transformBlocks.Push(component);
                             return transformBlocks;

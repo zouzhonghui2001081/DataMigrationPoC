@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Threading;
 using Newtonsoft.Json;
 
 namespace PerkinElmer.Simplicity.DataMigration.Implementation.Common
@@ -44,13 +45,13 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation.Common
             Transforms = transforms;
         }
 
-        public object CreateInstance(string dllName, string className)
+        public object CreateBlockInstance(CancellationToken cancellToken, string dllName, string className)
         {
             var outputPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             var assembly = Assembly.LoadFile(Path.Combine(outputPath, dllName));
             var typeInstance = assembly.GetType(className);
             if (typeInstance != null)
-                return Activator.CreateInstance(typeInstance, null);
+                return Activator.CreateInstance(typeInstance, cancellToken);
 
             throw new ArgumentException("Component configuration is incorrect!");
         }
