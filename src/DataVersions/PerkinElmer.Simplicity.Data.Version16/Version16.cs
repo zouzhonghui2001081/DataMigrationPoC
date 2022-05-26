@@ -43,6 +43,8 @@ namespace PerkinElmer.Simplicity.Data.Version16
                     UpgradePostgresql(migrationSourceContext.IsIncludeAuditTrailLog);
                     break;
             }
+
+            _sourceData.Complete();
         }
 
         public void PrepareTarget(string targetConfig)
@@ -128,7 +130,7 @@ namespace PerkinElmer.Simplicity.Data.Version16
             ((IDataflowBlock)_targetData).Fault(error);
         }
 
-        public Task Completion => _sourceData.Completion;
+        public Task Completion => _targetData.Completion;
 
         #endregion
 

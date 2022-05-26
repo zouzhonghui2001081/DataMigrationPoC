@@ -44,6 +44,8 @@ namespace PerkinElmer.Simplicity.Data.Version15
                     UpgradePostgresql(migrationSourceContext.IsIncludeAuditTrailLog);
                     break;
             }
+
+            _sourceData.Complete();
         }
 
         public void PrepareTarget(string targetConfig)
@@ -127,7 +129,7 @@ namespace PerkinElmer.Simplicity.Data.Version15
             ((IDataflowBlock)_targetData).Fault(error);
         }
 
-        public Task Completion => _sourceData.Completion;
+        public Task Completion => _targetData.Completion;
 
         #endregion
 
@@ -139,6 +141,7 @@ namespace PerkinElmer.Simplicity.Data.Version15
                 if (!(project is ProjectData projectData)) continue;
                 
                 var projectGuid = projectData.Project.Guid;
+
                 Task.Run(async () => { await _sourceData.SendAsync(projectData); });
 
                 var acqusitionMethods = AcquisitionMethodSource.GetAcqusitionMethods(projectGuid, isIncludeAuditTrail);
@@ -146,11 +149,11 @@ namespace PerkinElmer.Simplicity.Data.Version15
                     _sourceData.Post(acqusitionMethod);
 
                 var analysisResultSets = AnalysisResultSetSource.GetAnalysisResultSets(projectGuid, isIncludeAuditTrail);
-                foreach(var analysisResultSet in analysisResultSets)
+                foreach (var analysisResultSet in analysisResultSets)
                     Task.Run(async () => { await _sourceData.SendAsync(analysisResultSet); });
 
                 var compoundLibraries = CompoundLibrarySource.GetCompoundLibrary(projectGuid);
-                foreach(var compoundLibrary in compoundLibraries)
+                foreach (var compoundLibrary in compoundLibraries)
                     _sourceData.Post(compoundLibrary);
 
                 var processingMethods = ProcessingMethodSource.GetProcessingMethods(projectGuid, isIncludeAuditTrail);

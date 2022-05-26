@@ -86,19 +86,19 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation
             if (TransformBlocks != null && TransformBlocks.Count > 0)
             {
                 var currentPropagatorBlock = TransformBlocks.Pop();
-                currentPropagatorBlock.LinkTo(TargetBlock);
+                currentPropagatorBlock.LinkTo(TargetBlock, new DataflowLinkOptions{PropagateCompletion = true});
 
                 while (TransformBlocks.Count > 0)
                 {
                     var previousPropagatorBlock = TransformBlocks.Pop();
-                    previousPropagatorBlock.LinkTo(currentPropagatorBlock);
+                    previousPropagatorBlock.LinkTo(currentPropagatorBlock, new DataflowLinkOptions { PropagateCompletion = true });
                     currentPropagatorBlock = previousPropagatorBlock;
                 }
 
-                SourceBlock.LinkTo(currentPropagatorBlock);
+                SourceBlock.LinkTo(currentPropagatorBlock, new DataflowLinkOptions { PropagateCompletion = true });
             }
             else
-                SourceBlock.LinkTo(TargetBlock);
+                SourceBlock.LinkTo(TargetBlock, new DataflowLinkOptions { PropagateCompletion = true });
         }
 
         private void BuildMessagePipeline()

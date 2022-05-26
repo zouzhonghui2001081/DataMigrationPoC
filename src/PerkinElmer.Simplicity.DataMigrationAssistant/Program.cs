@@ -1,4 +1,5 @@
-﻿using log4net;
+﻿using System;
+using log4net;
 using System.Reflection;
 using PerkinElmer.Simplicity.DataMigration.Implementation;
 using PerkinElmer.Simplicity.DataMigration.Implementation.Common;
