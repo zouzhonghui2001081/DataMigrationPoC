@@ -9,24 +9,73 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation.Common
 {
     internal class MigrationComponenetsFactory
     {
-        public MigrationComponenetsFactory()
+        private const string ComponentConfiguration = "MigrationComponents.json";
+
+        private static readonly string ExecutingAssemblyPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+        static MigrationComponenetsFactory()
         {
             LoadMigrationComponents();
         }
 
-        public IList<VersionComponent> Versions { get; set; }
+        public static IList<VersionComponent> Versions { get; set; }
 
-        public IDictionary<string, IDictionary<string, TransformComponent>> Transforms { get; set; }
+        public static IDictionary<string, IDictionary<string, TransformComponent>> Transforms { get; set; }
 
-        private void LoadMigrationComponents()
+        public static void CreateVersionBlockInstance(CancellationToken cancellToken, VersionComponent versionComponent)
+        {
+            if (versionComponent == null) throw new ArgumentException("Version component should not be null!");
+            if (versionComponent.VersionBlock != null) return;
+
+            var assembly = Assembly.LoadFile(Path.Combine(ExecutingAssemblyPath, versionComponent.DllName));
+            var typeInstance = assembly.GetType(versionComponent.VersionClassName);
+            if (typeInstance != null)
+                versionComponent.VersionBlock =  Activator.CreateInstance(typeInstance, cancellToken);
+            else
+                throw new ArgumentException("Component configuration is incorrect!");
+        }
+
+        public static void CreateTransformBlockInstance(CancellationToken cancellToken,
+            TransformComponent transformComponent)
+        {
+            if (transformComponent == null) throw new ArgumentException("Transform component should not be null!");
+            if (transformComponent.PropagatorBlock != null) return;
+
+            var assembly = Assembly.LoadFile(Path.Combine(ExecutingAssemblyPath, transformComponent.DllName));
+            var typeInstance = assembly.GetType(transformComponent.MigrationClassName);
+            if (typeInstance != null)
+                transformComponent.PropagatorBlock = Activator.CreateInstance(typeInstance, cancellToken);
+            else
+                throw new ArgumentException("Transform configuration is incorrect!");
+        }
+
+        public static MethodInfo GetStartMethodInfo(VersionComponent versionComponent)
+        {
+            if (versionComponent.VersionBlock == null)
+                throw new ArgumentException("Version block should create first!");
+
+            var typeInstance = versionComponent.VersionBlock.GetType();
+            return typeInstance.GetMethod(versionComponent.SourceVersionMethodName);
+        }
+
+        public static MethodInfo GetTargetSettingMethodInfo(VersionComponent versionComponent)
+        {
+            if(versionComponent.VersionBlock == null)
+                throw new ArgumentException("Version block should create first!");
+
+            var typeInstance = versionComponent.VersionBlock.GetType();
+            return typeInstance.GetMethod(versionComponent.TargetVersionMethodName);
+        }
+
+        private static void LoadMigrationComponents()
         {
             var outputPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            var resourcePath = Path.Combine(outputPath, "MigrationComponents.json");
+            if (string.IsNullOrEmpty(outputPath)) throw new ArgumentException("Output path is null!");
+            var resourcePath = Path.Combine(outputPath, ComponentConfiguration);
             if (!File.Exists(resourcePath))
                 throw new ArgumentException("The migration components configration not exist!");
 
             var migrationComponent = JsonConvert.DeserializeObject<MigrationComponents>(File.ReadAllText(resourcePath));
-
             Versions = migrationComponent.VersionComponents;
             var transforms = new Dictionary<string, IDictionary<string, TransformComponent>>();
             foreach (var transformComponent in migrationComponent.TransformComponents)
@@ -41,19 +90,9 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation.Common
                 }
                 transforms[transformComponent.FromVersion][transformComponent.ToVersion] = transformComponent;
             }
-
             Transforms = transforms;
         }
 
-        public object CreateBlockInstance(CancellationToken cancellToken, string dllName, string className)
-        {
-            var outputPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            var assembly = Assembly.LoadFile(Path.Combine(outputPath, dllName));
-            var typeInstance = assembly.GetType(className);
-            if (typeInstance != null)
-                return Activator.CreateInstance(typeInstance, cancellToken);
-
-            throw new ArgumentException("Component configuration is incorrect!");
-        }
+        
     }
 }

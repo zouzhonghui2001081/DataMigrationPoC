@@ -25,7 +25,8 @@ namespace PerkinElmer.Simplicity.Data.Version16
             var dataflowOption = new DataflowBlockOptions { CancellationToken = cancellToken };
             var executeDataFlowOption = new ExecutionDataflowBlockOptions
             {
-                MaxDegreeOfParallelism = Environment.ProcessorCount,
+                //MaxDegreeOfParallelism = Environment.ProcessorCount,
+                MaxDegreeOfParallelism = 1,
                 CancellationToken = cancellToken
             };
             _sourceData = new BufferBlock<object>(dataflowOption);

@@ -17,7 +17,7 @@ namespace PerkinElmer.Simplicity.DataMigrationAssistant
                 TargetConfig = "{\"MigrationType\":\"Upgrade\",\"ArchiveFileLocation\":null}"
             };
             var migrationManager = new MigrationManager("Version15", "Version16");
-            migrationManager.Start(migrationContext);
+            migrationManager.StartMigration(migrationContext);
         }
     }
 }

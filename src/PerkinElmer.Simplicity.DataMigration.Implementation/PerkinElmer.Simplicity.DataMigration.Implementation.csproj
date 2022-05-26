@@ -27,12 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DataTransforms\PerkinElmer.Simplicity.DataTransform.V15ToV16\PerkinElmer.Simplicity.DataTransform.V15ToV16.csproj" />
-    <ProjectReference Include="..\DataVersions\PerkinElmer.Simplicity.Data.Version15\PerkinElmer.Simplicity.Data.Version15.csproj" />
-    <ProjectReference Include="..\DataVersions\PerkinElmer.Simplicity.Data.Version16\PerkinElmer.Simplicity.Data.Version16.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="MigrationComponents.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
