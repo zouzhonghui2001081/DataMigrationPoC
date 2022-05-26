@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using PerkinElmer.Simplicity.DataMigration.Implementation.Common;
 
 namespace PerkinElmer.Simplicity.DataMigration.Implementation
@@ -34,21 +32,9 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation
 
         public void StartMigration(MigrationContext migrationContext)
         {
-           var targetComponent = MigrationComponenetsFactory.Versions.FirstOrDefault(versionComponent =>
-                versionComponent.Version == _endVersion);
-           var setTargetSettingMethod = MigrationComponenetsFactory.GetTargetSettingMethodInfo(targetComponent);
-           if (targetComponent?.VersionBlock == null)
-                throw new ArgumentException("Target version block should not be null!");
-           setTargetSettingMethod.Invoke(targetComponent.VersionBlock, new object[]{ migrationContext.TargetConfig } );
-
-           var sourceComponent = MigrationComponenetsFactory.Versions.FirstOrDefault(versionComponent =>
-                versionComponent.Version == _startVersion);
-           var startDataFlowMethod = MigrationComponenetsFactory.GetStartMethodInfo(sourceComponent);
-           if (sourceComponent?.VersionBlock == null)
-                throw new ArgumentException("Source version block should not be null!");
-           startDataFlowMethod.Invoke(sourceComponent.VersionBlock, new object[] { migrationContext.SourceConfig });
-
-           _migrationPipeline.TargetBlock.Completion.Wait();
+            _migrationPipeline.TargetBlock.PrepareTarget(_endVersion, migrationContext.TargetConfig);
+            _migrationPipeline.SourceBlock.StartSourceDataflow(_startVersion, migrationContext.SourceConfig);
+            _migrationPipeline.TargetBlock.Completion.Wait();
         }
     }
 }

@@ -49,7 +49,7 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation.Common
                 throw new ArgumentException("Transform configuration is incorrect!");
         }
 
-        public static MethodInfo GetStartMethodInfo(VersionComponent versionComponent)
+        public static MethodInfo GetSourceMethodInfo(VersionComponent versionComponent)
         {
             if (versionComponent.VersionBlock == null)
                 throw new ArgumentException("Version block should create first!");
@@ -58,7 +58,7 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation.Common
             return typeInstance.GetMethod(versionComponent.SourceVersionMethodName);
         }
 
-        public static MethodInfo GetTargetSettingMethodInfo(VersionComponent versionComponent)
+        public static MethodInfo GetTargetMethodInfo(VersionComponent versionComponent)
         {
             if(versionComponent.VersionBlock == null)
                 throw new ArgumentException("Version block should create first!");
