@@ -9,12 +9,17 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation
 {
     internal class MigrationPipeline
     {
+        private readonly MigrationMessageHandler _migrationMessageHandler;
+
         public MigrationPipeline(string startVersion, string endVersion)
         {
+            _migrationMessageHandler = new MigrationMessageHandler();
+
             GenerateSourceBlock(startVersion);
             GenerateTransformBlocks(startVersion, endVersion);
             GenerateTargetBlock(endVersion);
-            BuildPipeline();
+            BuildTransformPipeline();
+            BuildMessagePipeline();
         }
 
         public ISourceBlock<object> SourceBlock { get; private set; }
@@ -76,7 +81,7 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation
                 throw new ArgumentException("Target block should not be null!");
         }
 
-        private void BuildPipeline()
+        private void BuildTransformPipeline()
         {
             if (TransformBlocks != null && TransformBlocks.Count > 0)
             {
@@ -94,6 +99,22 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation
             }
             else
                 SourceBlock.LinkTo(TargetBlock);
+        }
+
+        private void BuildMessagePipeline()
+        {
+            if (SourceBlock is ISourceBlock<string> sourceBlockAsMessageSource)
+                sourceBlockAsMessageSource.LinkTo(_migrationMessageHandler);
+            if (TargetBlock is ISourceBlock<string> targetBlockAsMessageSource)
+                targetBlockAsMessageSource.LinkTo(_migrationMessageHandler);
+            if (TransformBlocks.Count > 0)
+            {
+                foreach (var transformBlock in TransformBlocks)
+                {
+                    if (transformBlock is ISourceBlock<string> transformBlockAsMessageSource)
+                        transformBlockAsMessageSource.LinkTo(_migrationMessageHandler);
+                }
+            }
         }
 
         private Stack<IPropagatorBlock<object, object>> GenerateTransformBlocksRecursively(string endVersionName, IDictionary<string, TransformComponent> transformMap)
