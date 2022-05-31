@@ -3,7 +3,7 @@ using System.Data;
 using System.Reflection;
 using log4net;
 using PerkinElmer.Simplicity.Data.Version15.DataAccess.Postgresql.Chromatography;
-using PerkinElmer.Simplicity.Data.Version15.Version.Data.Chromatography;
+using PerkinElmer.Simplicity.Data.Version15.Contract.Version.Chromatography;
 
 namespace PerkinElmer.Simplicity.Data.Version15.DataSources.Postgresql.Chromatography
 {

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using PerkinElmer.Acquisition.Devices;
 using PerkinElmer.Simplicity.Data.Version16.DomainEntities.Implementation.Shared;
 using PerkinElmer.Simplicity.Data.Version16.DomainEntities.Interface.Acquisition;
 using PerkinElmer.Simplicity.Data.Version16.DomainEntities.Interface.LabManagement;

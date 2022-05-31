@@ -1,5 +1,5 @@
-﻿using ReviewApprovableDataEntitySubItem15 = PerkinElmer.Simplicity.Data.Version15.DataEntities.Chromatography.ReviewApprove.ReviewApprovableDataEntitySubItem;
-using ReviewApprovableDataEntitySubItem16 = PerkinElmer.Simplicity.Data.Version16.DataEntities.Chromatography.ReviewApprove.ReviewApprovableDataEntitySubItem;
+﻿using ReviewApprovableDataEntitySubItem15 = PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.ReviewApprove.ReviewApprovableDataEntitySubItem;
+using ReviewApprovableDataEntitySubItem16 = PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.Chromatography.ReviewApprove.ReviewApprovableDataEntitySubItem;
 
 namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatography.ReviewApprove
 {

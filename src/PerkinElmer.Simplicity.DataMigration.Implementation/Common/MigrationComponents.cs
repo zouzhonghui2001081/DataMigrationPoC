@@ -1,6 +1,5 @@
 ﻿
 using System.Collections.Generic;
-using Newtonsoft.Json;
 
 namespace PerkinElmer.Simplicity.DataMigration.Implementation.Common
 {
@@ -12,11 +11,11 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation.Common
 
         public string ToVersion { get; set; }
 
+        public string ComponentFolder { get; set; }
+
         public string DllName { get; set; }
 
         public string MigrationClassName { get; set; }
-
-        public object PropagatorBlock { get; set; }
     }
 
     public class VersionComponent
@@ -25,6 +24,8 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation.Common
 
         public string Version { get; set; }
 
+        public string ComponentFolder { get; set; }
+
         public string DllName { get; set; }
 
         public string VersionClassName { get; set; }
@@ -32,8 +33,6 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation.Common
         public string SourceVersionMethodName { get; set; }
 
         public string TargetVersionMethodName { get; set; }
-
-        public object VersionBlock { get; set; }
     }
 
     public class MigrationComponents

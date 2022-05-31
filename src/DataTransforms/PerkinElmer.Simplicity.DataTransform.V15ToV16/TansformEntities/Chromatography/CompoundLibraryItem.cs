@@ -1,5 +1,5 @@
-﻿using CompoundLibraryItem15 = PerkinElmer.Simplicity.Data.Version15.DataEntities.Chromatography.CompoundLibraryItem;
-using CompoundLibraryItem16 = PerkinElmer.Simplicity.Data.Version16.DataEntities.Chromatography.CompoundLibraryItem;
+﻿using CompoundLibraryItem15 = PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.CompoundLibraryItem;
+using CompoundLibraryItem16 = PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.Chromatography.CompoundLibraryItem;
 
 namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatography
 {

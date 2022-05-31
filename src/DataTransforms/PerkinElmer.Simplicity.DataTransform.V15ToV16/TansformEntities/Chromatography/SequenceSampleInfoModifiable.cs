@@ -1,5 +1,5 @@
-﻿using SequenceSampleInfoModifiable15 = PerkinElmer.Simplicity.Data.Version15.DataEntities.Chromatography.SequenceSampleInfoModifiable;
-using SequenceSampleInfoModifiable16 = PerkinElmer.Simplicity.Data.Version16.DataEntities.Chromatography.SequenceSampleInfoModifiable;
+﻿using SequenceSampleInfoModifiable15 = PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.SequenceSampleInfoModifiable;
+using SequenceSampleInfoModifiable16 = PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.Chromatography.SequenceSampleInfoModifiable;
 
 namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatography
 {

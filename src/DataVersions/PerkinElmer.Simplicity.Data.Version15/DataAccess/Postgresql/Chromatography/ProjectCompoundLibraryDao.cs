@@ -6,7 +6,7 @@ using System.Reflection;
 using Dapper;
 using log4net;
 using PerkinElmer.Simplicity.Data.Version15.DataAccess.Postgresql.Utils;
-using PerkinElmer.Simplicity.Data.Version15.DataEntities.Chromatography;
+using PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography;
 
 namespace PerkinElmer.Simplicity.Data.Version15.DataAccess.Postgresql.Chromatography
 {

@@ -1,5 +1,5 @@
-﻿using BatchRunChannelMap15 = PerkinElmer.Simplicity.Data.Version15.DataEntities.Chromatography.BatchRunChannelMap;
-using BatchRunChannelMap16 = PerkinElmer.Simplicity.Data.Version16.DataEntities.Chromatography.BatchRunChannelMap;
+﻿using BatchRunChannelMap15 = PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.BatchRunChannelMap;
+using BatchRunChannelMap16 = PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.Chromatography.BatchRunChannelMap;
 
 namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatography
 {

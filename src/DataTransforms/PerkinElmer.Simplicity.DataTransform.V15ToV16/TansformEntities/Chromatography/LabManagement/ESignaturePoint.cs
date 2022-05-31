@@ -1,5 +1,5 @@
-﻿using ESignaturePoint15 = PerkinElmer.Simplicity.Data.Version15.DataEntities.Chromatography.LabManagement.ESignaturePoint;
-using ESignaturePoint16 = PerkinElmer.Simplicity.Data.Version16.DataEntities.Chromatography.LabManagement.ESignaturePoint;
+﻿using ESignaturePoint15 = PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.LabManagement.ESignaturePoint;
+using ESignaturePoint16 = PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.Chromatography.LabManagement.ESignaturePoint;
 
 
 namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatography.LabManagement

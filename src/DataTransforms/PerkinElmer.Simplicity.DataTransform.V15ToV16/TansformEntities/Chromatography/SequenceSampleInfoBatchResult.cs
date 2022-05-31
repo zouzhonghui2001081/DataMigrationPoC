@@ -1,5 +1,5 @@
-﻿using SequenceSampleInfoBatchResult15 = PerkinElmer.Simplicity.Data.Version15.DataEntities.Chromatography.SequenceSampleInfoBatchResult;
-using SequenceSampleInfoBatchResult16 = PerkinElmer.Simplicity.Data.Version16.DataEntities.Chromatography.SequenceSampleInfoBatchResult;
+﻿using SequenceSampleInfoBatchResult15 = PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.SequenceSampleInfoBatchResult;
+using SequenceSampleInfoBatchResult16 = PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.Chromatography.SequenceSampleInfoBatchResult;
 
 namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatography
 {

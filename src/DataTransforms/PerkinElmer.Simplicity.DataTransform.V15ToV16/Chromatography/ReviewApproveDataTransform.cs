@@ -1,6 +1,6 @@
 ﻿using System;
-using PerkinElmer.Simplicity.Data.Version15.Version.Data.Chromatography;
-using PerkinElmer.Simplicity.Data.Version16.Version.Data.Chromatography;
+using PerkinElmer.Simplicity.Data.Version15.Contract.Version.Chromatography;
+using PerkinElmer.Simplicity.Data.Version16.Contract.Version.Chromatography;
 using PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatography.ReviewApprove;
 
 namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.Chromatography

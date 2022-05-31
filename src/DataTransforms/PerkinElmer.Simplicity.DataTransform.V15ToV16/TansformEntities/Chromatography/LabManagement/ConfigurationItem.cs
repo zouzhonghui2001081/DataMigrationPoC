@@ -1,5 +1,5 @@
-﻿using ConfigurationItem15 = PerkinElmer.Simplicity.Data.Version15.DataEntities.Chromatography.LabManagement.ConfigurationItem;
-using ConfigurationItem16 = PerkinElmer.Simplicity.Data.Version16.DataEntities.Chromatography.LabManagement.ConfigurationItem;
+﻿using ConfigurationItem15 = PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.LabManagement.ConfigurationItem;
+using ConfigurationItem16 = PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.Chromatography.LabManagement.ConfigurationItem;
 
 namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatography.LabManagement
 {

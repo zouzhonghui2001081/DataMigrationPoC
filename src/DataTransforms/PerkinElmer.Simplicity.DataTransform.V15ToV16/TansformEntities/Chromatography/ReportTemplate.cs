@@ -1,5 +1,5 @@
-﻿using ReportTemplate15 = PerkinElmer.Simplicity.Data.Version15.DataEntities.Chromatography.ReportTemplate;
-using ReportTemplate16 = PerkinElmer.Simplicity.Data.Version16.DataEntities.Chromatography.ReportTemplate;
+﻿using ReportTemplate15 = PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.ReportTemplate;
+using ReportTemplate16 = PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.Chromatography.ReportTemplate;
 
 namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatography
 {

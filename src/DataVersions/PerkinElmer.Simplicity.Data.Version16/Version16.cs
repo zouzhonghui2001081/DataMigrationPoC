@@ -8,8 +8,8 @@ using PerkinElmer.Simplicity.Data.Version16.DataTargets;
 using PerkinElmer.Simplicity.Data.Version16.DataTargets.Postgresql.Chromatography;
 using PerkinElmer.Simplicity.Data.Version16.Version;
 using PerkinElmer.Simplicity.Data.Version16.Version.Context;
-using PerkinElmer.Simplicity.Data.Version16.Version.Data;
-using PerkinElmer.Simplicity.Data.Version16.Version.Data.Chromatography;
+using PerkinElmer.Simplicity.Data.Version16.Contract.Version;
+using PerkinElmer.Simplicity.Data.Version16.Contract.Version.Chromatography;
 
 namespace PerkinElmer.Simplicity.Data.Version16
 {

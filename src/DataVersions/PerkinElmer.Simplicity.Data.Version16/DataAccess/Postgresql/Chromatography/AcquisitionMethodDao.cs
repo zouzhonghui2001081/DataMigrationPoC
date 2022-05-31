@@ -4,8 +4,8 @@ using System.Data;
 using System.Globalization;
 using System.Linq;
 using Dapper;
-using PerkinElmer.Simplicity.Data.Version16.DataEntities.Chromatography.AcquisitionMethod;
-using PerkinElmer.Simplicity.Data.Version16.DataEntities.Chromatography.ReviewApprove;
+using PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.Chromatography.AcquisitionMethod;
+using PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.Chromatography.ReviewApprove;
 
 namespace PerkinElmer.Simplicity.Data.Version16.DataAccess.Postgresql.Chromatography
 {
@@ -64,7 +64,7 @@ namespace PerkinElmer.Simplicity.Data.Version16.DataAccess.Postgresql.Chromatogr
 					};
 					ProjectToAcquisitionMethodMapDao projectToAcquisitionMethodMapDao = new ProjectToAcquisitionMethodMapDao();
 					projectToAcquisitionMethodMapDao.Create(connection, projectToAcquisitionMethodMap);
-            }
+                }
 			}
 			catch (Exception ex)
 			{

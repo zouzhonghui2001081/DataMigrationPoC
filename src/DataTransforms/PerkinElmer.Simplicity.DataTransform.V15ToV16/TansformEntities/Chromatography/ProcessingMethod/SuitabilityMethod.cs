@@ -1,5 +1,5 @@
-﻿using SuitabilityMethod15 = PerkinElmer.Simplicity.Data.Version15.DataEntities.Chromatography.ProcessingMethod.SuitabilityMethod;
-using SuitabilityMethod16 = PerkinElmer.Simplicity.Data.Version16.DataEntities.Chromatography.ProcessingMethod.SuitabilityMethod;
+﻿using SuitabilityMethod15 = PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.ProcessingMethod.SuitabilityMethod;
+using SuitabilityMethod16 = PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.Chromatography.ProcessingMethod.SuitabilityMethod;
 
 namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatography.ProcessingMethod
 {

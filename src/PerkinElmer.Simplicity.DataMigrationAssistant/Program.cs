@@ -1,5 +1,4 @@
-﻿using System;
-using log4net;
+﻿using log4net;
 using System.Reflection;
 using PerkinElmer.Simplicity.DataMigration.Implementation;
 using PerkinElmer.Simplicity.DataMigration.Implementation.Common;
@@ -17,7 +16,8 @@ namespace PerkinElmer.Simplicity.DataMigrationAssistant
                 SourceConfig = "{\"MigrationType\":\"Upgrade\",\"ArchiveProjectGuid\":null,\"RetrieveFileLocation\":null,\"IsIncludeAuditTrailLog\":true}",
                 TargetConfig = "{\"MigrationType\":\"Upgrade\",\"ArchiveFileLocation\":null}"
             };
-            var migrationManager = new MigrationManager("Version15", "Version16");
+            var migrationComponentsFactory = new MigrationComponentsFactory();
+            var migrationManager = new MigrationManager("Version15", "Version16", migrationComponentsFactory);
             migrationManager.StartMigration(migrationContext);
         }
     }

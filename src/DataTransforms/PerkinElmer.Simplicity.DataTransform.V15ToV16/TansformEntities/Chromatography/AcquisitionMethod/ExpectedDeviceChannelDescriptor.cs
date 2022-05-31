@@ -1,5 +1,5 @@
-﻿using ExpectedDeviceChannelDescriptor15 = PerkinElmer.Simplicity.Data.Version15.DataEntities.Chromatography.AcquisitionMethod.ExpectedDeviceChannelDescriptor;
-using ExpectedDeviceChannelDescriptor16 = PerkinElmer.Simplicity.Data.Version16.DataEntities.Chromatography.AcquisitionMethod.ExpectedDeviceChannelDescriptor;
+﻿using ExpectedDeviceChannelDescriptor15 = PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.AcquisitionMethod.ExpectedDeviceChannelDescriptor;
+using ExpectedDeviceChannelDescriptor16 = PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.Chromatography.AcquisitionMethod.ExpectedDeviceChannelDescriptor;
 
 namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatography.AcquisitionMethod
 {

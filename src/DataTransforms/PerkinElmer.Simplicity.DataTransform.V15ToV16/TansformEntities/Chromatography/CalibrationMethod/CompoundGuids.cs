@@ -1,5 +1,5 @@
-﻿using CompoundGuids15 = PerkinElmer.Simplicity.Data.Version15.DataEntities.Chromatography.CalibrationMethod.CompoundGuids;
-using CompoundGuids16 = PerkinElmer.Simplicity.Data.Version16.DataEntities.Chromatography.CalibrationMethod.CompoundGuids;
+﻿using CompoundGuids15 = PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.CalibrationMethod.CompoundGuids;
+using CompoundGuids16 = PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.Chromatography.CalibrationMethod.CompoundGuids;
 
 namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatography.CalibrationMethod
 {

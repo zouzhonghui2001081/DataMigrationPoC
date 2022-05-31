@@ -3,7 +3,7 @@ using System.Data;
 using System.Reflection;
 using Dapper;
 using log4net;
-using PerkinElmer.Simplicity.Data.Version16.DataEntities.Chromatography.LabManagement;
+using PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.Chromatography.LabManagement;
 
 namespace PerkinElmer.Simplicity.Data.Version16.DataAccess.Postgresql.Chromatography
 {

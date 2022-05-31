@@ -7,10 +7,10 @@ using PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatogra
 using PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatography.ProcessingMethod;
 using BatchResultDeviceModuleDetails = PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatography.BatchResultDeviceModuleDetails;
 using BatchResultSet = PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatography.BatchResultSet;
-using BatchResultSetData = PerkinElmer.Simplicity.Data.Version16.Version.Data.Chromatography.BatchResultSetData;
+using BatchResultSetData = PerkinElmer.Simplicity.Data.Version16.Contract.Version.Chromatography.BatchResultSetData;
 using BatchRun = PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatography.BatchRun;
-using BatchRunData = PerkinElmer.Simplicity.Data.Version16.Version.Data.Chromatography.BatchRunData;
-using BatchRunData15 = PerkinElmer.Simplicity.Data.Version15.Version.Data.Chromatography.BatchRunData;
+using BatchRunData = PerkinElmer.Simplicity.Data.Version16.Contract.Version.Chromatography.BatchRunData;
+using BatchRunData15 = PerkinElmer.Simplicity.Data.Version15.Contract.Version.Chromatography.BatchRunData;
 using DeviceDriverItemDetails = PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatography.DeviceDriverItemDetails;
 using NamedContent = PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatography.NamedContent;
 using SequenceSampleInfoBatchResult = PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatography.SequenceSampleInfoBatchResult;
@@ -21,7 +21,7 @@ namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.Chromatography
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
        
-        internal static BatchResultSetData Transform(Data.Version15.Version.Data.Chromatography.BatchResultSetData batchResultSetData)
+        internal static BatchResultSetData Transform(Data.Version15.Contract.Version.Chromatography.BatchResultSetData batchResultSetData)
         {
             if (batchResultSetData == null) throw new ArgumentNullException(nameof(batchResultSetData));
 
@@ -53,8 +53,8 @@ namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.Chromatography
                 AcquisitionMethod = AcquisitionMethod.Transform(batchRunData.AcquisitionMethod),
                 SequenceSampleInfoBatchResult = SequenceSampleInfoBatchResult.Transform(batchRunData.SequenceSampleInfoBatchResult),
                 ProcessingMethod = ProcessingMethod.Transform(batchRunData.ProcessingMethod),
-                NamedContents = new List<Data.Version16.DataEntities.Chromatography.NamedContent>(),
-                StreamDataBatchResults = new List<Data.Version16.DataEntities.Chromatography.StreamDataBatchResult>()
+                NamedContents = new List<Data.Version16.Contract.DataEntities.Chromatography.NamedContent>(),
+                StreamDataBatchResults = new List<Data.Version16.Contract.DataEntities.Chromatography.StreamDataBatchResult>()
             };
             foreach (var namedContent in batchRunData.NamedContents)
                 batchRunData16.NamedContents.Add(NamedContent.Transform(namedContent));

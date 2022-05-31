@@ -1,6 +1,5 @@
 using System;
 using Newtonsoft.Json.Linq;
-using PerkinElmer.Acquisition.Devices;
 using PerkinElmer.Simplicity.Data.Version15.DomainEntities.Factory;
 using PerkinElmer.Simplicity.Data.Version15.DomainEntities.Interface.Acquisition;
 

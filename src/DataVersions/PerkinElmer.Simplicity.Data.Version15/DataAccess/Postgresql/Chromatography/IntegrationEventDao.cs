@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using Dapper;
-using PerkinElmer.Simplicity.Data.Version15.DataEntities.Chromatography.ProcessingMethod;
+using PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.ProcessingMethod;
 
 namespace PerkinElmer.Simplicity.Data.Version15.DataAccess.Postgresql.Chromatography
 {

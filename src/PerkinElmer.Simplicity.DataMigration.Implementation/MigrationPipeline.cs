@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks.Dataflow;
 using PerkinElmer.Simplicity.DataMigration.Implementation.Common;
@@ -9,15 +7,22 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation
 {
     internal class MigrationPipeline
     {
+        private readonly string _startVersion;
+
+        private readonly string _endVersion;
+
         private readonly MigrationMessageHandler _migrationMessageHandler;
+        
+        private readonly MigrationComponentsFactory _migrationComponentsFactory;
 
-        public MigrationPipeline(string startVersion, string endVersion)
+        public MigrationPipeline(string startVersion, string endVersion, MigrationComponentsFactory migrationComponentsFactory)
         {
-            _migrationMessageHandler = new MigrationMessageHandler();
+            _startVersion = startVersion;
+            _endVersion = endVersion;
 
-            GenerateSourceBlock(startVersion);
-            GenerateTransformBlocks(startVersion, endVersion);
-            GenerateTargetBlock(endVersion);
+            _migrationMessageHandler = new MigrationMessageHandler();
+            _migrationComponentsFactory = migrationComponentsFactory;
+            InitialBlockInstances(startVersion,endVersion);
             BuildTransformPipeline();
             BuildMessagePipeline();
         }
@@ -30,55 +35,23 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation
 
         public CancellationTokenSource Cancellation => new CancellationTokenSource();
 
-        private void GenerateSourceBlock(string startVersion)
+        public void PreparePipeline(string pipelinePrepareConfig)
         {
-            var startVersionComponent = MigrationComponenetsFactory.Versions.FirstOrDefault(migrationComponents =>
-                migrationComponents.Version == startVersion);
-            if (startVersionComponent == null) throw new ArgumentException("Start version is incorrect!");
-            if (startVersionComponent.VersionBlock == null)
-                MigrationComponenetsFactory.CreateVersionBlockInstance(Cancellation.Token, startVersionComponent);
-
-            SourceBlock = startVersionComponent.VersionBlock as ISourceBlock<object>;
-            if (SourceBlock == null)
-                throw new ArgumentException("Source block should not be null!");
+            var targetMethod = MigrationComponentsFactory.GetTargetMethodInfo(_endVersion);
+            targetMethod.Invoke(TargetBlock, new object[] { pipelinePrepareConfig });
         }
 
-        private void GenerateTransformBlocks(string startVersion, string endVersion)
+        public void StartPipeline(string pipelineStartConfig)
         {
-            var transformBlocks = new Stack<IPropagatorBlock<object, object>>();
-            if (!MigrationComponenetsFactory.Transforms.ContainsKey(startVersion))
-            {
-                TransformBlocks = transformBlocks;
-                return;
-            }
-
-            var transformMap = MigrationComponenetsFactory.Transforms[startVersion];
-            if (!transformMap.ContainsKey(endVersion))
-            {
-                TransformBlocks = GenerateTransformBlocksRecursively(endVersion, transformMap);
-                return;
-            }
-
-            var transformComponent = transformMap[endVersion];
-            if(transformComponent.PropagatorBlock == null)
-                MigrationComponenetsFactory.CreateTransformBlockInstance(Cancellation.Token, transformComponent);
-            if(transformComponent.PropagatorBlock is IPropagatorBlock<object, object> propagatorBlock)
-                transformBlocks.Push(propagatorBlock);
-            TransformBlocks = transformBlocks;
+            var sourceMethod = _migrationComponentsFactory.GetSourceMethodInfo(_startVersion);
+            sourceMethod.Invoke(SourceBlock, new object[] { pipelineStartConfig });
         }
 
-        private void GenerateTargetBlock(string endVersion)
+        private void InitialBlockInstances(string startVersion, string endVersion)
         {
-            var endVersionComponent = MigrationComponenetsFactory.Versions.FirstOrDefault(migrationComponents =>
-                migrationComponents.Version == endVersion);
-            if (endVersionComponent == null) throw new ArgumentException("End version is incorrect!");
-
-            if (endVersionComponent.VersionBlock == null)
-                MigrationComponenetsFactory.CreateVersionBlockInstance(Cancellation.Token, endVersionComponent);
-
-            TargetBlock = endVersionComponent.VersionBlock as ITargetBlock<object>;
-            if (TargetBlock == null)
-                throw new ArgumentException("Target block should not be null!");
+            SourceBlock = _migrationComponentsFactory.CreateSourceBlockInstance(Cancellation.Token, startVersion);
+            TargetBlock = _migrationComponentsFactory.CreateTargetBlockInstance(Cancellation.Token, endVersion);
+            TransformBlocks = _migrationComponentsFactory.CreateTransformBlockInstances(Cancellation.Token, startVersion, endVersion);
         }
 
         private void BuildTransformPipeline()
@@ -115,49 +88,6 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation
                         transformBlockAsMessageSource.LinkTo(_migrationMessageHandler);
                 }
             }
-        }
-
-        private Stack<IPropagatorBlock<object, object>> GenerateTransformBlocksRecursively(string endVersionName, IDictionary<string, TransformComponent> transformMap)
-        {
-            var transformBlocks = new Stack<IPropagatorBlock<object, object>>();
-            foreach (var transform in transformMap)
-            {
-                if (MigrationComponenetsFactory.Transforms.ContainsKey(transform.Key))
-                {
-                    var nextTransformMap = MigrationComponenetsFactory.Transforms[transform.Key];
-                    if (nextTransformMap != null && nextTransformMap.Count > 0)
-                    {
-                        if (nextTransformMap.ContainsKey(endVersionName))
-                        {
-                            var nextTransformComponet = nextTransformMap[endVersionName];
-                            if(nextTransformComponet.PropagatorBlock == null)
-                                MigrationComponenetsFactory.CreateTransformBlockInstance(Cancellation.Token, nextTransformComponet);
-                            if(nextTransformComponet.PropagatorBlock is IPropagatorBlock<object, object> nextPropagatorBlock)
-                                transformBlocks.Push(nextPropagatorBlock);
-
-                            var currentTransformComponent = transformMap[transform.Key];
-                            if(currentTransformComponent.PropagatorBlock == null)
-                                MigrationComponenetsFactory.CreateTransformBlockInstance(Cancellation.Token, currentTransformComponent);
-                            if (currentTransformComponent.PropagatorBlock is IPropagatorBlock<object, object> currentPropagatorBlock)
-                                transformBlocks.Push(currentPropagatorBlock);
-                            return transformBlocks;
-                        }
-
-                        var subResult = GenerateTransformBlocksRecursively(endVersionName, nextTransformMap);
-                        if (subResult != null && subResult.Count > 0)
-                        {
-                            transformBlocks = subResult;
-                            var component = transformMap[transform.Key];
-                            if (component.PropagatorBlock == null)
-                                MigrationComponenetsFactory.CreateTransformBlockInstance(Cancellation.Token, component);
-                            if (component.PropagatorBlock is IPropagatorBlock<object, object> propagatorBlock)
-                                transformBlocks.Push(propagatorBlock);
-                            return transformBlocks;
-                        }
-                    }
-                }
-            }
-            return transformBlocks;
         }
     }
 }

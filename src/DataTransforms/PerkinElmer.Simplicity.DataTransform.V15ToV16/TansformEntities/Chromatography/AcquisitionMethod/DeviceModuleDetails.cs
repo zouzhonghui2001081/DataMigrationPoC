@@ -1,5 +1,5 @@
-﻿using DeviceModuleDetails15 = PerkinElmer.Simplicity.Data.Version15.DataEntities.Chromatography.AcquisitionMethod.DeviceModuleDetails;
-using DeviceModuleDetails16 = PerkinElmer.Simplicity.Data.Version16.DataEntities.Chromatography.AcquisitionMethod.DeviceModuleDetails;
+﻿using DeviceModuleDetails15 = PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.AcquisitionMethod.DeviceModuleDetails;
+using DeviceModuleDetails16 = PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.Chromatography.AcquisitionMethod.DeviceModuleDetails;
 
 namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatography.AcquisitionMethod
 {

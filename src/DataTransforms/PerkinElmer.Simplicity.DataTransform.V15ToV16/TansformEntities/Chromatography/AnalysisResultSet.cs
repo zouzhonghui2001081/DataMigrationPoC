@@ -1,5 +1,5 @@
-﻿using AnalysisResultSet15 = PerkinElmer.Simplicity.Data.Version15.DataEntities.Chromatography.AnalysisResultSet;
-using AnalysisResultSet16 = PerkinElmer.Simplicity.Data.Version16.DataEntities.Chromatography.AnalysisResultSet;
+﻿using AnalysisResultSet15 = PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.AnalysisResultSet;
+using AnalysisResultSet16 = PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.Chromatography.AnalysisResultSet;
 
 namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatography
 {

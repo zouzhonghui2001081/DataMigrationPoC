@@ -2,7 +2,7 @@
 using System.Reflection;
 using log4net;
 using PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatography;
-using SequenceData = PerkinElmer.Simplicity.Data.Version16.Version.Data.Chromatography.SequenceData;
+using SequenceData = PerkinElmer.Simplicity.Data.Version16.Contract.Version.Chromatography.SequenceData;
 
 namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.Chromatography
 {
@@ -10,7 +10,7 @@ namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.Chromatography
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
       
-        public static SequenceData Transform(Data.Version15.Version.Data.Chromatography.SequenceData sequenceData)
+        public static SequenceData Transform(Data.Version15.Contract.Version.Chromatography.SequenceData sequenceData)
         {
             if (sequenceData == null) throw new ArgumentNullException(nameof(sequenceData));
 

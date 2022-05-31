@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Dapper;
 using log4net;
-using PerkinElmer.Simplicity.Data.Version15.DataEntities.Chromatography.AcquisitionMethod;
+using PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.AcquisitionMethod;
 
 namespace PerkinElmer.Simplicity.Data.Version15.DataAccess.Postgresql.Chromatography
 {

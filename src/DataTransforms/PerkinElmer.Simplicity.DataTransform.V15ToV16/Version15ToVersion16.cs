@@ -2,16 +2,16 @@
 using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
-using PerkinElmer.Simplicity.Data.Version15.Version.Data;
+using PerkinElmer.Simplicity.Data.Version15.Contract.Version;
 using PerkinElmer.Simplicity.DataTransform.V15ToV16.Chromatography;
-using AcqusitionMethodData15 = PerkinElmer.Simplicity.Data.Version15.Version.Data.Chromatography.AcqusitionMethodData;
-using AnalysisResultSetData15 = PerkinElmer.Simplicity.Data.Version15.Version.Data.Chromatography.AnalysisResultSetData;
-using BatchResultSetData15 = PerkinElmer.Simplicity.Data.Version15.Version.Data.Chromatography.BatchResultSetData;
-using CompoundLibraryData15 = PerkinElmer.Simplicity.Data.Version15.Version.Data.Chromatography.CompoundLibraryData;
-using ProcessingMethodData15 = PerkinElmer.Simplicity.Data.Version15.Version.Data.Chromatography.ProcessingMethodData;
-using ProjectData15 = PerkinElmer.Simplicity.Data.Version15.Version.Data.Chromatography.ProjectData;
-using ReportTemplateData15 = PerkinElmer.Simplicity.Data.Version15.Version.Data.Chromatography.ReportTemplateData;
-using SequenceData15 = PerkinElmer.Simplicity.Data.Version15.Version.Data.Chromatography.SequenceData;
+using AcqusitionMethodData15 = PerkinElmer.Simplicity.Data.Version15.Contract.Version.Chromatography.AcqusitionMethodData;
+using AnalysisResultSetData15 = PerkinElmer.Simplicity.Data.Version15.Contract.Version.Chromatography.AnalysisResultSetData;
+using BatchResultSetData15 = PerkinElmer.Simplicity.Data.Version15.Contract.Version.Chromatography.BatchResultSetData;
+using CompoundLibraryData15 = PerkinElmer.Simplicity.Data.Version15.Contract.Version.Chromatography.CompoundLibraryData;
+using ProcessingMethodData15 = PerkinElmer.Simplicity.Data.Version15.Contract.Version.Chromatography.ProcessingMethodData;
+using ProjectData15 = PerkinElmer.Simplicity.Data.Version15.Contract.Version.Chromatography.ProjectData;
+using ReportTemplateData15 = PerkinElmer.Simplicity.Data.Version15.Contract.Version.Chromatography.ReportTemplateData;
+using SequenceData15 = PerkinElmer.Simplicity.Data.Version15.Contract.Version.Chromatography.SequenceData;
 
 namespace PerkinElmer.Simplicity.DataTransform.V15ToV16
 {

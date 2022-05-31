@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using DeviceMethod15 = PerkinElmer.Simplicity.Data.Version15.DataEntities.Chromatography.AcquisitionMethod.DeviceMethod;
-using DeviceMethod16 = PerkinElmer.Simplicity.Data.Version16.DataEntities.Chromatography.AcquisitionMethod.DeviceMethod;
+using DeviceMethod15 = PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.AcquisitionMethod.DeviceMethod;
+using DeviceMethod16 = PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.Chromatography.AcquisitionMethod.DeviceMethod;
 
 namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatography.AcquisitionMethod
 {
@@ -20,12 +20,12 @@ namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromat
                 InstrumentId = deviceMethod.InstrumentId,
                 DeviceDriverItemId = deviceMethod.DeviceDriverItemId,
             };
-            var deviceModules = new List<Data.Version16.DataEntities.Chromatography.AcquisitionMethod.DeviceModuleDetails>();
+            var deviceModules = new List<Data.Version16.Contract.DataEntities.Chromatography.AcquisitionMethod.DeviceModuleDetails>();
             foreach (var deviceModule in deviceMethod.DeviceModules)
                 deviceModules.Add(DeviceModuleDetails.Transform(deviceModule));
             deviceMethod16.DeviceModules = deviceModules.ToArray();
 
-            var expectedDeviceChannelDescriptors = new List<Data.Version16.DataEntities.Chromatography.AcquisitionMethod.ExpectedDeviceChannelDescriptor>();
+            var expectedDeviceChannelDescriptors = new List<Data.Version16.Contract.DataEntities.Chromatography.AcquisitionMethod.ExpectedDeviceChannelDescriptor>();
             foreach (var expectedDeviceChannelDescriptor in deviceMethod.ExpectedDeviceChannelDescriptors)
                 expectedDeviceChannelDescriptors.Add(ExpectedDeviceChannelDescriptor.Transform(expectedDeviceChannelDescriptor));
 

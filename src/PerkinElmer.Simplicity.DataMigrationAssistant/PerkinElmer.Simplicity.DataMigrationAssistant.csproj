@@ -2,7 +2,8 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>net471;</TargetFrameworks>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <TargetFrameworks>netcoreapp3.1;</TargetFrameworks>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -10,23 +11,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Dapper.StrongName" Version="$(DapperStrongName)" />
-    <PackageReference Include="DotNetZip" Version="$(DotNetZip)" />
-    <PackageReference Include="log4net" Version="$(Log4net)" />    
-    <PackageReference Include="Microsoft.CSharp" Version="$(MicrosoftCSharp)" />    
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="$(MicrosoftExtensionsLoggingAbstractions)" />
-    <PackageReference Include="Npgsql" Version="$(Npgsql)" />   
-	<PackageReference Include="Newtonsoft.Json" Version="$(NewtonsoftJson)" />	
-    <PackageReference Include="System.Data.DataSetExtensions" Version="$(SystemDataDataSetExtensions)" />  
-    <PackageReference Include="System.Data.SQLite.Core" Version="$(SystemDataSQLite)" />
-    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="$(SystemRuntimeCompilerServicesUnsafe)" />
-	<PackageReference Include="System.Threading.Tasks.Dataflow" Version="$(SystemThreadingTasksDataflow)" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\DataTransforms\PerkinElmer.Simplicity.DataTransform.V15ToV16\PerkinElmer.Simplicity.DataTransform.V15ToV16.csproj" />
-    <ProjectReference Include="..\DataVersions\PerkinElmer.Simplicity.Data.Version15\PerkinElmer.Simplicity.Data.Version15.csproj" />
-    <ProjectReference Include="..\DataVersions\PerkinElmer.Simplicity.Data.Version16\PerkinElmer.Simplicity.Data.Version16.csproj" />
     <ProjectReference Include="..\PerkinElmer.Simplicity.DataMigration.Implementation\PerkinElmer.Simplicity.DataMigration.Implementation.csproj" />
   </ItemGroup>
 

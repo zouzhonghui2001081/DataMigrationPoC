@@ -1,5 +1,5 @@
-﻿using NamedContent15 = PerkinElmer.Simplicity.Data.Version15.DataEntities.Chromatography.NamedContent;
-using NamedContent16 = PerkinElmer.Simplicity.Data.Version16.DataEntities.Chromatography.NamedContent;
+﻿using NamedContent15 = PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.NamedContent;
+using NamedContent16 = PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.Chromatography.NamedContent;
 
 namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatography
 {

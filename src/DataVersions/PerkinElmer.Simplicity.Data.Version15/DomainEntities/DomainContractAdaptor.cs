@@ -6,14 +6,14 @@ using System.Reflection;
 using System.Text;
 using log4net;
 using Newtonsoft.Json;
-using PerkinElmer.Acquisition.Devices;
-using PerkinElmer.Simplicity.Data.Version15.DataEntities.Chromatography;
-using PerkinElmer.Simplicity.Data.Version15.DataEntities.Chromatography.AcquisitionMethod;
-using PerkinElmer.Simplicity.Data.Version15.DataEntities.Chromatography.CalibrationMethod;
-using PerkinElmer.Simplicity.Data.Version15.DataEntities.Chromatography.LabManagement;
-using PerkinElmer.Simplicity.Data.Version15.DataEntities.Chromatography.ProcessingMethod;
-using PerkinElmer.Simplicity.Data.Version15.DataEntities.Chromatography.ReviewApprove;
+using PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography;
+using PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.AcquisitionMethod;
+using PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.CalibrationMethod;
+using PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.LabManagement;
+using PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.ProcessingMethod;
+using PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.ReviewApprove;
 using PerkinElmer.Simplicity.Data.Version15.DomainEntities.Factory;
+using PerkinElmer.Simplicity.Data.Version15.DomainEntities.Implementation.Acquisition;
 using PerkinElmer.Simplicity.Data.Version15.DomainEntities.Interface.Acquisition;
 using PerkinElmer.Simplicity.Data.Version15.DomainEntities.Interface.LabManagement;
 using PerkinElmer.Simplicity.Data.Version15.DomainEntities.Interface.Processing;
@@ -22,9 +22,14 @@ using PerkinElmer.Simplicity.Data.Version15.DomainEntities.Interface.Processing.
 using PerkinElmer.Simplicity.Data.Version15.DomainEntities.Interface.Reporting;
 using PerkinElmer.Simplicity.Data.Version15.DomainEntities.Interface.ReviewApprove;
 using PerkinElmer.Simplicity.Data.Version15.DomainEntities.Interface.Shared;
+using AcquisitionMethod = PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.AcquisitionMethod.AcquisitionMethod;
+using BatchResultSet = PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.BatchResultSet;
+using BatchRun = PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.BatchRun;
+using DeviceMethod = PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.AcquisitionMethod.DeviceMethod;
 using IDeviceMethod = PerkinElmer.Simplicity.Data.Version15.DomainEntities.Interface.Acquisition.IDeviceMethod;
 using ReviewApproveState = PerkinElmer.Simplicity.Data.Version15.DomainEntities.Interface.ReviewApprove.ReviewApproveState;
 using SampleType = PerkinElmer.Simplicity.Data.Version15.DomainEntities.Interface.Acquisition.SampleType;
+using Sequence = PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.Sequence;
 
 namespace PerkinElmer.Simplicity.Data.Version15.DomainEntities
 {
