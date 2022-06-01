@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks.Dataflow;
@@ -13,8 +13,6 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation.Common
     {
         private const string ComponentConfiguration = "MigrationComponents.json";
 
-        private readonly string _executingAssemblyPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-
         private IDictionary<string, MigrationLoadContext> _migrationLoadContexts;
 
         private IDictionary<string, Assembly> _migrationVersionAssemblies;
@@ -22,7 +20,6 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation.Common
         public MigrationComponentsFactory()
         {
             LoadMigrationComponents();
-            LoadMigrationAssemblies();
             LoadMigrationAssemblyContexts();
         }
 
@@ -32,18 +29,26 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation.Common
 
         public ISourceBlock<object> CreateSourceBlockInstance(CancellationToken cancellToken, string version)
         {
-            throw new NotImplementedException();
-            //var assembly = Assembly.LoadFile(Path.Combine(_executingAssemblyPath, versionComponent.DllName));
-            //var typeInstance = assembly.GetType(versionComponent.VersionClassName);
-            //if (typeInstance != null)
-            //    versionComponent.VersionBlock =  Activator.CreateInstance(typeInstance, cancellToken);
-            //else
-            //    throw new ArgumentException("Component configuration is incorrect!");
+            var migrationComponent = MigrationComponents.VersionComponents.FirstOrDefault(component => component.Version == version);
+            if (migrationComponent == null) throw new ArgumentException(nameof(version));
+            var assembly = _migrationVersionAssemblies[migrationComponent.DllName];
+            var typeInstance = assembly.GetType(migrationComponent.VersionClassName);
+            var instance = Activator.CreateInstance(typeInstance, cancellToken);
+            if (!(instance is ISourceBlock<object> sourceBlock))
+                throw new ArgumentException(nameof(migrationComponent));
+            return sourceBlock;
         }
 
         public ITargetBlock<object> CreateTargetBlockInstance(CancellationToken cancellToken, string version)
         {
-            throw new NotImplementedException();
+            var migrationComponent = MigrationComponents.VersionComponents.FirstOrDefault(component => component.Version == version);
+            if (migrationComponent == null) throw new ArgumentException(nameof(version));
+            var assembly = _migrationVersionAssemblies[migrationComponent.DllName];
+            var typeInstance = assembly.GetType(migrationComponent.VersionClassName);
+            var instance = Activator.CreateInstance(typeInstance, cancellToken);
+            if (!(instance is ITargetBlock<object> targetBlock))
+                throw new ArgumentException(nameof(migrationComponent));
+            return targetBlock;
         }
 
         public Stack<IPropagatorBlock<object, object>> CreateTransformBlockInstances(CancellationToken cancellToken, string fromVersion, string toVersion)
@@ -51,37 +56,38 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation.Common
             throw new NotImplementedException();
         }
 
-        public object CreateTransformBlockInstance(CancellationToken cancellToken,
+        private IPropagatorBlock<object, object> CreateTransformBlockInstance(CancellationToken cancellToken,
             string fromVersion, string toVersion)
         {
-           
-            throw new NotImplementedException();
-            //var assembly = Assembly.LoadFile(Path.Combine(_executingAssemblyPath, transformComponent.DllName));
-            //var typeInstance = assembly.GetType(transformComponent.MigrationClassName);
-            //if (typeInstance != null)
-            //    transformComponent.PropagatorBlock = Activator.CreateInstance(typeInstance, cancellToken);
-            //else
-            //    throw new ArgumentException("Transform configuration is incorrect!");
+
+            var migrationComponent = MigrationComponents.TransformComponents.FirstOrDefault(component =>
+                component.FromVersion == fromVersion && component.ToVersion == toVersion);
+            if (migrationComponent == null) throw new ArgumentException($"From Version {fromVersion} or To Version {toVersion} is incorrest!");
+            var assembly = _migrationVersionAssemblies[migrationComponent.DllName];
+            var typeInstance = assembly.GetType(migrationComponent.MigrationClassName);
+            var instance = Activator.CreateInstance(typeInstance, cancellToken);
+
+            if (!(instance is IPropagatorBlock<object, object> transformBlock))
+                throw new ArgumentException(nameof(migrationComponent));
+            return transformBlock;
         }
 
         public MethodInfo GetSourceMethodInfo(string version)
         {
-            throw new NotImplementedException();
-            //if (versionComponent.VersionBlock == null)
-            //    throw new ArgumentException("Version block should create first!");
-
-            //var typeInstance = versionComponent.VersionBlock.GetType();
-            //return typeInstance.GetMethod(versionComponent.SourceVersionMethodName);
+            var migrationComponent = MigrationComponents.VersionComponents.FirstOrDefault(component => component.Version == version);
+            if (migrationComponent == null) throw new ArgumentException(nameof(version));
+            var assembly = _migrationVersionAssemblies[migrationComponent.DllName];
+            var typeInstance = assembly.GetType(migrationComponent.VersionClassName);
+            return typeInstance.GetMethod(migrationComponent.SourceVersionMethodName);
         }
 
-        public static MethodInfo GetTargetMethodInfo(string version)
+        public MethodInfo GetTargetMethodInfo(string version)
         {
-            throw new NotImplementedException();
-            //if(versionComponent.VersionBlock == null)
-            //    throw new ArgumentException("Version block should create first!");
-
-            //var typeInstance = versionComponent.VersionBlock.GetType();
-            //return typeInstance.GetMethod(versionComponent.TargetVersionMethodName);
+            var migrationComponent = MigrationComponents.VersionComponents.FirstOrDefault(component => component.Version == version);
+            if (migrationComponent == null) throw new ArgumentException(nameof(version));
+            var assembly = _migrationVersionAssemblies[migrationComponent.DllName];
+            var typeInstance = assembly.GetType(migrationComponent.VersionClassName);
+            return typeInstance.GetMethod(migrationComponent.TargetVersionMethodName);
         }
 
         private void LoadMigrationComponents()
@@ -109,27 +115,28 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation.Common
             Transforms = transforms;
         }
 
-        private void LoadMigrationAssemblies()
+        private void LoadMigrationAssemblyContexts()
         {
+            //TODO: Need research how to unload migration load contenxt.
+            _migrationLoadContexts = new Dictionary<string, MigrationLoadContext>();
             _migrationVersionAssemblies = new Dictionary<string, Assembly>();
+
             foreach (var versionComponent in MigrationComponents.VersionComponents)
             {
                 var versionAssemblyFilePath = Path.Combine(versionComponent.ComponentFolder, versionComponent.DllName);
-                var assembly = Assembly.LoadFrom(versionAssemblyFilePath);
-                _migrationVersionAssemblies[assembly.FullName] = assembly;
+                var assemblyName = new AssemblyName(Path.GetFileNameWithoutExtension(versionAssemblyFilePath));
+                var migrationLoadContext = new MigrationLoadContext(versionAssemblyFilePath);
+                _migrationLoadContexts[versionComponent.DllName] = migrationLoadContext;
+                _migrationVersionAssemblies[versionComponent.DllName] = migrationLoadContext.LoadFromAssemblyName(assemblyName);
             }
-
-            foreach (var transformComponent in MigrationComponents.TransformComponents)
+            foreach(var transformComponent in MigrationComponents.TransformComponents)
             {
                 var transformAssemblyFilePath = Path.Combine(transformComponent.ComponentFolder, transformComponent.DllName);
-                var assembly = Assembly.LoadFrom(transformAssemblyFilePath);
-                _migrationVersionAssemblies[assembly.FullName] = assembly;
+                var assemblyName = new AssemblyName(Path.GetFileNameWithoutExtension(transformAssemblyFilePath));
+                var migrationLoadContext = new MigrationLoadContext(transformAssemblyFilePath);
+                _migrationLoadContexts[transformComponent.DllName] = migrationLoadContext;
+                _migrationVersionAssemblies[transformComponent.DllName] = migrationLoadContext.LoadFromAssemblyName(assemblyName);
             }
-        }
-
-        private void LoadMigrationAssemblyContexts()
-        {
-
         }
     }
 }

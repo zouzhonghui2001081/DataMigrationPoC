@@ -37,7 +37,7 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation
 
         public void PreparePipeline(string pipelinePrepareConfig)
         {
-            var targetMethod = MigrationComponentsFactory.GetTargetMethodInfo(_endVersion);
+            var targetMethod = _migrationComponentsFactory.GetTargetMethodInfo(_endVersion);
             targetMethod.Invoke(TargetBlock, new object[] { pipelinePrepareConfig });
         }
 
