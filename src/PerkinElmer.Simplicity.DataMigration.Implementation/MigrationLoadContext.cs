@@ -16,7 +16,7 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation
         protected override Assembly Load(AssemblyName assemblyName)
         {
             if (assemblyName.Name == "System.Threading.Tasks.Dataflow")
-                return AssemblyLoadContext.Default.LoadFromAssemblyName(assemblyName);
+                return Default.LoadFromAssemblyName(assemblyName);
             var assemblyPath = _resolver.ResolveAssemblyToPath(assemblyName);
             return assemblyPath != null ? LoadFromAssemblyPath(assemblyPath) : null;
         }
