@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using PerkinElmer.Acquisition.Devices;
+using PerkinElmer.Simplicity.Data.Version15.DomainEntities.Implementation.Acquisition;
+
 
 namespace PerkinElmer.Simplicity.Data.Version15.DomainEntities.Interface.Acquisition
 {

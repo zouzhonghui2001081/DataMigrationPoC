@@ -1,6 +1,6 @@
 ﻿using System;
-using SuitabilityResult15 = PerkinElmer.Simplicity.Data.Version15.DataEntities.Chromatography.SuitabilityResult;
-using SuitabilityResult16 = PerkinElmer.Simplicity.Data.Version16.DataEntities.Chromatography.SuitabilityResult;
+using SuitabilityResult15 = PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.SuitabilityResult;
+using SuitabilityResult16 = PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.Chromatography.SuitabilityResult;
 
 namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatography
 {

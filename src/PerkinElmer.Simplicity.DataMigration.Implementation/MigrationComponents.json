@@ -3,6 +3,7 @@
     {
       "Name": "Version15Component",
       "Version": "Version15",
+      "ComponentFolder": "C:\\DEV\\DataMigrationPoC\\Output\\Debug\\Version15",
       "DllName": "PerkinElmer.Simplicity.Data.Version15.dll",
       "VersionClassName": "PerkinElmer.Simplicity.Data.Version15.Version15",
       "SourceVersionMethodName": "StartSourceDataflow",
@@ -11,6 +12,7 @@
     {
       "Name": "Version16Component",
       "Version": "Version16",
+      "ComponentFolder": "C:\\DEV\\DataMigrationPoC\\Output\\Debug\\Version16",
       "DllName": "PerkinElmer.Simplicity.Data.Version16.dll",
       "VersionClassName": "PerkinElmer.Simplicity.Data.Version16.Version16",
       "SourceVersionMethodName": "StartSourceDataflow",
@@ -22,6 +24,7 @@
       "Name": "Ver15ToVer16",
       "FromVersion": "Version15",
       "ToVersion": "Version16",
+      "ComponentFolder": "C:\\DEV\\DataMigrationPoC\\Output\\Debug\\V15ToV16",
       "DllName": "PerkinElmer.Simplicity.DataTransform.V15ToV16.dll",
       "MigrationClassName": "PerkinElmer.Simplicity.DataTransform.V15ToV16.Version15ToVersion16"
     }

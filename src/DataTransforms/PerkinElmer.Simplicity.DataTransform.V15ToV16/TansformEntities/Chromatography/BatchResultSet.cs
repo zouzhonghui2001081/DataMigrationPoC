@@ -1,5 +1,5 @@
-﻿using BatchResultSet15 = PerkinElmer.Simplicity.Data.Version15.DataEntities.Chromatography.BatchResultSet;
-using BatchResultSet16 = PerkinElmer.Simplicity.Data.Version16.DataEntities.Chromatography.BatchResultSet;
+﻿using BatchResultSet15 = PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.BatchResultSet;
+using BatchResultSet16 = PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.Chromatography.BatchResultSet;
 
 namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatography
 {

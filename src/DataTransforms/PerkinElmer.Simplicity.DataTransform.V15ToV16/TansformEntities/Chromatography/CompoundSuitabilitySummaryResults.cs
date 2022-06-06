@@ -1,5 +1,5 @@
-﻿using CompoundSuitabilitySummaryResults15 = PerkinElmer.Simplicity.Data.Version15.DataEntities.Chromatography.CompoundSuitabilitySummaryResults;
-using CompoundSuitabilitySummaryResults16 = PerkinElmer.Simplicity.Data.Version16.DataEntities.Chromatography.CompoundSuitabilitySummaryResults;
+﻿using CompoundSuitabilitySummaryResults15 = PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.CompoundSuitabilitySummaryResults;
+using CompoundSuitabilitySummaryResults16 = PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.Chromatography.CompoundSuitabilitySummaryResults;
 
 namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatography
 {

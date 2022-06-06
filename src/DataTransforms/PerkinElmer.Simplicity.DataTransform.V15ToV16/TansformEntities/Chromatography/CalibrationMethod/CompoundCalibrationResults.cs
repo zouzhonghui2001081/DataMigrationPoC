@@ -1,5 +1,5 @@
-﻿using CompoundCalibrationResults15 = PerkinElmer.Simplicity.Data.Version15.DataEntities.Chromatography.CalibrationMethod.CompoundCalibrationResults;
-using CompoundCalibrationResults16 = PerkinElmer.Simplicity.Data.Version16.DataEntities.Chromatography.CalibrationMethod.CompoundCalibrationResults;
+﻿using CompoundCalibrationResults15 = PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.CalibrationMethod.CompoundCalibrationResults;
+using CompoundCalibrationResults16 = PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.Chromatography.CalibrationMethod.CompoundCalibrationResults;
 
 namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatography.CalibrationMethod
 {

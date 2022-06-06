@@ -5,8 +5,8 @@ using System.Linq;
 using System.Reflection;
 using Dapper;
 using log4net;
-using PerkinElmer.Simplicity.Data.Version16.DataEntities.Chromatography;
-using PerkinElmer.Simplicity.Data.Version16.DataEntities.Chromatography.ReviewApprove;
+using PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.Chromatography;
+using PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.Chromatography.ReviewApprove;
 
 namespace PerkinElmer.Simplicity.Data.Version16.DataAccess.Postgresql.Chromatography
 {

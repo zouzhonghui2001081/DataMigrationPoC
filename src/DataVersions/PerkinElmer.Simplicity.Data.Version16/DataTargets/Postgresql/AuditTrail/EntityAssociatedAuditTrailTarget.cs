@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Npgsql;
 using PerkinElmer.Simplicity.Data.Version16.DataAccess.Postgresql.AuditTrail;
-using PerkinElmer.Simplicity.Data.Version16.DataEntities.AuditTrail;
+using PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.AuditTrail;
 using PerkinElmer.Simplicity.Data.Version16.Version;
 
 namespace PerkinElmer.Simplicity.Data.Version16.DataTargets.Postgresql.AuditTrail

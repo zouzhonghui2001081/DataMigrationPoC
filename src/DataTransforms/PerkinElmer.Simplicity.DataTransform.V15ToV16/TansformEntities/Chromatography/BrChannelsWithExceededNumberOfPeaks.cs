@@ -1,5 +1,5 @@
-﻿using BrChannelsWithExceededNumberOfPeaks15 = PerkinElmer.Simplicity.Data.Version15.DataEntities.Chromatography.BrChannelsWithExceededNumberOfPeaks;
-using BrChannelsWithExceededNumberOfPeaks16 = PerkinElmer.Simplicity.Data.Version16.DataEntities.Chromatography.BrChannelsWithExceededNumberOfPeaks;
+﻿using BrChannelsWithExceededNumberOfPeaks15 = PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.BrChannelsWithExceededNumberOfPeaks;
+using BrChannelsWithExceededNumberOfPeaks16 = PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.Chromatography.BrChannelsWithExceededNumberOfPeaks;
 
 namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatography
 {

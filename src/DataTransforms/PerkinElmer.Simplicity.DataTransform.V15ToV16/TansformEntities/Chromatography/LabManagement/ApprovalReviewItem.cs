@@ -1,5 +1,5 @@
-﻿using ApprovalReviewItem15 = PerkinElmer.Simplicity.Data.Version15.DataEntities.Chromatography.LabManagement.ApprovalReviewItem;
-using ApprovalReviewItem16 = PerkinElmer.Simplicity.Data.Version16.DataEntities.Chromatography.LabManagement.ApprovalReviewItem;
+﻿using ApprovalReviewItem15 = PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.LabManagement.ApprovalReviewItem;
+using ApprovalReviewItem16 = PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.Chromatography.LabManagement.ApprovalReviewItem;
 
 namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatography.LabManagement
 {

@@ -3,7 +3,7 @@ using System.Reflection;
 using log4net;
 using PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.AuditTrail;
 using PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatography;
-using ReportTemplateData = PerkinElmer.Simplicity.Data.Version16.Version.Data.Chromatography.ReportTemplateData;
+using ReportTemplateData = PerkinElmer.Simplicity.Data.Version16.Contract.Version.Chromatography.ReportTemplateData;
 
 namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.Chromatography
 {
@@ -11,7 +11,7 @@ namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.Chromatography
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
        
-        public static ReportTemplateData Transform(Data.Version15.Version.Data.Chromatography.ReportTemplateData reportTemplate)
+        public static ReportTemplateData Transform(Data.Version15.Contract.Version.Chromatography.ReportTemplateData reportTemplate)
         {
             if(reportTemplate == null) throw new ArgumentNullException(nameof(reportTemplate));
             var reportTemplate16 = new ReportTemplateData

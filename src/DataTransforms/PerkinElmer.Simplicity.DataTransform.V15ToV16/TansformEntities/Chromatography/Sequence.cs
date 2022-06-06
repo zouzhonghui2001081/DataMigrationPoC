@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using Sequence15 = PerkinElmer.Simplicity.Data.Version15.DataEntities.Chromatography.Sequence;
-using Sequence16 = PerkinElmer.Simplicity.Data.Version16.DataEntities.Chromatography.Sequence;
+using Sequence15 = PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.Sequence;
+using Sequence16 = PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.Chromatography.Sequence;
 
 namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatography
 {
@@ -25,7 +25,7 @@ namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromat
             };
             if (sequence.SequenceSampleInfos == null) return sequence16;
 
-            sequence16.SequenceSampleInfos = new List<Data.Version16.DataEntities.Chromatography.SequenceSampleInfo>();
+            sequence16.SequenceSampleInfos = new List<Data.Version16.Contract.DataEntities.Chromatography.SequenceSampleInfo>();
             foreach (var sequenceSampleInfo in sequence.SequenceSampleInfos)
                 sequence16.SequenceSampleInfos.Add(SequenceSampleInfo.Transform(sequenceSampleInfo));
             return sequence16;

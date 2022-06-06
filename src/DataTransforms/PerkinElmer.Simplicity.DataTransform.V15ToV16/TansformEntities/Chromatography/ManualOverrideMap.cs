@@ -1,5 +1,5 @@
-﻿using ManualOverrideMap15 = PerkinElmer.Simplicity.Data.Version15.DataEntities.Chromatography.ManualOverrideMap;
-using ManualOverrideMap16 = PerkinElmer.Simplicity.Data.Version16.DataEntities.Chromatography.ManualOverrideMap;
+﻿using ManualOverrideMap15 = PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.ManualOverrideMap;
+using ManualOverrideMap16 = PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.Chromatography.ManualOverrideMap;
 
 namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatography
 {

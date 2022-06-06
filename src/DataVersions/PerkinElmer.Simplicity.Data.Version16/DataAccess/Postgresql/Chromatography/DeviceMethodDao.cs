@@ -2,7 +2,7 @@
 using System.Data;
 using System.Linq;
 using Dapper;
-using PerkinElmer.Simplicity.Data.Version16.DataEntities.Chromatography.AcquisitionMethod;
+using PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.Chromatography.AcquisitionMethod;
 
 namespace PerkinElmer.Simplicity.Data.Version16.DataAccess.Postgresql.Chromatography
 {

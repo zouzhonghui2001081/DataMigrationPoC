@@ -5,11 +5,11 @@ using System.Reflection;
 using log4net;
 using Npgsql;
 using PerkinElmer.Simplicity.Data.Version15.DataAccess.Postgresql.Chromatography;
-using PerkinElmer.Simplicity.Data.Version15.DataEntities.AuditTrail;
+using PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.AuditTrail;
 using PerkinElmer.Simplicity.Data.Version15.DataSources.Postgresql.AuditTrail;
 using PerkinElmer.Simplicity.Data.Version15.Version;
-using PerkinElmer.Simplicity.Data.Version15.Version.Data;
-using PerkinElmer.Simplicity.Data.Version15.Version.Data.Chromatography;
+using PerkinElmer.Simplicity.Data.Version15.Contract.Version;
+using PerkinElmer.Simplicity.Data.Version15.Contract.Version.Chromatography;
 
 namespace PerkinElmer.Simplicity.Data.Version15.DataSources.Postgresql.Chromatography
 {

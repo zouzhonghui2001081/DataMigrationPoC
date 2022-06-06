@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Reflection;
 using log4net;
-using PerkinElmer.Simplicity.Data.Version16.Version.Data.Chromatography;
+
+using PerkinElmer.Simplicity.Data.Version16.Contract.Version.Chromatography;
 using PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.AuditTrail;
 using PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatography;
 using PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatography.ProcessingMethod;
-using AnalysisResultSetData15 = PerkinElmer.Simplicity.Data.Version15.Version.Data.Chromatography.AnalysisResultSetData;
-using AnalysisResultSetData16 = PerkinElmer.Simplicity.Data.Version16.Version.Data.Chromatography.AnalysisResultSetData;
-using BatchRunAnalysisResultData15 = PerkinElmer.Simplicity.Data.Version15.Version.Data.Chromatography.BatchRunAnalysisResultData;
-using BatchRunAnalysisResultData16 = PerkinElmer.Simplicity.Data.Version16.Version.Data.Chromatography.BatchRunAnalysisResultData;
-using CalculatedChannelCompositeData15 = PerkinElmer.Simplicity.Data.Version15.Version.Data.Chromatography.CalculatedChannelCompositeData;
+using AnalysisResultSetData15 = PerkinElmer.Simplicity.Data.Version15.Contract.Version.Chromatography.AnalysisResultSetData;
+using AnalysisResultSetData16 = PerkinElmer.Simplicity.Data.Version16.Contract.Version.Chromatography.AnalysisResultSetData;
+using BatchRunAnalysisResultData15 = PerkinElmer.Simplicity.Data.Version15.Contract.Version.Chromatography.BatchRunAnalysisResultData;
+using BatchRunAnalysisResultData16 = PerkinElmer.Simplicity.Data.Version16.Contract.Version.Chromatography.BatchRunAnalysisResultData;
+using CalculatedChannelCompositeData15 = PerkinElmer.Simplicity.Data.Version15.Contract.Version.Chromatography.CalculatedChannelCompositeData;
 
 namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.Chromatography
 {

@@ -1,5 +1,5 @@
-﻿using CalibrationPointResponse15 = PerkinElmer.Simplicity.Data.Version15.DataEntities.Chromatography.CalibrationMethod.CalibrationPointResponse;
-using CalibrationPointResponse16 = PerkinElmer.Simplicity.Data.Version16.DataEntities.Chromatography.CalibrationMethod.CalibrationPointResponse;
+﻿using CalibrationPointResponse15 = PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.CalibrationMethod.CalibrationPointResponse;
+using CalibrationPointResponse16 = PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.Chromatography.CalibrationMethod.CalibrationPointResponse;
 
 namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatography.CalibrationMethod
 {

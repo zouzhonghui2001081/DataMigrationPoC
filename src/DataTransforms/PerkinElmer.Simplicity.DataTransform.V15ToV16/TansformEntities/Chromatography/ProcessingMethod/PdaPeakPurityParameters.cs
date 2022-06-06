@@ -1,5 +1,5 @@
-﻿using PdaPeakPurityParameters15 = PerkinElmer.Simplicity.Data.Version15.DataEntities.Chromatography.ProcessingMethod.PdaPeakPurityParameters;
-using PdaPeakPurityParameters16 = PerkinElmer.Simplicity.Data.Version16.DataEntities.Chromatography.ProcessingMethod.PdaPeakPurityParameters;
+﻿using PdaPeakPurityParameters15 = PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.ProcessingMethod.PdaPeakPurityParameters;
+using PdaPeakPurityParameters16 = PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.Chromatography.ProcessingMethod.PdaPeakPurityParameters;
 
 namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatography.ProcessingMethod
 {

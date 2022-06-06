@@ -1,5 +1,5 @@
-﻿using ManualOverrideIntegrationEvent15 = PerkinElmer.Simplicity.Data.Version15.DataEntities.Chromatography.ManualOverrideIntegrationEvent;
-using ManualOverrideIntegrationEvent16 = PerkinElmer.Simplicity.Data.Version16.DataEntities.Chromatography.ManualOverrideIntegrationEvent;
+﻿using ManualOverrideIntegrationEvent15 = PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.ManualOverrideIntegrationEvent;
+using ManualOverrideIntegrationEvent16 = PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.Chromatography.ManualOverrideIntegrationEvent;
 
 namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatography
 {

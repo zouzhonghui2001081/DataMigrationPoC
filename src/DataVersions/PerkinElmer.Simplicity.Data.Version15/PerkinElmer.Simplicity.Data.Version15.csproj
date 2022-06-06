@@ -1,17 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
    <PropertyGroup>
-    <OutputType>Library</OutputType>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <TargetFrameworks>net471;</TargetFrameworks>
-   </PropertyGroup>
-
-   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|AnyCPU'">
-     <OutputPath>..\..\..\output\Debug\</OutputPath>
-   </PropertyGroup>
-
-   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net471|AnyCPU'">
-     <OutputPath>..\..\..\Output\Debug\</OutputPath>
+     <OutputType>Library</OutputType>
+     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+     <TargetFrameworks>netcoreapp3.1;</TargetFrameworks>
    </PropertyGroup>
 
    <ItemGroup>
@@ -38,27 +31,26 @@
      <EmbeddedResource Include="DataAccess\Postgresql\SQL\SecurityDbSchema.sql" />
    </ItemGroup>
 
-
   <ItemGroup>
     <PackageReference Include="Dapper.StrongName" Version="$(DapperStrongName)" />
-    <PackageReference Include="DotNetZip" Version="$(DotNetZip)" />
-    <PackageReference Include="log4net" Version="$(Log4net)" />    
-    <PackageReference Include="Microsoft.CSharp" Version="$(MicrosoftCSharp)" />    
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="$(MicrosoftExtensionsLoggingAbstractions)" />
+    <PackageReference Include="log4net" Version="$(Log4net)" />
     <PackageReference Include="Npgsql" Version="$(Npgsql)" />    
     <PackageReference Include="System.Data.DataSetExtensions" Version="$(SystemDataDataSetExtensions)" />  
     <PackageReference Include="System.Data.SQLite.Core" Version="$(SystemDataSQLite)" />
-    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="$(SystemRuntimeCompilerServicesUnsafe)" />
  	<PackageReference Include="System.Threading.Tasks.Dataflow" Version="$(SystemThreadingTasksDataflow)" />
 	<PackageReference Include="Newtonsoft.Json" Version="$(NewtonsoftJson)" />
-	<PackageReference Include="PerkinElmer.Devices" Version="$(PerkinElmerDevices)" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="DataEntities\Chromatography\AcquisitionMethod\" />
-    <Folder Include="DataEntities\Chromatography\CalibrationMethod\" />
-    <Folder Include="DataEntities\Chromatography\ProcessingMethod\" />
     <Folder Include="DataSources\Sqlite\" />
     <Folder Include="DataTargets\Sqlite\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\PerkinElmer.Simplicity.Data.Version15.DataContract\PerkinElmer.Simplicity.Data.Version15.Contract.csproj">
+      <Private>false</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy &quot;$(TargetDir)*.*&quot; &quot;$(ProjectDir)..\..\..\Output\Debug\Version15\&quot; /Y" />
+  </Target>
 
 </Project>

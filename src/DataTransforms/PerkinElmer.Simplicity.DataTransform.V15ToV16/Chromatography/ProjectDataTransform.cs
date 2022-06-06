@@ -2,8 +2,8 @@
 using System.Reflection;
 using log4net;
 using PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatography;
-using ProjectData15 = PerkinElmer.Simplicity.Data.Version15.Version.Data.Chromatography.ProjectData;
-using ProjectData16 = PerkinElmer.Simplicity.Data.Version16.Version.Data.Chromatography.ProjectData;
+using ProjectData15 = PerkinElmer.Simplicity.Data.Version15.Contract.Version.Chromatography.ProjectData;
+using ProjectData16 = PerkinElmer.Simplicity.Data.Version16.Contract.Version.Chromatography.ProjectData;
 
 namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.Chromatography
 {

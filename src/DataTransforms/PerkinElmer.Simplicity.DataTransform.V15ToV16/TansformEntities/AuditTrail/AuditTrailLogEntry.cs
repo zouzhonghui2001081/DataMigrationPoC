@@ -1,6 +1,6 @@
 ﻿using System;
-using AuditTrailLogEntry15 = PerkinElmer.Simplicity.Data.Version15.DataEntities.AuditTrail.AuditTrailLogEntry;
-using AuditTrailLogEntry16 = PerkinElmer.Simplicity.Data.Version16.DataEntities.AuditTrail.AuditTrailLogEntry;
+using AuditTrailLogEntry15 = PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.AuditTrail.AuditTrailLogEntry;
+using AuditTrailLogEntry16 = PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.AuditTrail.AuditTrailLogEntry;
 
 namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.AuditTrail
 {

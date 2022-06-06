@@ -1,7 +1,7 @@
 using System;
 using System.Data;
 using Dapper;
-using PerkinElmer.Simplicity.Data.Version16.DataEntities.Chromatography.ProcessingMethod;
+using PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.Chromatography.ProcessingMethod;
 
 namespace PerkinElmer.Simplicity.Data.Version16.DataAccess.Postgresql.Chromatography
 {

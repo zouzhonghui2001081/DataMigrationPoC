@@ -1,6 +1,6 @@
 ﻿using PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatography.CalibrationMethod;
-using ProcessingMethod15 = PerkinElmer.Simplicity.Data.Version15.DataEntities.Chromatography.ProcessingMethod.ProcessingMethod;
-using ProcessingMethod16 = PerkinElmer.Simplicity.Data.Version16.DataEntities.Chromatography.ProcessingMethod.ProcessingMethod;
+using ProcessingMethod15 = PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.ProcessingMethod.ProcessingMethod;
+using ProcessingMethod16 = PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.Chromatography.ProcessingMethod.ProcessingMethod;
 
 
 namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatography.ProcessingMethod
@@ -57,7 +57,7 @@ namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromat
             if (processingMethod.ProcessingDeviceMethods != null)
             {
                 if (processingMethod16.ProcessingDeviceMethods == null)
-                    processingMethod16.ProcessingDeviceMethods = new System.Collections.Generic.List<Data.Version16.DataEntities.Chromatography.ProcessingMethod.ProcessingDeviceMethod>();
+                    processingMethod16.ProcessingDeviceMethods = new System.Collections.Generic.List<Data.Version16.Contract.DataEntities.Chromatography.ProcessingMethod.ProcessingDeviceMethod>();
                 foreach (var processingDeviceMethod in processingMethod.ProcessingDeviceMethods)
                     processingMethod16.ProcessingDeviceMethods.Add(ProcessingDeviceMethod.Transform(processingDeviceMethod));
                     

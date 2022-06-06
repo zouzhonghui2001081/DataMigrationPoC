@@ -1,5 +1,5 @@
-﻿using StreamDataBatchResult15 = PerkinElmer.Simplicity.Data.Version15.DataEntities.Chromatography.StreamDataBatchResult;
-using StreamDataBatchResult16 = PerkinElmer.Simplicity.Data.Version16.DataEntities.Chromatography.StreamDataBatchResult;
+﻿using StreamDataBatchResult15 = PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.StreamDataBatchResult;
+using StreamDataBatchResult16 = PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.Chromatography.StreamDataBatchResult;
 
 namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatography
 {

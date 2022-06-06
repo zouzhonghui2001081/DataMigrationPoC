@@ -1,5 +1,5 @@
-﻿using Project15 = PerkinElmer.Simplicity.Data.Version15.DataEntities.Chromatography.Project;
-using Project16 = PerkinElmer.Simplicity.Data.Version16.DataEntities.Chromatography.Project;
+﻿using Project15 = PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.Project;
+using Project16 = PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.Chromatography.Project;
 
 namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatography
 {

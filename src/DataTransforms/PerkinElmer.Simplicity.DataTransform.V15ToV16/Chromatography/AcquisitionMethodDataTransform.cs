@@ -3,8 +3,8 @@ using System.Reflection;
 using log4net;
 using PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.AuditTrail;
 using PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatography.AcquisitionMethod;
-using AcqusitionMethodData15 = PerkinElmer.Simplicity.Data.Version15.Version.Data.Chromatography.AcqusitionMethodData;
-using AcqusitionMethodData16 = PerkinElmer.Simplicity.Data.Version16.Version.Data.Chromatography.AcqusitionMethodData;
+using AcqusitionMethodData15 = PerkinElmer.Simplicity.Data.Version15.Contract.Version.Chromatography.AcqusitionMethodData;
+using AcqusitionMethodData16 = PerkinElmer.Simplicity.Data.Version16.Contract.Version.Chromatography.AcqusitionMethodData;
 
 namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.Chromatography
 {

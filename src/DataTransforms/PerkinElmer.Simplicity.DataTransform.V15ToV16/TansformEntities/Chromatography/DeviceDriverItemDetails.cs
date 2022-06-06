@@ -1,5 +1,5 @@
-﻿using DeviceDriverItemDetails15 = PerkinElmer.Simplicity.Data.Version15.DataEntities.Chromatography.DeviceDriverItemDetails;
-using DeviceDriverItemDetails16 = PerkinElmer.Simplicity.Data.Version16.DataEntities.Chromatography.DeviceDriverItemDetails;
+﻿using DeviceDriverItemDetails15 = PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.DeviceDriverItemDetails;
+using DeviceDriverItemDetails16 = PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.Chromatography.DeviceDriverItemDetails;
 
 namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatography
 {

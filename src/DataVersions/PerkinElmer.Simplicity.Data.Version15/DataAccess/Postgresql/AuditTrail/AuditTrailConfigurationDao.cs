@@ -3,7 +3,7 @@ using System.Data;
 using System.Reflection;
 using Dapper;
 using log4net;
-using PerkinElmer.Simplicity.Data.Version15.DataEntities.AuditTrail;
+using PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.AuditTrail;
 
 namespace PerkinElmer.Simplicity.Data.Version15.DataAccess.Postgresql.AuditTrail
 {

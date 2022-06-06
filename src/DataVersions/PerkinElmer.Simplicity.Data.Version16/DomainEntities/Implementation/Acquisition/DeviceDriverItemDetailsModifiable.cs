@@ -1,4 +1,4 @@
-﻿using PerkinElmer.Acquisition.Devices;
+﻿
 using PerkinElmer.Simplicity.Data.Version16.DomainEntities.Interface.Acquisition;
 using DeviceDriverItemCompleteId = PerkinElmer.Simplicity.Data.Version16.DomainEntities.Interface.Acquisition.DeviceDriverItemCompleteId;
 

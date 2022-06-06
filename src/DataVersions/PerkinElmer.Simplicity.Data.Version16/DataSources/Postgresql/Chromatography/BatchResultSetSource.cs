@@ -5,10 +5,10 @@ using System.Reflection;
 using log4net;
 using Npgsql;
 using PerkinElmer.Simplicity.Data.Version16.DataAccess.Postgresql.Chromatography;
-using PerkinElmer.Simplicity.Data.Version16.DataEntities.Chromatography;
+using PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.Chromatography;
 using PerkinElmer.Simplicity.Data.Version16.Version;
-using PerkinElmer.Simplicity.Data.Version16.Version.Data;
-using PerkinElmer.Simplicity.Data.Version16.Version.Data.Chromatography;
+using PerkinElmer.Simplicity.Data.Version16.Contract.Version;
+using PerkinElmer.Simplicity.Data.Version16.Contract.Version.Chromatography;
 
 namespace PerkinElmer.Simplicity.Data.Version16.DataSources.Postgresql.Chromatography
 {

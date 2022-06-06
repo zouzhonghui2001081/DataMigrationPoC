@@ -1,5 +1,5 @@
-﻿using AuditTrailConfiguration15 = PerkinElmer.Simplicity.Data.Version15.DataEntities.AuditTrail.AuditTrailConfiguration;
-using AuditTrailConfiguration16 = PerkinElmer.Simplicity.Data.Version16.DataEntities.AuditTrail.AuditTrailConfiguration;
+﻿using AuditTrailConfiguration15 = PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.AuditTrail.AuditTrailConfiguration;
+using AuditTrailConfiguration16 = PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.AuditTrail.AuditTrailConfiguration;
 
 namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.AuditTrail
 {

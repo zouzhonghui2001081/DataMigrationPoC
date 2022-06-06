@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using PerkinElmer.Simplicity.Data.Version16.DataEntities.Chromatography.ProcessingMethod;
-using PdaLibraryConfirmationParameters15 = PerkinElmer.Simplicity.Data.Version15.DataEntities.Chromatography.ProcessingMethod.PdaLibraryConfirmationParameters;
-using PdaLibraryConfirmationParameters16 = PerkinElmer.Simplicity.Data.Version16.DataEntities.Chromatography.ProcessingMethod.PdaLibraryConfirmationParameters;
+using PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.Chromatography.ProcessingMethod;
+using PdaLibraryConfirmationParameters15 = PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.ProcessingMethod.PdaLibraryConfirmationParameters;
+using PdaLibraryConfirmationParameters16 = PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.Chromatography.ProcessingMethod.PdaLibraryConfirmationParameters;
 
 namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatography.ProcessingMethod
 {

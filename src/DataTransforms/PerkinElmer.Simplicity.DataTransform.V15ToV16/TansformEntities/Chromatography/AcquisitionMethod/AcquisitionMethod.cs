@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using AcqusitionMethod15 = PerkinElmer.Simplicity.Data.Version15.DataEntities.Chromatography.AcquisitionMethod.AcquisitionMethod;
-using AcqusitionMethod16 = PerkinElmer.Simplicity.Data.Version16.DataEntities.Chromatography.AcquisitionMethod.AcquisitionMethod;
+using AcqusitionMethod15 = PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.AcquisitionMethod.AcquisitionMethod;
+using AcqusitionMethod16 = PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.Chromatography.AcquisitionMethod.AcquisitionMethod;
 
 namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromatography.AcquisitionMethod
 {
@@ -24,7 +24,7 @@ namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.TansformEntities.Chromat
                 Guid = acqusitionMethod.Guid,
                 ReviewApproveState = acqusitionMethod.ReviewApproveState
             };
-            var deviceMethods = new List<Data.Version16.DataEntities.Chromatography.AcquisitionMethod.DeviceMethod>();
+            var deviceMethods = new List<Data.Version16.Contract.DataEntities.Chromatography.AcquisitionMethod.DeviceMethod>();
             foreach (var deviceMethod in acqusitionMethod.DeviceMethods)
                 deviceMethods.Add(DeviceMethod.Transform(deviceMethod));
 

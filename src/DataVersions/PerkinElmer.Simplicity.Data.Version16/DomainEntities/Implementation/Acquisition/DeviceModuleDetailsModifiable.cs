@@ -1,5 +1,4 @@
-﻿using PerkinElmer.Acquisition.Devices;
-using PerkinElmer.Simplicity.Data.Version16.DomainEntities.Interface.Acquisition;
+﻿using PerkinElmer.Simplicity.Data.Version16.DomainEntities.Interface.Acquisition;
 using DeviceModuleCompleteId = PerkinElmer.Simplicity.Data.Version16.DomainEntities.Interface.Acquisition.DeviceModuleCompleteId;
 
 namespace PerkinElmer.Simplicity.Data.Version16.DomainEntities.Implementation.Acquisition

@@ -1,27 +1,60 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
-using PerkinElmer.Simplicity.Data.Version15.Version.Data;
+using PerkinElmer.Simplicity.Data.Version15.Contract.Version;
 using PerkinElmer.Simplicity.DataTransform.V15ToV16.Chromatography;
-using AcqusitionMethodData15 = PerkinElmer.Simplicity.Data.Version15.Version.Data.Chromatography.AcqusitionMethodData;
-using AnalysisResultSetData15 = PerkinElmer.Simplicity.Data.Version15.Version.Data.Chromatography.AnalysisResultSetData;
-using BatchResultSetData15 = PerkinElmer.Simplicity.Data.Version15.Version.Data.Chromatography.BatchResultSetData;
-using CompoundLibraryData15 = PerkinElmer.Simplicity.Data.Version15.Version.Data.Chromatography.CompoundLibraryData;
-using ProcessingMethodData15 = PerkinElmer.Simplicity.Data.Version15.Version.Data.Chromatography.ProcessingMethodData;
-using ProjectData15 = PerkinElmer.Simplicity.Data.Version15.Version.Data.Chromatography.ProjectData;
-using ReportTemplateData15 = PerkinElmer.Simplicity.Data.Version15.Version.Data.Chromatography.ReportTemplateData;
-using SequenceData15 = PerkinElmer.Simplicity.Data.Version15.Version.Data.Chromatography.SequenceData;
+using AcqusitionMethodData15 = PerkinElmer.Simplicity.Data.Version15.Contract.Version.Chromatography.AcqusitionMethodData;
+using AnalysisResultSetData15 = PerkinElmer.Simplicity.Data.Version15.Contract.Version.Chromatography.AnalysisResultSetData;
+using BatchResultSetData15 = PerkinElmer.Simplicity.Data.Version15.Contract.Version.Chromatography.BatchResultSetData;
+using CompoundLibraryData15 = PerkinElmer.Simplicity.Data.Version15.Contract.Version.Chromatography.CompoundLibraryData;
+using ProcessingMethodData15 = PerkinElmer.Simplicity.Data.Version15.Contract.Version.Chromatography.ProcessingMethodData;
+using ProjectData15 = PerkinElmer.Simplicity.Data.Version15.Contract.Version.Chromatography.ProjectData;
+using ReportTemplateData15 = PerkinElmer.Simplicity.Data.Version15.Contract.Version.Chromatography.ReportTemplateData;
+using SequenceData15 = PerkinElmer.Simplicity.Data.Version15.Contract.Version.Chromatography.SequenceData;
 
 namespace PerkinElmer.Simplicity.DataTransform.V15ToV16
 {
-    public sealed class Version15ToVersion16 : IPropagatorBlock<object, object>
+    public sealed class Version15ToVersion16 : IPropagatorBlock<object, object>,
+        ISourceBlock<string>
     {
+        private readonly BufferBlock<string> _sourceMessage;
         private readonly TransformBlock<object, object> _transformBlock;
 
-        public Version15ToVersion16()
+        public Version15ToVersion16(CancellationToken cancellToken)
         {
-            _transformBlock = new TransformBlock<object, object>(Transform);
+            var dataflowOption = new DataflowBlockOptions { CancellationToken = cancellToken };
+            var executeDataFlowOption = new ExecutionDataflowBlockOptions
+            {
+                MaxDegreeOfParallelism = Environment.ProcessorCount,
+                CancellationToken = cancellToken
+            };
+            _sourceMessage = new BufferBlock<string>(dataflowOption);
+            _transformBlock = new TransformBlock<object, object>(Transform, executeDataFlowOption);
         }
+
+        #region ISourceBlock<string> members
+
+        public IDisposable LinkTo(ITargetBlock<string> target, DataflowLinkOptions linkOptions)
+        {
+            return _sourceMessage.LinkTo(target);
+        }
+
+        public string ConsumeMessage(DataflowMessageHeader messageHeader, ITargetBlock<string> target, out bool messageConsumed)
+        {
+            return ((ISourceBlock<string>)_sourceMessage).ConsumeMessage(messageHeader, target, out messageConsumed);
+        }
+
+        public bool ReserveMessage(DataflowMessageHeader messageHeader, ITargetBlock<string> target)
+        {
+            return ((ISourceBlock<string>)_sourceMessage).ReserveMessage(messageHeader, target);
+        }
+
+        public void ReleaseReservation(DataflowMessageHeader messageHeader, ITargetBlock<string> target)
+        {
+            ((ISourceBlock<string>)_sourceMessage).ReleaseReservation(messageHeader, target);
+        }
+        #endregion
 
         #region IPropagatorBlock members
 
@@ -72,7 +105,7 @@ namespace PerkinElmer.Simplicity.DataTransform.V15ToV16
         public object Transform(object input)
         {
             if(!(input is Version15DataBase version15DataBase)) throw new ArgumentException("The input type is incorrect!");
-
+            _sourceMessage.Post("Transform begin");
             switch (version15DataBase.Version15DataTypes)
             {
                 case Version15DataTypes.AcqusitionMethod:
