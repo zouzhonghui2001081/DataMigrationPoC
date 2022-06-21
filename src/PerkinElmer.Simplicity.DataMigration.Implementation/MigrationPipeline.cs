@@ -35,10 +35,10 @@ namespace PerkinElmer.Simplicity.DataMigration.Implementation
 
         public CancellationTokenSource Cancellation => new CancellationTokenSource();
 
-        public void PreparePipeline(string pipelinePrepareConfig)
+        public void PreparePipeline(string pipelineConfig)
         {
             var targetMethod = _migrationComponentsFactory.GetTargetMethodInfo(_endVersion);
-            targetMethod.Invoke(TargetBlock, new object[] { pipelinePrepareConfig });
+            targetMethod.Invoke(TargetBlock, new object[] { pipelineConfig });
         }
 
         public void StartPipeline(string pipelineStartConfig)

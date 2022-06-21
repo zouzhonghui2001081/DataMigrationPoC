@@ -45,7 +45,8 @@
     <Folder Include="DataAccess\Postgresql\AuditTrail\" />
     <Folder Include="DataSources\Sqlite\" />
     <Folder Include="DataTargets\Sqlite\" />
-    <Folder Include="DomainEntities\Factory\" />
+    <Folder Include="Version\Context\TargetContext\" />
+    <Folder Include="Version\Context\SourceContext\" />
   </ItemGroup>
   
   <ItemGroup>

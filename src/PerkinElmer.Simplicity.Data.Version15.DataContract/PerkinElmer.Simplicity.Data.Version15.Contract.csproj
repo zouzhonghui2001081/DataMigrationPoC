@@ -5,4 +5,9 @@
     <TargetFrameworks>netcoreapp3.1;</TargetFrameworks>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="log4net" Version="$(Log4net)" />
+	<PackageReference Include="Newtonsoft.Json" Version="$(NewtonsoftJson)" />
+  </ItemGroup>
+  
 </Project>

@@ -2,11 +2,10 @@ using System;
 using System.Data;
 using System.IO;
 using System.Reflection;
-using System.Text.Json;
 using Dapper;
 using log4net;
 using Npgsql;
-using PerkinElmer.Simplicity.Data.Version16.DataAccess.Postgresql;
+using PerkinElmer.Simplicity.Data.Version16.Version.Context.TargetContext;
 
 namespace PerkinElmer.Simplicity.Data.Version16.Version
 {
@@ -24,7 +23,6 @@ namespace PerkinElmer.Simplicity.Data.Version16.Version
 
         private const string ChromatographyDummyData = "PerkinElmer.Simplicity.Data.Version16.DataAccess.Postgresql.SQL.DummyRuns.sql";
 
-        private const string ConnectionStringResourceName = "PerkinElmer.Simplicity.Data.Version16.DataAccess.Postgresql.ConnectionStrings.json";
 
         private const string SchemaTableName = "SchemaVersion";
 
@@ -42,26 +40,17 @@ namespace PerkinElmer.Simplicity.Data.Version16.Version
 
         #region Postgresql
 
-        private static ConnectionStrings _connectionStrings;
-        private static ConnectionStrings ConnectionStrings => _connectionStrings ?? (_connectionStrings = GetConnectionStrings());
-
         private static NpgsqlConnectionStringBuilder _systemDbConnectionStringBuilder;
-        private static NpgsqlConnectionStringBuilder SystemDbConnectionStrBuilder =>
-            _systemDbConnectionStringBuilder ?? (_systemDbConnectionStringBuilder =
-                new NpgsqlConnectionStringBuilder(ConnectionStrings.System) { Pooling = false });
-
-        internal static string ChromatographyConnection => ConnectionStrings.Chromatography;
-
-        internal static string AuditTrailConnection => ConnectionStrings.AuditTrail;
-
-        internal static string SecurityConnection => ConnectionStrings.Security;
+        private static NpgsqlConnectionStringBuilder SystemDbConnectionStrBuilder => _systemDbConnectionStringBuilder;
 
 
-        public static void PreparePostgresqlHost()
+        public static void PreparePostgresqlHost(PostgresqlTargetContext postgresqlTargetContext)
         {
-            ResetChromatographyDatabase(new NpgsqlConnectionStringBuilder(ChromatographyConnection));
-            ResetAuditTrailDatabase(new NpgsqlConnectionStringBuilder(AuditTrailConnection));
-            ResetSecurityDatabase(new NpgsqlConnectionStringBuilder(SecurityConnection));
+            _systemDbConnectionStringBuilder = new NpgsqlConnectionStringBuilder(postgresqlTargetContext.SystemConnectionString) { Pooling = false };
+
+            ResetChromatographyDatabase(new NpgsqlConnectionStringBuilder(postgresqlTargetContext.ChromatographyConnectionString));
+            ResetAuditTrailDatabase(new NpgsqlConnectionStringBuilder(postgresqlTargetContext.AuditTrailConnectionString));
+            ResetSecurityDatabase(new NpgsqlConnectionStringBuilder(postgresqlTargetContext.SecurityConnectionString));
         }
 
         private static void ResetChromatographyDatabase(NpgsqlConnectionStringBuilder chromatographyConnBuilder)
@@ -236,21 +225,6 @@ namespace PerkinElmer.Simplicity.Data.Version16.Version
             {
                 Log.Error("Error occurred during ResetDatabase", ex);
                 throw;
-            }
-        }
-
-        private static ConnectionStrings GetConnectionStrings()
-        {
-            var assembly = typeof(Version16Host).Assembly;
-
-            using (var stream = assembly.GetManifestResourceStream(ConnectionStringResourceName))
-            {
-                using (var reader = new StreamReader(stream ?? throw new InvalidOperationException(
-                                                         $"Failed to load resource {ConnectionStringResourceName}")))
-                {
-                    var strings = reader.ReadToEnd();
-                    return JsonSerializer.Deserialize<ConnectionStrings>(strings);
-                }
             }
         }
 

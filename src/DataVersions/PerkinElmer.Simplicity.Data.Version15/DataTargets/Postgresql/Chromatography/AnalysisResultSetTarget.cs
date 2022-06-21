@@ -6,8 +6,8 @@ using log4net;
 using Npgsql;
 using PerkinElmer.Simplicity.Data.Version15.DataAccess.Postgresql.Chromatography;
 using PerkinElmer.Simplicity.Data.Version15.DataTargets.Postgresql.AuditTrail;
-using PerkinElmer.Simplicity.Data.Version15.Version;
 using PerkinElmer.Simplicity.Data.Version15.Contract.Version.Chromatography;
+using PerkinElmer.Simplicity.Data.Version15.Version.Context.TargetContext;
 
 namespace PerkinElmer.Simplicity.Data.Version15.DataTargets.Postgresql.Chromatography
 {
@@ -15,15 +15,13 @@ namespace PerkinElmer.Simplicity.Data.Version15.DataTargets.Postgresql.Chromatog
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        internal static void SaveAnalysisResultSet(AnalysisResultSetData analysisResultSetData)
+        internal static void SaveAnalysisResultSet(AnalysisResultSetData analysisResultSetData, PostgresqlTargetContext postgresqlTargetContext)
         {
-            using (var connection = new NpgsqlConnection(Version15Host.ChromatographyConnection))
-            {
-                if (connection.State != ConnectionState.Open) connection.Open();
-                CreateAnalysisResultSet(connection, analysisResultSetData);
-                EntityAssociatedAuditTrailTarget.CreateAuditTrailLogs(analysisResultSetData.AuditTrailLogs);
-                connection.Close();
-            }
+            using var connection = new NpgsqlConnection(postgresqlTargetContext.ChromatographyConnectionString);
+            if (connection.State != ConnectionState.Open) connection.Open();
+            CreateAnalysisResultSet(connection, analysisResultSetData);
+            EntityAssociatedAuditTrailTarget.CreateAuditTrailLogs(postgresqlTargetContext.AuditTrailConnectionString, analysisResultSetData.AuditTrailLogs);
+            connection.Close();
         }
         
         internal static void CreateAnalysisResultSet(IDbConnection connection,

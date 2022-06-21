@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using PerkinElmer.Simplicity.Data.Version15.DataSources.Postgresql.Chromatography;
 using PerkinElmer.Simplicity.Data.Version15.DataTargets;
 using PerkinElmer.Simplicity.Data.Version15.DataTargets.Postgresql.Chromatography;
@@ -10,6 +11,8 @@ using PerkinElmer.Simplicity.Data.Version15.Version;
 using PerkinElmer.Simplicity.Data.Version15.Version.Context;
 using PerkinElmer.Simplicity.Data.Version15.Contract.Version;
 using PerkinElmer.Simplicity.Data.Version15.Contract.Version.Chromatography;
+using PerkinElmer.Simplicity.Data.Version15.Version.Context.SourceContext;
+using PerkinElmer.Simplicity.Data.Version15.Version.Context.TargetContext;
 
 namespace PerkinElmer.Simplicity.Data.Version15
 {
@@ -35,27 +38,37 @@ namespace PerkinElmer.Simplicity.Data.Version15
 
         internal TargetType TargetType { get; set; } = TargetType.Unknown;
 
-        public void StartSourceDataflow(string sourceConfig)
+        internal PostgresqlTargetContext PostgresqlTargetContext { get; set; }
+
+        public void StartDataflow(string sourceConfig)
         {
-            var migrationSourceContext = JsonConvert.DeserializeObject<MigrationSourceContext>(sourceConfig);
-            switch (migrationSourceContext.MigrationType)
+            var source = JObject.Parse(sourceConfig);
+            var migrationType = (string)source["MigrationType"];
+            var payload = (string) source["Payload"];            
+            
+            switch (migrationType)
             {
                 case MigrationTypes.Upgrade:
-                    UpgradePostgresql(migrationSourceContext.IsIncludeAuditTrailLog);
+                    var postgresqlSourceContext = JsonConvert.DeserializeObject<PostgresqlSourceContext>(payload);
+                    UpgradePostgresql(postgresqlSourceContext);
                     break;
             }
 
             _sourceData.Complete();
         }
 
+
         public void PrepareTarget(string targetConfig)
         {
-            var migrationTargetContext = JsonConvert.DeserializeObject<MigrationTargetContext>(targetConfig);
-            switch (migrationTargetContext.MigrationType)
+            var target = JObject.Parse(targetConfig);
+            var migrationType = (string)target["MigrationType"];
+            var payload = (string)target["Payload"];
+            switch (migrationType)
             {
                 case MigrationTypes.Upgrade:
                     TargetType = TargetType.Posgresql;
-                    Version15Host.PreparePostgresqlHost();
+                    var postgresqlTargetContext = JsonConvert.DeserializeObject<PostgresqlTargetContext>(payload);
+                    Version15Host.PreparePostgresqlHost(postgresqlTargetContext);
                     break;
             }
         }
@@ -133,9 +146,9 @@ namespace PerkinElmer.Simplicity.Data.Version15
 
         #endregion
 
-        private void UpgradePostgresql(bool isIncludeAuditTrail)
+        private void UpgradePostgresql(PostgresqlSourceContext posgresqlSourceContext)
         {
-            var projects = ProjectSource.GetAllProjects();
+            var projects = ProjectSource.GetAllProjects(posgresqlSourceContext);
             foreach (var project in projects)
             {
                 if (!(project is ProjectData projectData)) continue;
@@ -144,27 +157,27 @@ namespace PerkinElmer.Simplicity.Data.Version15
 
                 Task.Run(async () => { await _sourceData.SendAsync(projectData); });
 
-                var acqusitionMethods = AcquisitionMethodSource.GetAcqusitionMethods(projectGuid, isIncludeAuditTrail);
+                var acqusitionMethods = AcquisitionMethodSource.GetAcqusitionMethods(projectGuid, posgresqlSourceContext);
                 foreach (var acqusitionMethod in acqusitionMethods)
                     _sourceData.Post(acqusitionMethod);
 
-                var analysisResultSets = AnalysisResultSetSource.GetAnalysisResultSets(projectGuid, isIncludeAuditTrail);
+                var analysisResultSets = AnalysisResultSetSource.GetAnalysisResultSets(projectGuid, posgresqlSourceContext);
                 foreach (var analysisResultSet in analysisResultSets)
                     Task.Run(async () => { await _sourceData.SendAsync(analysisResultSet); });
 
-                var compoundLibraries = CompoundLibrarySource.GetCompoundLibrary(projectGuid);
+                var compoundLibraries = CompoundLibrarySource.GetCompoundLibrary(projectGuid, posgresqlSourceContext);
                 foreach (var compoundLibrary in compoundLibraries)
                     _sourceData.Post(compoundLibrary);
 
-                var processingMethods = ProcessingMethodSource.GetProcessingMethods(projectGuid, isIncludeAuditTrail);
+                var processingMethods = ProcessingMethodSource.GetProcessingMethods(projectGuid, posgresqlSourceContext);
                 foreach (var processingMethod in processingMethods)
                     _sourceData.Post(processingMethod);
 
-                var reportTemplates = ReportTemplateSource.GetReportTemplates(projectGuid, isIncludeAuditTrail);
+                var reportTemplates = ReportTemplateSource.GetReportTemplates(projectGuid, posgresqlSourceContext);
                 foreach (var reportTemplate in reportTemplates)
                     _sourceData.Post(reportTemplate);
 
-                var sequences = SequenceSource.GetSequence(projectGuid, isIncludeAuditTrail);
+                var sequences = SequenceSource.GetSequence(projectGuid, posgresqlSourceContext);
                 foreach (var sequence in sequences)
                     _sourceData.Post(sequence);
             }
@@ -179,6 +192,8 @@ namespace PerkinElmer.Simplicity.Data.Version15
             switch (TargetType)
             {
                 case TargetType.Posgresql:
+                    if (PostgresqlTargetContext == null)
+                        throw new ArgumentException("Target context not set!");
                     SavePostgresqlVersionData(version15DataBase);
                     break;
             }
@@ -190,36 +205,36 @@ namespace PerkinElmer.Simplicity.Data.Version15
             {
                 case Version15DataTypes.AcqusitionMethod:
                     if (versionData is AcqusitionMethodData acqusitionMethodData)
-                        AcquisitionMethodTarget.SaveAcquisitionMethod(acqusitionMethodData);
+                        AcquisitionMethodTarget.SaveAcquisitionMethod(acqusitionMethodData, PostgresqlTargetContext);
                     break;
                 case Version15DataTypes.AnalysisResultSet:
                     if (versionData is AnalysisResultSetData analysisResultSetData)
-                        AnalysisResultSetTarget.SaveAnalysisResultSet(analysisResultSetData);
+                        AnalysisResultSetTarget.SaveAnalysisResultSet(analysisResultSetData, PostgresqlTargetContext);
                     break;
                 case Version15DataTypes.BatchResultSet:
                     if (versionData is BatchResultSetData batchResultSetData)
-                        BatchResultSetTarget.SaveBatchResultSet(batchResultSetData);
+                        BatchResultSetTarget.SaveBatchResultSet(batchResultSetData, PostgresqlTargetContext);
                     break;
                 case Version15DataTypes.CompoundLibrary:
                     if (versionData is CompoundLibraryData compoundLibraryData)
-                        CompoundLibraryTarget.SaveCompoundLibrary(compoundLibraryData);
+                        CompoundLibraryTarget.SaveCompoundLibrary(compoundLibraryData, PostgresqlTargetContext);
                     break;
                 case Version15DataTypes.ProcessingMethod:
                     if (versionData is ProcessingMethodData processingMethodData)
-                        ProcessingMethodTarget.SaveProcessingMethod(processingMethodData);
+                        ProcessingMethodTarget.SaveProcessingMethod(processingMethodData, PostgresqlTargetContext);
                     break;
 
                 case Version15DataTypes.Project:
                     if (versionData is ProjectData projectData)
-                        ProjectTarget.SaveProject(projectData);
+                        ProjectTarget.SaveProject(projectData, PostgresqlTargetContext);
                     break;
                 case Version15DataTypes.ReportTemplate:
                     if (versionData is ReportTemplateData reportTemplateData)
-                        ReportTemplateTarget.SaveReportTemplate(reportTemplateData);
+                        ReportTemplateTarget.SaveReportTemplate(reportTemplateData, PostgresqlTargetContext);
                     break;
                 case Version15DataTypes.Sequence:
                     if (versionData is SequenceData sequenceData)
-                        SequenceTarget.SaveSequence(sequenceData);
+                        SequenceTarget.SaveSequence(sequenceData, PostgresqlTargetContext);
                     break;
             }
         }

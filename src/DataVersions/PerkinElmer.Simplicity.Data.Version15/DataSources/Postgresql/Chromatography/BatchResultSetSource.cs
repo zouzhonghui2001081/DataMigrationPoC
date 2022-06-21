@@ -6,9 +6,9 @@ using log4net;
 using Npgsql;
 using PerkinElmer.Simplicity.Data.Version15.DataAccess.Postgresql.Chromatography;
 using PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography;
-using PerkinElmer.Simplicity.Data.Version15.Version;
 using PerkinElmer.Simplicity.Data.Version15.Contract.Version;
 using PerkinElmer.Simplicity.Data.Version15.Contract.Version.Chromatography;
+using PerkinElmer.Simplicity.Data.Version15.Version.Context.SourceContext;
 
 namespace PerkinElmer.Simplicity.Data.Version15.DataSources.Postgresql.Chromatography
 {
@@ -16,11 +16,11 @@ namespace PerkinElmer.Simplicity.Data.Version15.DataSources.Postgresql.Chromatog
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public static IList<Version15DataBase> GetBatchResultSets(Guid projectGuid)
+        public static IList<Version15DataBase> GetBatchResultSets(Guid projectGuid, PostgresqlSourceContext postgresqlSourceContext)
         {
             var migrationEntities = new List<Version15DataBase>();
             var batchResultSetDao = new BatchResultSetDao();
-            using (var connection = new NpgsqlConnection(Version15Host.ChromatographyConnection))
+            using (var connection = new NpgsqlConnection(postgresqlSourceContext.ChromatographyConnectionString))
             {
                 if (connection.State != ConnectionState.Open) connection.Open();
                 var batchResultSets = batchResultSetDao.GetAll(connection, projectGuid);
@@ -34,11 +34,11 @@ namespace PerkinElmer.Simplicity.Data.Version15.DataSources.Postgresql.Chromatog
             return migrationEntities;
         }
 
-        public static IList<Version15DataBase> GetBatchResultSets(Guid projectGuid, IList<Guid> batchResultSetGuids)
+        public static IList<Version15DataBase> GetBatchResultSets( Guid projectGuid, IList<Guid> batchResultSetGuids, PostgresqlSourceContext postgresqlSourceContext)
         {
             var migrationEntities = new List<Version15DataBase>();
             var batchResultSetDao = new BatchResultSetDao();
-            using (var connection = new NpgsqlConnection(Version15Host.ChromatographyConnection))
+            using (var connection = new NpgsqlConnection(postgresqlSourceContext.ChromatographyConnectionString))
             {
                 if (connection.State != ConnectionState.Open) connection.Open();
                

@@ -8,9 +8,9 @@ using PerkinElmer.Simplicity.Data.Version15.DataAccess.Postgresql.Chromatography
 using PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.AuditTrail;
 using PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.ReviewApprove;
 using PerkinElmer.Simplicity.Data.Version15.DataSources.Postgresql.AuditTrail;
-using PerkinElmer.Simplicity.Data.Version15.Version;
 using PerkinElmer.Simplicity.Data.Version15.Contract.Version;
 using PerkinElmer.Simplicity.Data.Version15.Contract.Version.Chromatography;
+using PerkinElmer.Simplicity.Data.Version15.Version.Context.SourceContext;
 
 namespace PerkinElmer.Simplicity.Data.Version15.DataSources.Postgresql.Chromatography
 {
@@ -18,11 +18,11 @@ namespace PerkinElmer.Simplicity.Data.Version15.DataSources.Postgresql.Chromatog
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public static IList<Version15DataBase> GetReportTemplates(Guid projectGuid, bool isIncludeAuditTrail)
+        public static IList<Version15DataBase> GetReportTemplates(Guid projectGuid, PostgresqlSourceContext postgresqlSourceContext)
         {
             var migrationEntities = new List<Version15DataBase>();
             var reportTemplateDao = new ReportTemplateDao();
-            using (var connection = new NpgsqlConnection(Version15Host.ChromatographyConnection))
+            using (var connection = new NpgsqlConnection(postgresqlSourceContext.ChromatographyConnectionString))
             {
                 if (connection.State != ConnectionState.Open) connection.Open();
                 var reportTemplates = reportTemplateDao.GetList(connection, projectGuid, true);
@@ -38,8 +38,8 @@ namespace PerkinElmer.Simplicity.Data.Version15.DataSources.Postgresql.Chromatog
                         ReviewApproveData = reviewApproveData
                     };
 
-                    if (isIncludeAuditTrail)
-                        reportTemplateData.AuditTrailLogs = EntityAssociatedAuditTrailSource.GetAuditTrail(reportTemplate.Id.ToString(), EntityTypeConstants.ReportTemplate);
+                    if (postgresqlSourceContext.IsIncludeAuditTrail)
+                        reportTemplateData.AuditTrailLogs = EntityAssociatedAuditTrailSource.GetAuditTrail(postgresqlSourceContext.AuditTrailConnectionString, reportTemplate.Id.ToString(), EntityTypeConstants.ReportTemplate);
 
                     migrationEntities.Add(reportTemplateData);
                 }
@@ -49,11 +49,11 @@ namespace PerkinElmer.Simplicity.Data.Version15.DataSources.Postgresql.Chromatog
             return migrationEntities;
         }
 
-        public static IList<Version15DataBase> GetReportTemplates(Guid projectGuid, IList<Guid> reportTemplateGuids, bool isIncludeAuditTrail)
+        public static IList<Version15DataBase> GetReportTemplates(Guid projectGuid, IList<Guid> reportTemplateGuids, PostgresqlSourceContext postgresqlSourceContext)
         {
             var migrationEntities = new List<Version15DataBase>();
             var reportTemplateDao = new ReportTemplateDao();
-            using (var connection = new NpgsqlConnection(Version15Host.ChromatographyConnection))
+            using (var connection = new NpgsqlConnection(postgresqlSourceContext.ChromatographyConnectionString))
             {
                 if (connection.State != ConnectionState.Open) connection.Open();
                 foreach (var reportTemplateGuid in reportTemplateGuids)
@@ -68,8 +68,8 @@ namespace PerkinElmer.Simplicity.Data.Version15.DataSources.Postgresql.Chromatog
                         ReportTemplate = reportTemplate,
                         ReviewApproveData = reviewApproveData
                     };
-                    if (isIncludeAuditTrail)
-                        reportTemplateData.AuditTrailLogs = EntityAssociatedAuditTrailSource.GetAuditTrail(reportTemplate.Id.ToString(), EntityTypeConstants.ReportTemplate);
+                    if (postgresqlSourceContext.IsIncludeAuditTrail)
+                        reportTemplateData.AuditTrailLogs = EntityAssociatedAuditTrailSource.GetAuditTrail(postgresqlSourceContext.AuditTrailConnectionString, reportTemplate.Id.ToString(), EntityTypeConstants.ReportTemplate);
 
                     migrationEntities.Add(reportTemplateData);
                 }

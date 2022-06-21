@@ -2,25 +2,22 @@
 using Npgsql;
 using PerkinElmer.Simplicity.Data.Version16.DataAccess.Postgresql.AuditTrail;
 using PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.AuditTrail;
-using PerkinElmer.Simplicity.Data.Version16.Version;
 
 namespace PerkinElmer.Simplicity.Data.Version16.DataTargets.Postgresql.AuditTrail
 {
     public class EntityAssociatedAuditTrailTarget
     {
-        public static void CreateAuditTrailLogs(IList<AuditTrailLogEntry> auditTrailLogs)
+        public static void CreateAuditTrailLogs(string auditTrailConnection, IList<AuditTrailLogEntry> auditTrailLogs)
         {
             if (auditTrailLogs == null) return;
-            using (var dbConnection = new NpgsqlConnection(Version16Host.AuditTrailConnection))
+            using var dbConnection = new NpgsqlConnection(auditTrailConnection);
+            var auditTrailDataDao = new AuditTrailDao();
+            var entityVersionDao = new EntityVersionLogDao();
+            foreach (var auditTrailLog in auditTrailLogs)
             {
-                var auditTrailDataDao = new AuditTrailDao();
-                var entityVersionDao = new EntityVersionLogDao();
-                foreach (var auditTrailLog in auditTrailLogs)
-                {
-                    if (auditTrailLog.VersionDiffEntry != null)
-                        entityVersionDao.Insert(dbConnection, auditTrailLog.VersionDiffEntry);
-                    auditTrailDataDao.CreateLog(dbConnection, auditTrailLog);
-                }
+                if (auditTrailLog.VersionDiffEntry != null)
+                    entityVersionDao.Insert(dbConnection, auditTrailLog.VersionDiffEntry);
+                auditTrailDataDao.CreateLog(dbConnection, auditTrailLog);
             }
         }
     }

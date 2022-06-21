@@ -2,16 +2,15 @@
 using Npgsql;
 using PerkinElmer.Simplicity.Data.Version15.DataAccess.Postgresql.AuditTrail;
 using PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.AuditTrail;
-using PerkinElmer.Simplicity.Data.Version15.Version;
 
 namespace PerkinElmer.Simplicity.Data.Version15.DataTargets.Postgresql.AuditTrail
 {
     internal class EntityAssociatedAuditTrailTarget
     {
-        public static void CreateAuditTrailLogs( IList<AuditTrailLogEntry> auditTrailLogs)
+        public static void CreateAuditTrailLogs(string auditTrailConnection, IList<AuditTrailLogEntry> auditTrailLogs)
         {
             if (auditTrailLogs == null) return;
-            using (var dbConnection = new NpgsqlConnection(Version15Host.AuditTrailConnection))
+            using (var dbConnection = new NpgsqlConnection(auditTrailConnection))
             {
                 var auditTrailDataDao = new AuditTrailDao();
                 var entityVersionDao = new EntityVersionLogDao();

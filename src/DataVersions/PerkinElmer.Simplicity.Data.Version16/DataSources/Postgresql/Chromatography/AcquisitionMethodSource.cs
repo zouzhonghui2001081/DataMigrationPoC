@@ -9,9 +9,9 @@ using PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.AuditTrail;
 using PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.Chromatography.AcquisitionMethod;
 using PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.Chromatography.ReviewApprove;
 using PerkinElmer.Simplicity.Data.Version16.DataSources.Postgresql.AuditTrail;
-using PerkinElmer.Simplicity.Data.Version16.Version;
 using PerkinElmer.Simplicity.Data.Version16.Contract.Version;
 using PerkinElmer.Simplicity.Data.Version16.Contract.Version.Chromatography;
+using PerkinElmer.Simplicity.Data.Version16.Version.Context.SourceContext;
 
 namespace PerkinElmer.Simplicity.Data.Version16.DataSources.Postgresql.Chromatography
 {
@@ -19,11 +19,11 @@ namespace PerkinElmer.Simplicity.Data.Version16.DataSources.Postgresql.Chromatog
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public static IList<Version16DataBase> GetAcqusitionMethods(Guid projectGuid, bool isIncludeAuditTrail)
+        public static IList<Version16DataBase> GetAcqusitionMethods(Guid projectGuid, PostgresqlSourceContext postgresqlSourceContext)
         {
             var migrationEntities = new List<Version16DataBase>();
             var acquisitionMethodDao = new AcquisitionMethodDao();
-            using (var connection = new NpgsqlConnection(Version16Host.ChromatographyConnection))
+            using (var connection = new NpgsqlConnection(postgresqlSourceContext.ChromatographyConnectionString))
             {
                 if (connection.State != ConnectionState.Open) connection.Open();
                 var acquisitionMethods = acquisitionMethodDao.GetAll(connection, projectGuid);
@@ -38,8 +38,8 @@ namespace PerkinElmer.Simplicity.Data.Version16.DataSources.Postgresql.Chromatog
                         AcquisitionMethod = acquisitionMethod,
                         ReviewApproveData = reviewApproveData,
                     };
-                    if (isIncludeAuditTrail)
-                        acqusitionMethodData.AuditTrailLogs = EntityAssociatedAuditTrailSource.GetAuditTrail(acquisitionMethod.Guid.ToString(), EntityTypeConstants.AcquisitionMethod);
+                    if (postgresqlSourceContext.IsIncludeAuditTrail)
+                        acqusitionMethodData.AuditTrailLogs = EntityAssociatedAuditTrailSource.GetAuditTrail(postgresqlSourceContext.AuditTrailConnectionString, acquisitionMethod.Guid.ToString(), EntityTypeConstants.AcquisitionMethod);
                     migrationEntities.Add(acqusitionMethodData);
                 }
                 connection.Close();
@@ -48,11 +48,11 @@ namespace PerkinElmer.Simplicity.Data.Version16.DataSources.Postgresql.Chromatog
             return migrationEntities;
         }
 
-        public static IList<Version16DataBase> GetAcqusitionMethods(Guid projectGuid, IList<Guid> acquisitionMethodGuids, bool isIncludeAuditTrail)
+        public static IList<Version16DataBase> GetAcqusitionMethods(Guid projectGuid, IList<Guid> acquisitionMethodGuids, PostgresqlSourceContext postgresqlSourceContext)
         {
             var migrationEntities = new List<Version16DataBase>();
             var acquisitionMethodDao = new AcquisitionMethodDao();
-            using (var connection = new NpgsqlConnection(Version16Host.ChromatographyConnection))
+            using (var connection = new NpgsqlConnection(postgresqlSourceContext.ChromatographyConnectionString))
             {
                 if (connection.State != ConnectionState.Open) connection.Open();
                 foreach (var acquisitionMethodGuid in acquisitionMethodGuids)
@@ -67,8 +67,8 @@ namespace PerkinElmer.Simplicity.Data.Version16.DataSources.Postgresql.Chromatog
                         AcquisitionMethod = acquisitionMethod,
                         ReviewApproveData = reviewApproveData,
                     };
-                    if (isIncludeAuditTrail)
-                        acqusitionMethodData.AuditTrailLogs = EntityAssociatedAuditTrailSource.GetAuditTrail( acquisitionMethod.Guid.ToString(), EntityTypeConstants.AcquisitionMethod);
+                    if (postgresqlSourceContext.IsIncludeAuditTrail)
+                        acqusitionMethodData.AuditTrailLogs = EntityAssociatedAuditTrailSource.GetAuditTrail(postgresqlSourceContext.AuditTrailConnectionString, acquisitionMethod.Guid.ToString(), EntityTypeConstants.AcquisitionMethod);
                     migrationEntities.Add(acqusitionMethodData);
                 }
                 connection.Close();

@@ -8,9 +8,9 @@ using PerkinElmer.Simplicity.Data.Version16.DataAccess.Postgresql.Chromatography
 using PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.AuditTrail;
 using PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.Chromatography.ReviewApprove;
 using PerkinElmer.Simplicity.Data.Version16.DataSources.Postgresql.AuditTrail;
-using PerkinElmer.Simplicity.Data.Version16.Version;
 using PerkinElmer.Simplicity.Data.Version16.Contract.Version;
 using PerkinElmer.Simplicity.Data.Version16.Contract.Version.Chromatography;
+using PerkinElmer.Simplicity.Data.Version16.Version.Context.SourceContext;
 
 namespace PerkinElmer.Simplicity.Data.Version16.DataSources.Postgresql.Chromatography
 {
@@ -19,12 +19,12 @@ namespace PerkinElmer.Simplicity.Data.Version16.DataSources.Postgresql.Chromatog
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         public static IList<Version16DataBase> GetProcessingMethods(Guid projectGuid,
-            bool isIncludeAuditTrail)
+            PostgresqlSourceContext postgresqlSourceContext)
         {
             var migrationEntities = new List<Version16DataBase>();
             var processingMethodProjDao = new ProcessingMethodProjDao();
 
-            using (var connection = new NpgsqlConnection(Version16Host.ChromatographyConnection))
+            using (var connection = new NpgsqlConnection(postgresqlSourceContext.ChromatographyConnectionString))
             {
                 if (connection.State != ConnectionState.Open) connection.Open();
                 var processingMethods = processingMethodProjDao.GetAllProcessingMethods(connection, projectGuid);
@@ -38,8 +38,8 @@ namespace PerkinElmer.Simplicity.Data.Version16.DataSources.Postgresql.Chromatog
                         ProcessingMethod = processingMethod,
                         ReviewApproveData = reviewApproveData
                     };
-                    if (isIncludeAuditTrail)
-                        processingMethodData.AuditTrailLogs = EntityAssociatedAuditTrailSource.GetAuditTrail(processingMethod.Guid.ToString(), EntityTypeConstants.ProcessingMethod);
+                    if (postgresqlSourceContext.IsIncludeAuditTrail)
+                        processingMethodData.AuditTrailLogs = EntityAssociatedAuditTrailSource.GetAuditTrail(postgresqlSourceContext.AuditTrailConnectionString,processingMethod.Guid.ToString(), EntityTypeConstants.ProcessingMethod);
 
                     migrationEntities.Add(processingMethodData);
                 }
@@ -50,12 +50,12 @@ namespace PerkinElmer.Simplicity.Data.Version16.DataSources.Postgresql.Chromatog
         }
 
         public static IList<Version16DataBase> GetProcessingMethod(Guid projectGuid,
-            IList<Guid> processingMethodGuids, bool isIncludeAuditTrail)
+            IList<Guid> processingMethodGuids, PostgresqlSourceContext postgresqlSourceContext)
         {
             var migrationEntities = new List<Version16DataBase>();
             var processingMethodProjDao = new ProcessingMethodProjDao();
 
-            using (var connection = new NpgsqlConnection(Version16Host.ChromatographyConnection))
+            using (var connection = new NpgsqlConnection(postgresqlSourceContext.ChromatographyConnectionString))
             {
                 if (connection.State != ConnectionState.Open) connection.Open();
                 foreach (var processingMethodGuid in processingMethodGuids)
@@ -69,8 +69,8 @@ namespace PerkinElmer.Simplicity.Data.Version16.DataSources.Postgresql.Chromatog
                         ProcessingMethod = processingMethod,
                         ReviewApproveData = reviewApproveData
                     };
-                    if (isIncludeAuditTrail)
-                        processingMethodData.AuditTrailLogs = EntityAssociatedAuditTrailSource.GetAuditTrail( processingMethod.Guid.ToString(), EntityTypeConstants.ProcessingMethod);
+                    if (postgresqlSourceContext.IsIncludeAuditTrail)
+                        processingMethodData.AuditTrailLogs = EntityAssociatedAuditTrailSource.GetAuditTrail(postgresqlSourceContext.AuditTrailConnectionString, processingMethod.Guid.ToString(), EntityTypeConstants.ProcessingMethod);
 
                     migrationEntities.Add(processingMethodData);
                 }

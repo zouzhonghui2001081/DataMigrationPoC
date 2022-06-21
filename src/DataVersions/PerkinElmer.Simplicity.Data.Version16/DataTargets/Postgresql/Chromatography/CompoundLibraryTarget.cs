@@ -7,6 +7,7 @@ using PerkinElmer.Simplicity.Data.Version16.DataAccess.Postgresql.Chromatography
 using PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.Chromatography;
 using PerkinElmer.Simplicity.Data.Version16.Version;
 using PerkinElmer.Simplicity.Data.Version16.Contract.Version.Chromatography;
+using PerkinElmer.Simplicity.Data.Version16.Version.Context.TargetContext;
 
 namespace PerkinElmer.Simplicity.Data.Version16.DataTargets.Postgresql.Chromatography
 {
@@ -14,9 +15,9 @@ namespace PerkinElmer.Simplicity.Data.Version16.DataTargets.Postgresql.Chromatog
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        internal static void SaveCompoundLibrary(CompoundLibraryData compoundLibraryData)
+        internal static void SaveCompoundLibrary(CompoundLibraryData compoundLibraryData, PostgresqlTargetContext postgresqlTargetContext)
         {
-            using (var connection = new NpgsqlConnection(Version16Host.ChromatographyConnection))
+            using (var connection = new NpgsqlConnection(postgresqlTargetContext.ChromatographyConnectionString))
             {
                 if (connection.State != ConnectionState.Open) connection.Open();
                 var projectDao = new ProjectDao();

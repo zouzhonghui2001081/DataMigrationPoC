@@ -5,8 +5,8 @@ using log4net;
 using Npgsql;
 using PerkinElmer.Simplicity.Data.Version15.DataAccess.Postgresql.Chromatography;
 using PerkinElmer.Simplicity.Data.Version15.DataTargets.Postgresql.AuditTrail;
-using PerkinElmer.Simplicity.Data.Version15.Version;
 using PerkinElmer.Simplicity.Data.Version15.Contract.Version.Chromatography;
+using PerkinElmer.Simplicity.Data.Version15.Version.Context.TargetContext;
 
 namespace PerkinElmer.Simplicity.Data.Version15.DataTargets.Postgresql.Chromatography
 {
@@ -14,9 +14,9 @@ namespace PerkinElmer.Simplicity.Data.Version15.DataTargets.Postgresql.Chromatog
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        internal static void SaveSequence(SequenceData sequenceData)
+        internal static void SaveSequence(SequenceData sequenceData, PostgresqlTargetContext postgresqlTargetContext)
         {
-            using (var connection = new NpgsqlConnection(Version15Host.ChromatographyConnection))
+            using (var connection = new NpgsqlConnection(postgresqlTargetContext.ChromatographyConnectionString))
             {
                 if (connection.State != ConnectionState.Open) connection.Open();
                 var projectDao = new ProjectDao();
@@ -28,7 +28,7 @@ namespace PerkinElmer.Simplicity.Data.Version15.DataTargets.Postgresql.Chromatog
                     return;
                 sequenceData.Sequence.ProjectId = project.Id;
                 sequenceDao.CreateSequence(connection, sequenceData.ProjectGuid, sequenceData.Sequence);
-                EntityAssociatedAuditTrailTarget.CreateAuditTrailLogs(sequenceData.AuditTrailLogs);
+                EntityAssociatedAuditTrailTarget.CreateAuditTrailLogs(postgresqlTargetContext.AuditTrailConnectionString, sequenceData.AuditTrailLogs);
                 connection.Close();
             }
         }

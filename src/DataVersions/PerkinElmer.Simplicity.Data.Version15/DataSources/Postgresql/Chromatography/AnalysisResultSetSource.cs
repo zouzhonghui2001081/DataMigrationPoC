@@ -10,9 +10,9 @@ using PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.AuditTrail;
 using PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography;
 using PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.ReviewApprove;
 using PerkinElmer.Simplicity.Data.Version15.DataSources.Postgresql.AuditTrail;
-using PerkinElmer.Simplicity.Data.Version15.Version;
 using PerkinElmer.Simplicity.Data.Version15.Contract.Version;
 using PerkinElmer.Simplicity.Data.Version15.Contract.Version.Chromatography;
+using PerkinElmer.Simplicity.Data.Version15.Version.Context.SourceContext;
 
 namespace PerkinElmer.Simplicity.Data.Version15.DataSources.Postgresql.Chromatography
 {
@@ -20,19 +20,19 @@ namespace PerkinElmer.Simplicity.Data.Version15.DataSources.Postgresql.Chromatog
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public static IList<Version15DataBase> GetAnalysisResultSets(Guid projectGuid, bool isIncludeAuditTrail)
+        public static IList<Version15DataBase> GetAnalysisResultSets(Guid projectGuid, PostgresqlSourceContext postgresqlSourceContext)
         {
             var migrationEntities = new List<Version15DataBase>(); 
             var analysisResultSetDao = new AnalysisResultSetDao();
-            using (var connection = new NpgsqlConnection(Version15Host.ChromatographyConnection))
+            using (var connection = new NpgsqlConnection(postgresqlSourceContext.ChromatographyConnectionString))
             {
                 if (connection.State != ConnectionState.Open) connection.Open();
                 var analysisResultSets = analysisResultSetDao.GetAll(connection, projectGuid);
                 foreach (var analysisResultSet in analysisResultSets)
                 {
                     var analysisResultSetData = CreateAnalysisResultSetData(connection, projectGuid, analysisResultSet);
-                    if (isIncludeAuditTrail)
-                        analysisResultSetData.AuditTrailLogs = EntityAssociatedAuditTrailSource.GetAuditTrail(analysisResultSet.Guid.ToString(), EntityTypeConstants.AnalysisResultSet);
+                    if (postgresqlSourceContext.IsIncludeAuditTrail)
+                        analysisResultSetData.AuditTrailLogs = EntityAssociatedAuditTrailSource.GetAuditTrail(postgresqlSourceContext.AuditTrailConnectionString, analysisResultSet.Guid.ToString(), EntityTypeConstants.AnalysisResultSet);
                     migrationEntities.Add(analysisResultSetData);
                 }
                 connection.Close();
@@ -42,19 +42,19 @@ namespace PerkinElmer.Simplicity.Data.Version15.DataSources.Postgresql.Chromatog
         }
 
         public static IList<Version15DataBase> GetAnalysisResultSets(Guid projectGuid, IList<Guid> analysisResultSetGuids,
-            bool isIncludeAuditTrail)
+            PostgresqlSourceContext postgresqlSourceContext)
         {
             var migrationEntities = new List<Version15DataBase>();
             var analysisResultSetDao = new AnalysisResultSetDao();
-            using (var connection = new NpgsqlConnection(Version15Host.ChromatographyConnection))
+            using (var connection = new NpgsqlConnection(postgresqlSourceContext.ChromatographyConnectionString))
             {
                 if (connection.State != ConnectionState.Open) connection.Open();
                 foreach (var analysisResultSetId in analysisResultSetGuids)
                 {
                     var analysisResultSet = analysisResultSetDao.Get(connection, projectGuid, analysisResultSetId);
                     var analysisResultSetData = CreateAnalysisResultSetData(connection, projectGuid, analysisResultSet);
-                    if (isIncludeAuditTrail)
-                        analysisResultSetData.AuditTrailLogs = EntityAssociatedAuditTrailSource.GetAuditTrail(analysisResultSet.Guid.ToString(), EntityTypeConstants.AnalysisResultSet);
+                    if (postgresqlSourceContext.IsIncludeAuditTrail)
+                        analysisResultSetData.AuditTrailLogs = EntityAssociatedAuditTrailSource.GetAuditTrail(postgresqlSourceContext.AuditTrailConnectionString, analysisResultSet.Guid.ToString(), EntityTypeConstants.AnalysisResultSet);
                     migrationEntities.Add(analysisResultSetData);
                 }
                 connection.Close();

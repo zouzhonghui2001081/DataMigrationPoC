@@ -6,8 +6,8 @@ using Npgsql;
 using PerkinElmer.Simplicity.Data.Version16.DataAccess.Postgresql.Chromatography;
 using PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.Chromatography.AcquisitionMethod;
 using PerkinElmer.Simplicity.Data.Version16.DataTargets.Postgresql.AuditTrail;
-using PerkinElmer.Simplicity.Data.Version16.Version;
 using PerkinElmer.Simplicity.Data.Version16.Contract.Version.Chromatography;
+using PerkinElmer.Simplicity.Data.Version16.Version.Context.TargetContext;
 
 namespace PerkinElmer.Simplicity.Data.Version16.DataTargets.Postgresql.Chromatography
 {
@@ -15,14 +15,14 @@ namespace PerkinElmer.Simplicity.Data.Version16.DataTargets.Postgresql.Chromatog
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        internal static void SaveAcquisitionMethod(AcqusitionMethodData acquisitionMethodData)
+        internal static void SaveAcquisitionMethod(AcqusitionMethodData acquisitionMethodData, PostgresqlTargetContext postgresqlTargetContext)
         {
-            using (var connection = new NpgsqlConnection(Version16Host.ChromatographyConnection))
+            using (var connection = new NpgsqlConnection(postgresqlTargetContext.ChromatographyConnectionString))
             {
                 if (connection.State != ConnectionState.Open) connection.Open();
                 CreateProjectAcquisitionMethod(connection, acquisitionMethodData.ProjectGuid, acquisitionMethodData.AcquisitionMethod);
                 EntityAssociatedReviewApproveTarget.CreateReviewApproveEntity(connection, acquisitionMethodData.ReviewApproveData);
-                EntityAssociatedAuditTrailTarget.CreateAuditTrailLogs(acquisitionMethodData.AuditTrailLogs);
+                EntityAssociatedAuditTrailTarget.CreateAuditTrailLogs(postgresqlTargetContext.AuditTrailConnectionString, acquisitionMethodData.AuditTrailLogs);
                 connection.Close();
             }
         }

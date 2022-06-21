@@ -2,11 +2,10 @@
 using System.Data;
 using System.IO;
 using System.Reflection;
-using System.Text.Json;
 using Dapper;
 using log4net;
 using Npgsql;
-using ConnectionStrings = PerkinElmer.Simplicity.Data.Version15.DataAccess.Postgresql.ConnectionStrings;
+using PerkinElmer.Simplicity.Data.Version15.Version.Context.TargetContext;
 
 namespace PerkinElmer.Simplicity.Data.Version15.Version
 {
@@ -24,8 +23,6 @@ namespace PerkinElmer.Simplicity.Data.Version15.Version
 
         private const string ChromatographyDummyData = "PerkinElmer.Simplicity.Data.Version15.DataAccess.Postgresql.SQL.DummyRuns.sql";
 
-        private const string ConnectionStringResourceName = "PerkinElmer.Simplicity.Data.Version15.DataAccess.Postgresql.ConnectionStrings.json";
-
         public const string SchemaTableName = "SchemaVersion";
 
         public static readonly System.Version AuditTrailSchemaVersion = new System.Version(0, 5);
@@ -42,25 +39,16 @@ namespace PerkinElmer.Simplicity.Data.Version15.Version
 
         #region Postgresql
 
-        private static ConnectionStrings _connectionStrings;
-        private static ConnectionStrings ConnectionStrings => _connectionStrings ?? (_connectionStrings = GetConnectionStrings());
-
+      
         private static NpgsqlConnectionStringBuilder _systemDbConnectionStringBuilder;
-        private static NpgsqlConnectionStringBuilder SystemDbConnectionStrBuilder =>
-            _systemDbConnectionStringBuilder ?? (_systemDbConnectionStringBuilder =
-                new NpgsqlConnectionStringBuilder(ConnectionStrings.System) {Pooling = false});
+        private static NpgsqlConnectionStringBuilder SystemDbConnectionStrBuilder => _systemDbConnectionStringBuilder;
 
-        internal static string ChromatographyConnection => ConnectionStrings.Chromatography;
-
-        internal static string AuditTrailConnection => ConnectionStrings.AuditTrail;
-
-        internal static string SecurityConnection => ConnectionStrings.Security;
-
-        public static void PreparePostgresqlHost()
+        public static void PreparePostgresqlHost(PostgresqlTargetContext postgresqlTargetContext)
         {
-            ResetChromatographyDatabase(new NpgsqlConnectionStringBuilder(ChromatographyConnection));
-            ResetAuditTrailDatabase(new NpgsqlConnectionStringBuilder(AuditTrailConnection));
-            ResetSecurityDatabase(new NpgsqlConnectionStringBuilder(SecurityConnection));
+            _systemDbConnectionStringBuilder = new NpgsqlConnectionStringBuilder(postgresqlTargetContext.SystemConnectionString) {Pooling = false};
+            ResetChromatographyDatabase(new NpgsqlConnectionStringBuilder(postgresqlTargetContext.ChromatographyConnectionString));
+            ResetAuditTrailDatabase(new NpgsqlConnectionStringBuilder(postgresqlTargetContext.AuditTrailConnectionString));
+            ResetSecurityDatabase(new NpgsqlConnectionStringBuilder(postgresqlTargetContext.SecurityConnectionString));
         }
 
         private static void ResetChromatographyDatabase(NpgsqlConnectionStringBuilder chromatographyConnBuilder)
@@ -238,20 +226,16 @@ namespace PerkinElmer.Simplicity.Data.Version15.Version
             }
         }
 
-        private static ConnectionStrings GetConnectionStrings()
-        {
-            var assembly = typeof(Version15Host).Assembly;
+        //private static ConnectionStrings GetConnectionStrings()
+        //{
+        //    var assembly = typeof(Version15Host).Assembly;
 
-            using (var stream = assembly.GetManifestResourceStream(ConnectionStringResourceName))
-            {
-                using (var reader = new StreamReader(stream ?? throw new InvalidOperationException(
-                                                         $"Failed to load resource {ConnectionStringResourceName}")))
-                {
-                    var strings = reader.ReadToEnd();
-                    return JsonSerializer.Deserialize<ConnectionStrings>(strings);
-                }
-            }
-        }
+        //    using var stream = assembly.GetManifestResourceStream(ConnectionStringResourceName);
+        //    using var reader = new StreamReader(stream ?? throw new InvalidOperationException(
+        //                                            $"Failed to load resource {ConnectionStringResourceName}"));
+        //    var strings = reader.ReadToEnd();
+        //    return JsonSerializer.Deserialize<ConnectionStrings>(strings);
+        //}
 
         private static string GetSqlScript(string resourceName)
         {
@@ -259,14 +243,10 @@ namespace PerkinElmer.Simplicity.Data.Version15.Version
 
             var assembly = typeof(Version15Host).Assembly;
 
-            using (var stream = assembly.GetManifestResourceStream(resourceName))
-            {
-                using (var reader = new StreamReader(stream ?? throw new InvalidOperationException(
-                                                         $"Failed to load resource {resourceName}")))
-                {
-                    return reader.ReadToEnd();
-                }
-            }
+            using var stream = assembly.GetManifestResourceStream(resourceName);
+            using var reader = new StreamReader(stream ?? throw new InvalidOperationException(
+                                                    $"Failed to load resource {resourceName}"));
+            return reader.ReadToEnd();
         }
 
         #endregion
