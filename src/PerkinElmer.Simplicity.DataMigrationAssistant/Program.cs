@@ -1,6 +1,9 @@
-﻿using log4net;
+﻿using System;
+using System.IO;
+using log4net;
 using System.Reflection;
 using System.Runtime.Loader;
+using Newtonsoft.Json.Linq;
 using PerkinElmer.Simplicity.DataMigration.Implementation;
 using PerkinElmer.Simplicity.DataMigration.Implementation.Common;
 
@@ -12,18 +15,67 @@ namespace PerkinElmer.Simplicity.DataMigrationAssistant
 
         static void Main(string[] args)
         {
-            var version15ContractPath = @"C:\DEV\DataMigrationPoC\Output\Debug\PerkinElmer.Simplicity.Data.Version15.Contract.dll";
-            var version16ContractPath = @"C:\DEV\DataMigrationPoC\Output\Debug\PerkinElmer.Simplicity.Data.Version16.Contract.dll";
-            AssemblyLoadContext.Default.LoadFromAssemblyPath(version15ContractPath);
-            AssemblyLoadContext.Default.LoadFromAssemblyPath(version16ContractPath);
+            LoadSharedLibraries();
             var migrationContext = new MigrationContext
             {
-                SourceConfig = "{\"MigrationType\":\"Upgrade\",\"ArchiveProjectGuid\":null,\"RetrieveFileLocation\":null,\"IsIncludeAuditTrailLog\":true}",
-                TargetConfig = "{\"MigrationType\":\"Upgrade\",\"ArchiveFileLocation\":null}"
+                SourceConfig = GenerateSourceConfig("Version15"),
+                TargetConfig = GenerateTargetConfig("Version16")
             };
             var migrationComponentsFactory = new MigrationComponentsFactory();
             var migrationManager = new MigrationManager("Version15", "Version16", migrationComponentsFactory);
             migrationManager.StartMigration(migrationContext);
+        }
+
+        static void LoadSharedLibraries()
+        {
+            var exeFileFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var sharedFileFolder = Path.Combine(exeFileFolder, "Share");
+            var sharedLibraryFiles = System.IO.Directory.GetFiles(sharedFileFolder, "*.dll");
+            foreach(var sharedLibraryFile in sharedLibraryFiles)
+                AssemblyLoadContext.Default.LoadFromAssemblyPath(sharedLibraryFile);
+        }
+
+        static string GenerateSourceConfig(string version)
+        {
+            if (version != "Version15") throw new ArgumentException("Not support version!");
+            var sourceConfig = new JObject
+            {
+                new JProperty("MigrationType", "Upgrade"),
+                new JProperty("Payload", new JObject
+                {
+                    new JProperty("ChromatographyConnectionString",
+                        "User Id=postgres;Password=Jamun!@#;host=localhost;database=Chromatography15;port=9257"),
+                    new JProperty("AuditTrailConnectionString",
+                        "User Id=postgres;Password=Jamun!@#;host=localhost;database=SimplicityCDSAuditTrail15;port=9257"),
+                    new JProperty("SecurityConnectionString",
+                        "User Id=postgres;Password=Jamun!@#;host=localhost;database=SimplicityCDSSecurity15;port=9257"),
+                    new JProperty("SystemConnectionString",
+                        "User Id=postgres;Password=Jamun!@#;host=localhost;database=postgres;port=9257"),
+                    new JProperty("IsIncludeAuditTrail", bool.TrueString)
+                }.ToString())
+            };
+            return sourceConfig.ToString();
+        }
+
+        static string GenerateTargetConfig(string version)
+        {
+            if (version != "Version16") throw new ArgumentException("Not support version!");
+            var sourceConfig = new JObject
+            {
+                new JProperty("MigrationType", "Upgrade"),
+                new JProperty("Payload", new JObject
+                {
+                    new JProperty("ChromatographyConnectionString",
+                        "User Id=postgres;Password=Jamun!@#;host=localhost;database=Chromatography16;port=9257"),
+                    new JProperty("AuditTrailConnectionString",
+                        "User Id=postgres;Password=Jamun!@#;host=localhost;database=SimplicityCDSAuditTrail16;port=9257"),
+                    new JProperty("SecurityConnectionString",
+                        "User Id=postgres;Password=Jamun!@#;host=localhost;database=SimplicityCDSSecurity16;port=9257"),
+                    new JProperty("SystemConnectionString",
+                        "User Id=postgres;Password=Jamun!@#;host=localhost;database=postgres;port=9257")
+                }.ToString())
+            };
+            return sourceConfig.ToString();
         }
     }
 }

@@ -67,8 +67,8 @@ namespace PerkinElmer.Simplicity.Data.Version15
             {
                 case MigrationTypes.Upgrade:
                     TargetType = TargetType.Posgresql;
-                    var postgresqlTargetContext = JsonConvert.DeserializeObject<PostgresqlTargetContext>(payload);
-                    Version15Host.PreparePostgresqlHost(postgresqlTargetContext);
+                    PostgresqlTargetContext = JsonConvert.DeserializeObject<PostgresqlTargetContext>(payload);
+                    Version15Host.PreparePostgresqlHost(PostgresqlTargetContext);
                     break;
             }
         }

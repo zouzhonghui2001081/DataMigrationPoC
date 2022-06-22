@@ -37,7 +37,7 @@ namespace PerkinElmer.Simplicity.Data.Version16
             _targetData = new ActionBlock<object>(SaveVersionData, executeDataFlowOption);
         }
 
-        public void StartSourceDataflow(string sourceConfig)
+        public void StartDataflow(string sourceConfig)
         {
             var source = JObject.Parse(sourceConfig);
             var migrationType = (string)source["MigrationType"];
@@ -63,8 +63,8 @@ namespace PerkinElmer.Simplicity.Data.Version16
             {
                 case MigrationTypes.Upgrade:
                     TargetType = TargetType.Posgresql;
-                    var postgresqlTargetContext = JsonConvert.DeserializeObject<PostgresqlTargetContext>(payload);
-                    Version16Host.PreparePostgresqlHost(postgresqlTargetContext);
+                    PostgresqlTargetContext = JsonConvert.DeserializeObject<PostgresqlTargetContext>(payload);
+                    Version16Host.PreparePostgresqlHost(PostgresqlTargetContext);
                     break;
             }
         }

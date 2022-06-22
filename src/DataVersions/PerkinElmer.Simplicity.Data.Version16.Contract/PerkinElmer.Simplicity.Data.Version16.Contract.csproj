@@ -1,6 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Library</OutputType>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <TargetFrameworks>netcoreapp3.1;</TargetFrameworks>
   </PropertyGroup>
 
@@ -8,4 +9,8 @@
     <PackageReference Include="log4net" Version="$(Log4net)" />
 	<PackageReference Include="Newtonsoft.Json" Version="$(NewtonsoftJson)" />
   </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy &quot;$(TargetDir)*.*&quot; &quot;$(ProjectDir)..\..\..\Output\Debug\Share\&quot; /Y" />
+  </Target>
 </Project>

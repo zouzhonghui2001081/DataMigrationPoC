@@ -10,12 +10,11 @@
 	<PackageReference Include="System.Threading.Tasks.Dataflow" Version="$(SystemThreadingTasksDataflow)" />
 
   </ItemGroup>
-  
   <ItemGroup>
-    <ProjectReference Include="..\..\PerkinElmer.Simplicity.Data.Version15.DataContract\PerkinElmer.Simplicity.Data.Version15.Contract.csproj">
+    <ProjectReference Include="..\..\DataVersions\PerkinElmer.Simplicity.Data.Version15.Contract\PerkinElmer.Simplicity.Data.Version15.Contract.csproj">
       <Private>false</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\PerkinElmer.Simplicity.Data.Version16.Contract\PerkinElmer.Simplicity.Data.Version16.Contract.csproj">
+    <ProjectReference Include="..\..\DataVersions\PerkinElmer.Simplicity.Data.Version16.Contract\PerkinElmer.Simplicity.Data.Version16.Contract.csproj">
       <Private>false</Private>
     </ProjectReference>
   </ItemGroup>

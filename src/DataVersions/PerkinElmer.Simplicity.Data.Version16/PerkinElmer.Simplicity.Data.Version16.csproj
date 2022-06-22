@@ -50,7 +50,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\..\PerkinElmer.Simplicity.Data.Version16.Contract\PerkinElmer.Simplicity.Data.Version16.Contract.csproj">
+    <ProjectReference Include="..\PerkinElmer.Simplicity.Data.Version16.Contract\PerkinElmer.Simplicity.Data.Version16.Contract.csproj">
       <Private>false</Private>
     </ProjectReference>
   </ItemGroup>

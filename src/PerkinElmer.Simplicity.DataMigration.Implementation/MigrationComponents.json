@@ -6,7 +6,7 @@
       "ComponentFolder": "C:\\DEV\\DataMigrationPoC\\Output\\Debug\\Version15",
       "DllName": "PerkinElmer.Simplicity.Data.Version15.dll",
       "VersionClassName": "PerkinElmer.Simplicity.Data.Version15.Version15",
-      "SourceVersionMethodName": "StartSourceDataflow",
+      "SourceVersionMethodName": "StartDataflow",
       "TargetVersionMethodName": "PrepareTarget"
     },
     {
@@ -15,7 +15,7 @@
       "ComponentFolder": "C:\\DEV\\DataMigrationPoC\\Output\\Debug\\Version16",
       "DllName": "PerkinElmer.Simplicity.Data.Version16.dll",
       "VersionClassName": "PerkinElmer.Simplicity.Data.Version16.Version16",
-      "SourceVersionMethodName": "StartSourceDataflow",
+      "SourceVersionMethodName": "StartDataflow",
       "TargetVersionMethodName": "PrepareTarget"
     }
   ],
