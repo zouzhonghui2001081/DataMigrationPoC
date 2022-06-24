@@ -1,0 +1,363 @@
+{
+  "Version": 2,
+  "Info": {
+    "Version": 1,
+    "Guid": "3052e129-0442-4151-ae06-d228855ea81b",
+    "Name": "Test Processing Method 01",
+    "VersionNumber": 1,
+    "ReviewApproveState": "\"NeverSubmitted\"",
+    "CreatedByUser": {
+      "Version": 1,
+      "UserId": null,
+      "UserName": "SimplicityChrom User"
+    },
+    "CreatedDateUtc": "2022-06-22T14:53:31.284706+08:00",
+    "ModifiedDateUtc": "2022-06-22T14:53:31.284706+08:00",
+    "ModifiedByUser": {
+      "Version": 1,
+      "UserId": null,
+      "UserName": "SimplicityChrom User"
+    },
+    "Description": "",
+    "IsDefault": false
+  },
+  "ForExternalMethod": false,
+  "CalibrationGlobalParameters": {
+    "Version": 1,
+    "NumberOfLevels": 1,
+    "AmountUnits": "ppm",
+    "UnidentifiedPeakCalibrationType": "\"None\"",
+    "UnidentifiedPeakCalibrationFactor": 1.0,
+    "UnidentifiedPeakReferenceCompoundGuid": "00000000-0000-0000-0000-000000000000"
+  },
+  "ApexOptimizedParameters": {
+    "Version": 1,
+    "MinWavelength": 190.0,
+    "MaxWavelength": 790.0,
+    "WavelengthBandwidth": 10.0,
+    "UseReference": true,
+    "ReferenceWavelength": 400.0,
+    "ReferenceWavelengthBandwidth": 10.0,
+    "ApplyBaselineCorrection": true,
+    "UseAutoAbsorbanceThreshold": true,
+    "ManualAbsorbanceThreshold": 0.0005
+  },
+  "SSTParameters": {
+    "Version": 2,
+    "Enabled": false,
+    "SelectedPharmacopeiaType": "\"Usp32\"",
+    "IsEfficiencyInPlates": true,
+    "ColumnLength": 0.25,
+    "SignalToNoiseRatio": false,
+    "SignalToNoiseWindowStart": 0.0,
+    "SignalToNoiseWindowEnd": 60.0,
+    "AnalyzeAdjacentPeaks": true,
+    "CompoundPharmacopeiaDefinitions": null,
+    "VoidTimeType": 1,
+    "VoidTimeCustomValueInSeconds": 0.0
+  },
+  "ProcessingDeviceMethods": null,
+  "ChannelMethods": [
+    {
+      "Version": 1,
+      "ChannelIndex": 0,
+      "ChannelDescriptor": {
+        "Version": 2,
+        "DeviceChannelDescriptor": {
+          "Version": 3,
+          "DeviceChannelType": 2,
+          "DeviceChannelIdentifier": {
+            "Version": 1,
+            "DeviceIdentifier": {
+              "Version": 1,
+              "DeviceClass": "PDA",
+              "DeviceIndex": 0
+            },
+            "ChannelIdentifier": {
+              "Version": 1,
+              "ChannelIndex": 0,
+              "Auxiliary": false
+            }
+          },
+          "MetaData": {
+            "Version": 2,
+            "ResponseUnit": "mAU",
+            "StartWavelength": 190.0,
+            "EndWavelength": 790.0,
+            "LowResolution": false,
+            "DefaultMinYScale": 0.0,
+            "DefaultMaxYScale": 0.0,
+            "MinValidYValue": 0.0,
+            "MaxValidYValue": 0.0,
+            "SamplingRateInMilliseconds": 200.0
+          }
+        },
+        "ExtractionType": 1,
+        "ExtractionMetaData": {
+          "Version": 2,
+          "ResponseUnit": null,
+          "Wavelength": 254.0,
+          "WavelengthBandwidth": 10.0,
+          "UseReference": true,
+          "ReferenceWavelength": 400.0,
+          "ReferenceWavelengthBandwidth": 10.0,
+          "IsApexOptimized": false,
+          "DefaultMinYScale": 0.0,
+          "DefaultMaxYScale": 0.0,
+          "MinValidYValue": 0.0,
+          "MaxValidYValue": 0.0,
+          "SamplingRateInMilliseconds": 0.0
+        },
+        "PostProcessingChannelType": "\"None\""
+      },
+      "ChannelGuid": "23eea044-3e4f-4126-9b8f-c5172d37cf12",
+      "SmoothParams": {
+        "Version": 1,
+        "Function": "\"None\"",
+        "Width": 0,
+        "Passes": 0,
+        "Order": 0,
+        "Cycles": 0
+      },
+      "IsPdaMethod": true,
+      "PdaParameters": {
+        "Version": 1,
+        "WavelengthParameters": {
+          "Version": 1,
+          "MinWavelength": 190.0,
+          "MaxWavelength": 790.0,
+          "ApplyBaselineCorrection": false,
+          "UseAutoAbsorbanceThreshold": true,
+          "ManualAbsorbanceThreshold": 0.5
+        },
+        "PeakPurityParameters": {
+          "Version": 1,
+          "MinWavelength": 215.0,
+          "MaxWavelength": 600.0,
+          "MinimumDataPoints": 20,
+          "ApplyBaselineCorrection": false,
+          "PurityLimit": 1.5,
+          "PercentOfPeakHeightForSpectra": 0.1,
+          "UseAutoAbsorbanceThreshold": true,
+          "ManualAbsorbanceThreshold": 0.5
+        },
+        "StandardConfirmationParameters": {
+          "Version": 1,
+          "MinWavelength": 190.0,
+          "MaxWavelength": 790.0,
+          "MinimumDataPoints": 20,
+          "PassThreshold": 1.5,
+          "ApplyBaselineCorrection": false,
+          "UseAutoAbsorbanceThresholdForSample": true,
+          "ManualAbsorbanceThresholdForSample": 0.5,
+          "UseAutoAbsorbanceThresholdForStandard": true,
+          "ManualAbsorbanceThresholdForStandard": 0.5,
+          "StandardType": "\"None\""
+        },
+        "AbsorbanceRatioParameters": {
+          "Version": 1,
+          "WavelengthA": 254.0,
+          "WavelengthB": 280.0,
+          "ApplyBaselineCorrection": false,
+          "UseAutoAbsorbanceThreshold": true,
+          "ManualAbsorbanceThreshold": 0.5
+        },
+        "LibraryConfirmationParameters": {
+          "Version": 1,
+          "MinimumWavelength": 190.0,
+          "MaximumWavelength": 790.0,
+          "IsBaselineCorrectionEnabled": false,
+          "HitDistanceThreshold": 975.0,
+          "SelectedLibraries": []
+        },
+        "PeakLibrarySearchParameters": {
+          "Version": 1,
+          "MinimumWavelength": 190.0,
+          "MaximumWavelength": 790.0,
+          "MatchRetentionTimeWindow": 5.0,
+          "IsMatchRetentionTimeWindowEnabled": false,
+          "IsBaselineCorrectionEnabled": false,
+          "HitDistanceThreshold": 975.0,
+          "IsPeakLibrarySearch": false,
+          "SelectedLibraries": [],
+          "UseWavelengthLimits": true,
+          "MaxNumberOfResults": 1
+        },
+        "BaselineCorrectionParameters": {
+          "Version": 1,
+          "CorrectionType": "\"PeakStart\"",
+          "SelectedSpectrumTime": 0.1,
+          "RangeStart": 0.1,
+          "RangeEnd": 0.5
+        }
+      },
+      "WidthRatio": 0.2,
+      "ValleyToPeakRatio": 0.01,
+      "TimeAdjustment": 0.0,
+      "TangentSkimWidth": 0.0,
+      "PeakHeightRatio": 5.0,
+      "AdjustedHeightRatio": 4.0,
+      "ValleyHeightRatio": 3.0,
+      "VoidTime": 0.0,
+      "VoidTimeType": "\"None\"",
+      "RrtReferenceCompound": "00000000-0000-0000-0000-000000000000",
+      "RrtReferenceType": "\"UseFirstPeak\"",
+      "CalibrationFactor": 0.0,
+      "UnidentifiedPeakCalibrationType": "\"None\"",
+      "AmountUnit": null,
+      "BunchingFactor": 1,
+      "NoiseThreshold": 0.001,
+      "AreaThreshold": 0.1,
+      "TimedIntegrationParameters": []
+    },
+    {
+      "Version": 1,
+      "ChannelIndex": 0,
+      "ChannelDescriptor": {
+        "Version": 2,
+        "DeviceChannelDescriptor": {
+          "Version": 3,
+          "DeviceChannelType": 2,
+          "DeviceChannelIdentifier": {
+            "Version": 1,
+            "DeviceIdentifier": {
+              "Version": 1,
+              "DeviceClass": "PDA",
+              "DeviceIndex": 0
+            },
+            "ChannelIdentifier": {
+              "Version": 1,
+              "ChannelIndex": 0,
+              "Auxiliary": false
+            }
+          },
+          "MetaData": {
+            "Version": 2,
+            "ResponseUnit": "mAU",
+            "StartWavelength": 190.0,
+            "EndWavelength": 790.0,
+            "LowResolution": false,
+            "DefaultMinYScale": 0.0,
+            "DefaultMaxYScale": 0.0,
+            "MinValidYValue": 0.0,
+            "MaxValidYValue": 0.0,
+            "SamplingRateInMilliseconds": 200.0
+          }
+        },
+        "ExtractionType": 4,
+        "ExtractionMetaData": {
+          "Version": 1,
+          "ResponseUnit": "mAU",
+          "DefaultMinYScale": 0.0,
+          "DefaultMaxYScale": 0.0,
+          "MinValidYValue": 0.0,
+          "MaxValidYValue": 0.0,
+          "SamplingRateInMilliseconds": 200.0
+        },
+        "PostProcessingChannelType": "\"None\""
+      },
+      "ChannelGuid": "a922e22b-0022-4829-9129-5733c7a302f4",
+      "SmoothParams": {
+        "Version": 1,
+        "Function": "\"None\"",
+        "Width": 0,
+        "Passes": 0,
+        "Order": 0,
+        "Cycles": 0
+      },
+      "IsPdaMethod": true,
+      "PdaParameters": {
+        "Version": 1,
+        "WavelengthParameters": {
+          "Version": 1,
+          "MinWavelength": 190.0,
+          "MaxWavelength": 790.0,
+          "ApplyBaselineCorrection": false,
+          "UseAutoAbsorbanceThreshold": true,
+          "ManualAbsorbanceThreshold": 0.5
+        },
+        "PeakPurityParameters": {
+          "Version": 1,
+          "MinWavelength": 215.0,
+          "MaxWavelength": 600.0,
+          "MinimumDataPoints": 20,
+          "ApplyBaselineCorrection": false,
+          "PurityLimit": 1.5,
+          "PercentOfPeakHeightForSpectra": 0.1,
+          "UseAutoAbsorbanceThreshold": true,
+          "ManualAbsorbanceThreshold": 0.5
+        },
+        "StandardConfirmationParameters": {
+          "Version": 1,
+          "MinWavelength": 190.0,
+          "MaxWavelength": 790.0,
+          "MinimumDataPoints": 20,
+          "PassThreshold": 1.5,
+          "ApplyBaselineCorrection": false,
+          "UseAutoAbsorbanceThresholdForSample": true,
+          "ManualAbsorbanceThresholdForSample": 0.5,
+          "UseAutoAbsorbanceThresholdForStandard": true,
+          "ManualAbsorbanceThresholdForStandard": 0.5,
+          "StandardType": "\"None\""
+        },
+        "AbsorbanceRatioParameters": {
+          "Version": 1,
+          "WavelengthA": 254.0,
+          "WavelengthB": 280.0,
+          "ApplyBaselineCorrection": false,
+          "UseAutoAbsorbanceThreshold": true,
+          "ManualAbsorbanceThreshold": 0.5
+        },
+        "LibraryConfirmationParameters": {
+          "Version": 1,
+          "MinimumWavelength": 190.0,
+          "MaximumWavelength": 790.0,
+          "IsBaselineCorrectionEnabled": false,
+          "HitDistanceThreshold": 975.0,
+          "SelectedLibraries": []
+        },
+        "PeakLibrarySearchParameters": {
+          "Version": 1,
+          "MinimumWavelength": 190.0,
+          "MaximumWavelength": 790.0,
+          "MatchRetentionTimeWindow": 5.0,
+          "IsMatchRetentionTimeWindowEnabled": false,
+          "IsBaselineCorrectionEnabled": false,
+          "HitDistanceThreshold": 975.0,
+          "IsPeakLibrarySearch": false,
+          "SelectedLibraries": [],
+          "UseWavelengthLimits": true,
+          "MaxNumberOfResults": 1
+        },
+        "BaselineCorrectionParameters": {
+          "Version": 1,
+          "CorrectionType": "\"PeakStart\"",
+          "SelectedSpectrumTime": 0.1,
+          "RangeStart": 0.1,
+          "RangeEnd": 0.5
+        }
+      },
+      "WidthRatio": 0.2,
+      "ValleyToPeakRatio": 0.01,
+      "TimeAdjustment": 0.0,
+      "TangentSkimWidth": 0.0,
+      "PeakHeightRatio": 5.0,
+      "AdjustedHeightRatio": 4.0,
+      "ValleyHeightRatio": 3.0,
+      "VoidTime": 0.0,
+      "VoidTimeType": "\"None\"",
+      "RrtReferenceCompound": "00000000-0000-0000-0000-000000000000",
+      "RrtReferenceType": "\"UseFirstPeak\"",
+      "CalibrationFactor": 0.0,
+      "UnidentifiedPeakCalibrationType": "\"None\"",
+      "AmountUnit": null,
+      "BunchingFactor": 1,
+      "NoiseThreshold": 0.001,
+      "AreaThreshold": 0.1,
+      "TimedIntegrationParameters": []
+    }
+  ],
+  "Compounds": [],
+  "SpectrumMethods": [],
+  "CompoundCalibrationResultsMap": {}
+}

@@ -17,9 +17,6 @@
    </ItemGroup>
 
    <ItemGroup>
-     <EmbeddedResource Include="DataAccess\Postgresql\ConnectionStrings.json">
-       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-     </EmbeddedResource>
      <EmbeddedResource Include="DataAccess\Postgresql\SQL\AuditTrailDBSchema.sql" />
      <EmbeddedResource Include="DataAccess\Postgresql\SQL\ChromatographyDBInit.sql" />
      <EmbeddedResource Include="DataAccess\Postgresql\SQL\ChromatographyDBSchema.sql" />

@@ -226,17 +226,6 @@ namespace PerkinElmer.Simplicity.Data.Version15.Version
             }
         }
 
-        //private static ConnectionStrings GetConnectionStrings()
-        //{
-        //    var assembly = typeof(Version15Host).Assembly;
-
-        //    using var stream = assembly.GetManifestResourceStream(ConnectionStringResourceName);
-        //    using var reader = new StreamReader(stream ?? throw new InvalidOperationException(
-        //                                            $"Failed to load resource {ConnectionStringResourceName}"));
-        //    var strings = reader.ReadToEnd();
-        //    return JsonSerializer.Deserialize<ConnectionStrings>(strings);
-        //}
-
         private static string GetSqlScript(string resourceName)
         {
             Log.Info("GetSqlScript() called");

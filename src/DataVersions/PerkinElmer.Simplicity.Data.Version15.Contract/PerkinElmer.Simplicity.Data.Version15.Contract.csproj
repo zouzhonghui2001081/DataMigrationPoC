@@ -11,6 +11,12 @@
 	<PackageReference Include="Newtonsoft.Json" Version="$(NewtonsoftJson)" />
   </ItemGroup>
 
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>PerkinElmer.Simplicity.Data.Version15.Dummy</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="xcopy &quot;$(TargetDir)*.*&quot; &quot;$(ProjectDir)..\..\..\Output\Debug\Share\&quot; /Y" />
   </Target>

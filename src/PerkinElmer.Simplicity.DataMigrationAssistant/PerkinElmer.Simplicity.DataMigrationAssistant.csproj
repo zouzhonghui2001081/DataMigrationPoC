@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PerkinElmer.Simplicity.DataMigration.Implementation\PerkinElmer.Simplicity.DataMigration.Implementation.csproj" />
+    <ProjectReference Include="..\Test\PerkinElmer.Simplicity.Data.Version15.Dummy\PerkinElmer.Simplicity.Data.Version15.Dummy.csproj" />
   </ItemGroup>
 
 </Project>

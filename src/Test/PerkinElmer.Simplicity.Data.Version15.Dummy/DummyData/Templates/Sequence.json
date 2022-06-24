@@ -1,0 +1,645 @@
+{
+  "Version": 1,
+  "Info": {
+    "Version": 1,
+    "Guid": "f5b05dfe-4418-4993-ab57-23a361a5d0d5",
+    "Name": "Test Sequence 01",
+    "CreatedByUser": {
+      "Version": 1,
+      "UserId": null,
+      "UserName": "SimplicityChrom User"
+    },
+    "CreatedDateUtc": "2022-06-22T06:42:00.397827",
+    "ModifiedDateUtc": "2022-06-22T06:42:00.397827",
+    "ModifiedByUser": {
+      "Version": 1,
+      "UserId": null,
+      "UserName": "SimplicityChrom User"
+    }
+  },
+  "Samples": [
+    {
+      "Version": 2,
+      "Guid": "28feaba2-3dab-4aaa-acb7-6aa5cea033ea",
+      "SampleName": "Sample001",
+      "Selected": true,
+      "SampleId": "",
+      "UserComments": "",
+      "SampleType": "Unknown",
+      "NumberOfRepeats": 1,
+      "Level": 0,
+      "SampleAmount": 1.0,
+      "Multiplier": 1.0,
+      "Divisor": 1.0,
+      "Addend": 0.0,
+      "DilutionFactor": 1.0,
+      "NormalizationFactor": 100.0,
+      "UnknownAmountAdjustment": 0.0,
+      "InternalStandardAmountAdjustment": 1.0,
+      "BaselineCorrection": "None",
+      "BaselineRunGuid": "00000000-0000-0000-0000-000000000000",
+      "RackCode": null,
+      "RackPosition": 0,
+      "PlateCode": "100 vial",
+      "PlatePosition": "Single plate",
+      "VialPosition": "1",
+      "DestinationVial": null,
+      "PlatePositionAsInteger": {
+        "Version": 1,
+        "DeviceName": "Stellar",
+        "Value": 0
+      },
+      "PlateCodeAsInteger": {
+        "Version": 1,
+        "DeviceName": "Stellar",
+        "Value": 12
+      },
+      "VialPositionAsInteger": {
+        "Version": 1,
+        "DeviceName": "Stellar",
+        "Value": 0
+      },
+      "DestinationVialAsInteger": null,
+      "InjectionVolume": {
+        "Version": 1,
+        "DeviceName": "Stellar",
+        "Value": 10.0
+      },
+      "InjectionType": null,
+      "InjectionTypeAsInteger": null,
+      "IsSelected": false,
+      "InjectionPortAsInteger": null,
+      "InjectionPort": null,
+      "AcquisitionMethodName": "Test Acquisition Method 01",
+      "AcquisitionMethodVersionNumber": 1,
+      "AcquisitionMethodState": 0,
+      "ProcessingMethodName": "Test Processing Method 01",
+      "ProcessingMethodVersionNumber": 1,
+      "ProcessingMethodState": 0,
+      "CalibrationMethodName": null,
+      "CalibrationBracket": 0,
+      "StandardAmountAdjustment": 1.0,
+      "SampleReportTemplate": null,
+      "SummaryReportGroup": null,
+      "SuitabilitySampleType": "None"
+    }
+  ],
+  "ExternalBaselineRuns": null,
+  "ExternalBaselineRunsAcquisitionMethods": [
+    {
+      "Version": 1,
+      "ReconciledRunTime": true,
+      "Info": {
+        "Version": 1,
+        "Guid": "76e350ac-bb05-46eb-8011-1fc5b8e0bfe1",
+        "Name": "Test Acquisition Method 01",
+        "VersionNumber": 1,
+        "ReviewApproveState": "\"NeverSubmitted\"",
+        "CreatedByUser": {
+          "Version": 1,
+          "UserId": null,
+          "UserName": "SimplicityChrom User"
+        },
+        "CreatedDateUtc": "2022-06-22T06:41:35.081129",
+        "ModifiedDateUtc": "2022-06-22T06:41:35.081129",
+        "ModifiedByUser": {
+          "Version": 1,
+          "UserId": null,
+          "UserName": "SimplicityChrom User"
+        },
+        "Devices": []
+      },
+      "DeviceMethods": [
+        {
+          "Version": 1,
+          "Content": "{\"Channels\":[{\"ChannelItemId\":\"e2ca6486-2c4d-43f4-9599-f31f3845f882\",\"Wavelengths\":[{\"Acquired\":true,\"AcquiredReference\":true,\"AutoZero\":true,\"Bandwidth\":1,\"ReferenceBandwidth\":1,\"Time\":0,\"Wavelength\":254,\"WavelengthItemId\":\"01462003-8472-4f68-9143-9a1aea10478d\",\"WavelengthReference\":400}]}],\"ConfigData\":{\"IPAddress\":{\"m_Address\":2517635244,\"m_Family\":2,\"m_HashCode\":0,\"m_Numbers\":[0,0,0,0,0,0,0,0],\"m_ScopeId\":0},\"SpectralPeriod\":5,\"Version\":null},\"MethodType\":0,\"OriginalRunTimeInMinutes\":5,\"RunTimeInMinutes\":5,\"SamplingRateInHertz\":5,\"Version\":null}",
+          "DeviceDriverItemDetails": {
+            "Version": 1,
+            "Configuration": "<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<Config Version=\"1\">\r\n  <IPAddress>172.16.16.150</IPAddress>\r\n  <SpectralPeriod>5</SpectralPeriod>\r\n</Config>",
+            "Name": "LC 300 PDA Detector",
+            "DeviceType": "null",
+            "IsDisplayDriver": false,
+            "Id": {
+              "Version": 1,
+              "InstrumentCompleteId": "{\r\n  \"Version\": 1,\r\n  \"InstrumentMasterId\": \"MyComputer\",\r\n  \"InstrumentId\": \"ed0768ae-ff95-4cd3-99c5-4c1f656e4a13\"\r\n}",
+              "DeviceDriverItemId": "{\r\n  \"Version\": 1,\r\n  \"Id\": \"Flexar PDA Plus Detector\"\r\n}"
+            }
+          },
+          "DeviceModuleDetails": [
+            {
+              "Version": 1,
+              "DeviceModule": {
+                "Version": 1,
+                "Id": {
+                  "Version": 1,
+                  "DeviceModuleId": {
+                    "Version": 1,
+                    "Id": "Flexar PDA Plus Detector"
+                  },
+                  "IsDisplayDriver": false,
+                  "DeviceDriverItemCompleteId": {
+                    "Version": 1,
+                    "InstrumentCompleteId": "{\r\n  \"Version\": 1,\r\n  \"InstrumentMasterId\": \"MyComputer\",\r\n  \"InstrumentId\": \"ed0768ae-ff95-4cd3-99c5-4c1f656e4a13\"\r\n}",
+                    "DeviceDriverItemId": "{\r\n  \"Version\": 1,\r\n  \"Id\": \"Flexar PDA Plus Detector\"\r\n}"
+                  }
+                },
+                "Name": "LC 300 PDA Detector",
+                "DeviceType": "\"PhotodiodeArrayDetector\""
+              },
+              "DeviceInformation": {
+                "Version": 1,
+                "FirmwareVersion": "Simulation",
+                "SerialNumber": "Simulation",
+                "ModelName": "LC 300 PDA Detector",
+                "MacAddress": "-",
+                "InterfaceAddress": "172.16.16.150"
+              },
+              "SettingsUserInterfaceSupported": true,
+              "Simulation": true,
+              "CommunicationTestedSuccessfully": true
+            }
+          ]
+        },
+        {
+          "Version": 1,
+          "Content": "﻿<StellarMethod version=\"2.5.0.0\">\r\n  <AS8400 version=\"2.8.2.0\">\r\n    <Injection>\r\n      <InjectionMode>PartialLoop</InjectionMode>\r\n      <SampleSpeed>Medium</SampleSpeed>\r\n      <FlushVolume>45</FlushVolume>\r\n      <InjectWhenValveSwitched>false</InjectWhenValveSwitched>\r\n      <SampleScaleFactor>NaN</SampleScaleFactor>\r\n      <SyncNeedleNotInSample>true</SyncNeedleNotInSample>\r\n      <InjectionDelay>0</InjectionDelay>\r\n    </Injection>\r\n    <AdvancedInjectionV2>\r\n      <NeedleHeight>4</NeedleHeight>\r\n      <UseHeadspace>true</UseHeadspace>\r\n      <UseAirSegment>false</UseAirSegment>\r\n      <AnalysisTime>0</AnalysisTime>\r\n      <SynchronizeWithAce>false</SynchronizeWithAce>\r\n      <ISSRunPosition>NoChange</ISSRunPosition>\r\n      <FillTransportPu>1</FillTransportPu>\r\n      <AirSegmentVolume>5</AirSegmentVolume>\r\n      <SyncInjectionEnabled>true</SyncInjectionEnabled>\r\n      <TransportSolvent>Solvent1</TransportSolvent>\r\n    </AdvancedInjectionV2>\r\n    <WashItems>\r\n      <WashMethodItem>\r\n        <WashSolvent>Solvent1</WashSolvent>\r\n        <WashVolume>500</WashVolume>\r\n        <WashValve>false</WashValve>\r\n      </WashMethodItem>\r\n    </WashItems>\r\n    <Cooling>\r\n      <Enabled>false</Enabled>\r\n      <Setpoint>5</Setpoint>\r\n      <WaitForSetpoint>true</WaitForSetpoint>\r\n      <Tolerance>2</Tolerance>\r\n    </Cooling>\r\n    <ValveWash>\r\n      <EnableValveWashSynchronization>false</EnableValveWashSynchronization>\r\n      <PumpFractionB>10</PumpFractionB>\r\n    </ValveWash>\r\n    <WashExtension>\r\n      <WashType>Volume</WashType>\r\n    </WashExtension>\r\n    <Oven>\r\n      <Enabled>false</Enabled>\r\n      <Setpoint>30</Setpoint>\r\n      <WaitForSetpoint>true</WaitForSetpoint>\r\n      <EquilibrationTime>2</EquilibrationTime>\r\n      <Tolerance>2</Tolerance>\r\n    </Oven>\r\n    <PreSequenceFlushItems>\r\n      <WashMethodItem>\r\n        <WashSolvent>Solvent1</WashSolvent>\r\n        <WashVolume>500</WashVolume>\r\n        <WashValve>false</WashValve>\r\n      </WashMethodItem>\r\n    </PreSequenceFlushItems>\r\n    <AdvancedWash>\r\n      <Enabled>false</Enabled>\r\n      <WashTime>0</WashTime>\r\n    </AdvancedWash>\r\n    <MixAndDilute>\r\n      <Enabled>false</Enabled>\r\n      <InitialTargetVolume>0</InitialTargetVolume>\r\n      <MixItems />\r\n      <MixPositions />\r\n      <SampleTypesOnly>false</SampleTypesOnly>\r\n      <SamplePrepTrayType>Vials85</SamplePrepTrayType>\r\n    </MixAndDilute>\r\n  </AS8400>\r\n  <Pump7700 version=\"2.10.3.0\">\r\n    <MaxPressure>1240</MaxPressure>\r\n    <MinPressure>0</MinPressure>\r\n    <EquilibrationTime>0</EquilibrationTime>\r\n    <Solvent>Solvent1</Solvent>\r\n    <SolventB>Solvent1</SolventB>\r\n    <SyncInjectionEnabled>true</SyncInjectionEnabled>\r\n    <SyncRampEnabled>false</SyncRampEnabled>\r\n    <SyncValveWashEnabled>false</SyncValveWashEnabled>\r\n    <SoftRampEnabled>true</SoftRampEnabled>\r\n    <ShutDownPump>false</ShutDownPump>\r\n    <TimeTable>\r\n      <TimeTableEntryV2>\r\n        <IsTimeFlowEntry>true</IsTimeFlowEntry>\r\n        <IsTimedIOEntry>false</IsTimedIOEntry>\r\n        <Time>0</Time>\r\n        <Flow>1</Flow>\r\n        <FractionA>100</FractionA>\r\n        <FractionB>0</FractionB>\r\n        <N>1000</N>\r\n        <Aux1>Unknown</Aux1>\r\n        <Aux2>Unknown</Aux2>\r\n        <TTL1>Unknown</TTL1>\r\n        <TTL2>Unknown</TTL2>\r\n      </TimeTableEntryV2>\r\n      <TimeTableEntryV2>\r\n        <IsTimeFlowEntry>true</IsTimeFlowEntry>\r\n        <IsTimedIOEntry>false</IsTimedIOEntry>\r\n        <Time>5</Time>\r\n        <Flow>1</Flow>\r\n        <FractionA>100</FractionA>\r\n        <FractionB>0</FractionB>\r\n        <N>1</N>\r\n        <Aux1>Unknown</Aux1>\r\n        <Aux2>Unknown</Aux2>\r\n        <TTL1>Unknown</TTL1>\r\n        <TTL2>Unknown</TTL2>\r\n      </TimeTableEntryV2>\r\n    </TimeTable>\r\n  </Pump7700>\r\n  <CO8860 version=\"2.10.2.0\">\r\n    <TemperatureControlEnabled>false</TemperatureControlEnabled>\r\n    <TemperatureSetPoint>25</TemperatureSetPoint>\r\n    <ColumnSelection>Column1</ColumnSelection>\r\n    <SyncRampEnabled>true</SyncRampEnabled>\r\n    <WaitForTemperatureSetPoint>false</WaitForTemperatureSetPoint>\r\n    <TemperatureTolerance>0.5</TemperatureTolerance>\r\n    <EquilibrationTime>0</EquilibrationTime>\r\n    <DiverterValveMethod>\r\n      <EnableDiverterValveSwitching>false</EnableDiverterValveSwitching>\r\n      <InitialValvePosition>OneTwo</InitialValvePosition>\r\n      <DiverterValveTimeTable />\r\n    </DiverterValveMethod>\r\n  </CO8860>\r\n  <StellarMethodExtend version=\"2.5.0.0\">\r\n    <TimeToExtend>0</TimeToExtend>\r\n  </StellarMethodExtend>\r\n</StellarMethod>",
+          "DeviceDriverItemDetails": {
+            "Version": 1,
+            "Configuration": "<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<root>\r\n  <DocumentId>Configuration</DocumentId>\r\n  <Item>\r\n    <Id>AS8400</Id>\r\n    <Value>\r\n      <AS8400ConfigurationV2>\r\n  <DeviceName></DeviceName>\r\n  <PrepMode>false</PrepMode>\r\n  <SyringeVolume>500</SyringeVolume>\r\n  <LoopVolume>100</LoopVolume>\r\n  <NeedleVolume>15</NeedleVolume>\r\n  <BufferVolume>1000</BufferVolume>\r\n  <TransportVolumeEditable>true</TransportVolumeEditable>\r\n  <SetInjectMarker>true</SetInjectMarker>\r\n  <AbortBehaviourType>EmergencyAbort</AbortBehaviourType>\r\n  <UseConnectionNotification>true</UseConnectionNotification>\r\n  <SynchronizationConfiguration>\r\n    <SyncValveWashServerName></SyncValveWashServerName>\r\n    <SyncValveWashClientName></SyncValveWashClientName>\r\n    <SynchronizeWithAce>false</SynchronizeWithAce>\r\n    <SyncInjectServerName></SyncInjectServerName>\r\n    <SyncInjectClientName></SyncInjectClientName>\r\n    <IsSyncValveWashEnabled>false</IsSyncValveWashEnabled>\r\n    <IsSyncInjectEnabled>false</IsSyncInjectEnabled>\r\n  </SynchronizationConfiguration>\r\n  <AS8400SimulationSettingsV2>\r\n    <SimulationSpeed>Normal</SimulationSpeed>\r\n    <SimulationOptions>\r\n      <HasTrayCooling>false</HasTrayCooling>\r\n      <HasSSV>false</HasSSV>\r\n      <HasWashPort2>true</HasWashPort2>\r\n      <HasISSA>false</HasISSA>\r\n      <HasTrayHeating>false</HasTrayHeating>\r\n      <HasOven>false</HasOven>\r\n      <Has6PortValve>false</Has6PortValve>\r\n    </SimulationOptions>\r\n    <ProtocolVersion>\r\n      <ProtocolVersionPart1>111120</ProtocolVersionPart1>\r\n      <ProtocolVersionPart2>111111</ProtocolVersionPart2>\r\n      <ProtocolVersionPart3>111111</ProtocolVersionPart3>\r\n      <ProtocolVersionPart4>111111</ProtocolVersionPart4>\r\n      <ProtocolVersionPart5>111111</ProtocolVersionPart5>\r\n      <ProtocolVersionPart6>111111</ProtocolVersionPart6>\r\n      <ProtocolVersionPart7>100001</ProtocolVersionPart7>\r\n      <ProtocolVersionPart8>110001</ProtocolVersionPart8>\r\n      <ProtocolVersionPart9>1</ProtocolVersionPart9>\r\n      <PropertyName></PropertyName>\r\n    </ProtocolVersion>\r\n    <SimulationDetails></SimulationDetails>\r\n    <SimulationTrayLeft>Vials100</SimulationTrayLeft>\r\n    <SimulationTrayRight>Vials100</SimulationTrayRight>\r\n    <FirmwarePartNumber>\r\n      <PartLeft>0</PartLeft>\r\n      <PartRight>0</PartRight>\r\n    </FirmwarePartNumber>\r\n    <FirmwareVersion>\r\n      <PartLeft>0</PartLeft>\r\n      <PartRight>0</PartRight>\r\n      <PartTest>0</PartTest>\r\n      <VersionType>Release</VersionType>\r\n    </FirmwareVersion>\r\n    <FpgaPartNumber>\r\n      <PartLeft>0</PartLeft>\r\n      <PartRight>0</PartRight>\r\n    </FpgaPartNumber>\r\n    <FpgaVersion>\r\n      <PartLeft>0</PartLeft>\r\n      <PartRight>0</PartRight>\r\n      <PartTest>0</PartTest>\r\n      <VersionType>Release</VersionType>\r\n    </FpgaVersion>\r\n    <PcbPartNumber>\r\n      <PartLeft>0</PartLeft>\r\n      <PartRight>0</PartRight>\r\n    </PcbPartNumber>\r\n    <PcbVersion>0</PcbVersion>\r\n    <SerialNumber>0</SerialNumber>\r\n  </AS8400SimulationSettingsV2>\r\n  <Communication>\r\n    <ComPort>1</ComPort>\r\n    <IPAddress>172.16.16.110</IPAddress>\r\n    <CommunicationType>Simulation</CommunicationType>\r\n    <UsbSerialNumber></UsbSerialNumber>\r\n  </Communication>\r\n  <SiasBehavior>DeviceDriver</SiasBehavior>\r\n</AS8400ConfigurationV2>\r\n    </Value>\r\n  </Item>\r\n  <Item>\r\n    <Id>Pump7700</Id>\r\n    <Value>\r\n      <Pump7700Configuration>\r\n  <ConfigVersion>2.10.3.0</ConfigVersion>\r\n  <Options>\r\n    <MixerVolume>0</MixerVolume>\r\n  </Options>\r\n  <SyncConfiguration>\r\n    <SyncRampServerName></SyncRampServerName>\r\n    <SyncRampClientName></SyncRampClientName>\r\n    <SyncValveWashServerName></SyncValveWashServerName>\r\n    <SyncValveWashClientName></SyncValveWashClientName>\r\n    <SyncInjectServerName></SyncInjectServerName>\r\n    <SyncInjectClientName></SyncInjectClientName>\r\n    <StartSyncAtInitialize>true</StartSyncAtInitialize>\r\n  </SyncConfiguration>\r\n  <PumpType>0</PumpType>\r\n  <UsbId></UsbId>\r\n  <MaximumFlow>3</MaximumFlow>\r\n  <MaximumPressureSimulation>1300</MaximumPressureSimulation>\r\n  <AbortBehaviourType>EmergencyAbort</AbortBehaviourType>\r\n  <UseConnectionNotification>true</UseConnectionNotification>\r\n  <Communication>\r\n    <ComPort>0</ComPort>\r\n    <IPAddress>172.16.16.120</IPAddress>\r\n    <CommunicationType>Simulation</CommunicationType>\r\n    <UsbSerialNumber></UsbSerialNumber>\r\n  </Communication>\r\n  <SiasBehavior>DeviceDriver</SiasBehavior>\r\n</Pump7700Configuration>\r\n    </Value>\r\n  </Item>\r\n  <Item>\r\n    <Id>CO8860</Id>\r\n    <Value>\r\n      <ColumnOvenConfiguration>\r\n  <DeviceName></DeviceName>\r\n  <SynchronizationConfiguration>\r\n    <SyncRampServerName></SyncRampServerName>\r\n    <SyncRampClientName></SyncRampClientName>\r\n  </SynchronizationConfiguration>\r\n  <Options>\r\n    <HasCooling>false</HasCooling>\r\n    <HasColumnSwitcher>false</HasColumnSwitcher>\r\n    <HasDiverterValve>false</HasDiverterValve>\r\n  </Options>\r\n  <ProtocolVersion>\r\n    <HasExtendedProtocol>false</HasExtendedProtocol>\r\n    <ProtocolVersionPart1>111110</ProtocolVersionPart1>\r\n    <ProtocolVersionPart2>111111</ProtocolVersionPart2>\r\n    <ProtocolVersionPart3>1</ProtocolVersionPart3>\r\n    <PropertyName></PropertyName>\r\n  </ProtocolVersion>\r\n  <UseConnectionNotification>true</UseConnectionNotification>\r\n  <Communication>\r\n    <ComPort>1</ComPort>\r\n    <IPAddress>172.16.16.130</IPAddress>\r\n    <CommunicationType>Simulation</CommunicationType>\r\n    <UsbSerialNumber></UsbSerialNumber>\r\n  </Communication>\r\n  <SiasBehavior>DeviceDriver</SiasBehavior>\r\n</ColumnOvenConfiguration>\r\n    </Value>\r\n  </Item>\r\n  <Item>\r\n    <Id>StellarSettings</Id>\r\n    <Value>\r\n      <StellarSettings>\r\n  <MaxSystemPressureInBar>1240</MaxSystemPressureInBar>\r\n  <MaxColumnOvenPressureInBar>1300</MaxColumnOvenPressureInBar>\r\n  <MaxPumpPressureInBar>1240</MaxPumpPressureInBar>\r\n  <MaxAutosamplerPressureInBar>1240</MaxAutosamplerPressureInBar>\r\n  <PressureUnit>Psi</PressureUnit>\r\n  <AS8400Options>\r\n    <HasTrayCooling>false</HasTrayCooling>\r\n    <HasSSV>false</HasSSV>\r\n    <HasWashPort2>true</HasWashPort2>\r\n    <HasISSA>false</HasISSA>\r\n    <HasTrayHeating>false</HasTrayHeating>\r\n    <HasOven>false</HasOven>\r\n    <Has6PortValve>false</Has6PortValve>\r\n  </AS8400Options>\r\n</StellarSettings>\r\n    </Value>\r\n  </Item>\r\n</root>",
+            "Name": "Stellar driver",
+            "DeviceType": "null",
+            "IsDisplayDriver": false,
+            "Id": {
+              "Version": 1,
+              "InstrumentCompleteId": "{\r\n  \"Version\": 1,\r\n  \"InstrumentMasterId\": \"MyComputer\",\r\n  \"InstrumentId\": \"ed0768ae-ff95-4cd3-99c5-4c1f656e4a13\"\r\n}",
+              "DeviceDriverItemId": "{\r\n  \"Version\": 1,\r\n  \"Id\": \"Stellar\"\r\n}"
+            }
+          },
+          "DeviceModuleDetails": [
+            {
+              "Version": 1,
+              "DeviceModule": {
+                "Version": 1,
+                "Id": {
+                  "Version": 1,
+                  "DeviceModuleId": {
+                    "Version": 1,
+                    "Id": "Pump7700"
+                  },
+                  "IsDisplayDriver": false,
+                  "DeviceDriverItemCompleteId": {
+                    "Version": 1,
+                    "InstrumentCompleteId": "{\r\n  \"Version\": 1,\r\n  \"InstrumentMasterId\": \"MyComputer\",\r\n  \"InstrumentId\": \"ed0768ae-ff95-4cd3-99c5-4c1f656e4a13\"\r\n}",
+                    "DeviceDriverItemId": "{\r\n  \"Version\": 1,\r\n  \"Id\": \"Stellar\"\r\n}"
+                  }
+                },
+                "Name": "LC 300 (U)HPLC Pump",
+                "DeviceType": "\"Pump\""
+              },
+              "DeviceInformation": {
+                "Version": 1,
+                "FirmwareVersion": "Simulation",
+                "SerialNumber": "Simulation",
+                "ModelName": "LC 300 UHPLC Pump",
+                "MacAddress": "-",
+                "InterfaceAddress": "172.16.16.120"
+              },
+              "SettingsUserInterfaceSupported": true,
+              "Simulation": true,
+              "CommunicationTestedSuccessfully": true
+            },
+            {
+              "Version": 1,
+              "DeviceModule": {
+                "Version": 1,
+                "Id": {
+                  "Version": 1,
+                  "DeviceModuleId": {
+                    "Version": 1,
+                    "Id": "AS8400"
+                  },
+                  "IsDisplayDriver": false,
+                  "DeviceDriverItemCompleteId": {
+                    "Version": 1,
+                    "InstrumentCompleteId": "{\r\n  \"Version\": 1,\r\n  \"InstrumentMasterId\": \"MyComputer\",\r\n  \"InstrumentId\": \"ed0768ae-ff95-4cd3-99c5-4c1f656e4a13\"\r\n}",
+                    "DeviceDriverItemId": "{\r\n  \"Version\": 1,\r\n  \"Id\": \"Stellar\"\r\n}"
+                  }
+                },
+                "Name": "LC 300 (U)HPLC Autosampler",
+                "DeviceType": "\"Autosampler\""
+              },
+              "DeviceInformation": {
+                "Version": 1,
+                "FirmwareVersion": "Simulation",
+                "SerialNumber": "Simulation",
+                "ModelName": "LC 300 UHPLC Autosampler",
+                "MacAddress": "-",
+                "InterfaceAddress": "172.16.16.110"
+              },
+              "SettingsUserInterfaceSupported": true,
+              "Simulation": true,
+              "CommunicationTestedSuccessfully": true
+            },
+            {
+              "Version": 1,
+              "DeviceModule": {
+                "Version": 1,
+                "Id": {
+                  "Version": 1,
+                  "DeviceModuleId": {
+                    "Version": 1,
+                    "Id": "CO8860"
+                  },
+                  "IsDisplayDriver": false,
+                  "DeviceDriverItemCompleteId": {
+                    "Version": 1,
+                    "InstrumentCompleteId": "{\r\n  \"Version\": 1,\r\n  \"InstrumentMasterId\": \"MyComputer\",\r\n  \"InstrumentId\": \"ed0768ae-ff95-4cd3-99c5-4c1f656e4a13\"\r\n}",
+                    "DeviceDriverItemId": "{\r\n  \"Version\": 1,\r\n  \"Id\": \"Stellar\"\r\n}"
+                  }
+                },
+                "Name": "LC 300 Column Oven",
+                "DeviceType": "\"Oven\""
+              },
+              "DeviceInformation": {
+                "Version": 1,
+                "FirmwareVersion": "Simulation",
+                "SerialNumber": "Simulation",
+                "ModelName": "LC 300 Column Oven",
+                "MacAddress": "-",
+                "InterfaceAddress": "172.16.16.130"
+              },
+              "SettingsUserInterfaceSupported": true,
+              "Simulation": true,
+              "CommunicationTestedSuccessfully": true
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "ExternalBaselineRunsProcessingMethods": [
+    {
+      "Version": 2,
+      "Info": {
+        "Version": 1,
+        "Guid": "3052e129-0442-4151-ae06-d228855ea81b",
+        "Name": "Test Processing Method 01",
+        "VersionNumber": 1,
+        "ReviewApproveState": "\"NeverSubmitted\"",
+        "CreatedByUser": {
+          "Version": 1,
+          "UserId": null,
+          "UserName": "SimplicityChrom User"
+        },
+        "CreatedDateUtc": "2022-06-22T14:53:31.284706+08:00",
+        "ModifiedDateUtc": "2022-06-22T14:53:31.284706+08:00",
+        "ModifiedByUser": {
+          "Version": 1,
+          "UserId": null,
+          "UserName": "SimplicityChrom User"
+        },
+        "Description": "",
+        "IsDefault": false
+      },
+      "ForExternalMethod": false,
+      "CalibrationGlobalParameters": {
+        "Version": 1,
+        "NumberOfLevels": 1,
+        "AmountUnits": "ppm",
+        "UnidentifiedPeakCalibrationType": "\"None\"",
+        "UnidentifiedPeakCalibrationFactor": 1.0,
+        "UnidentifiedPeakReferenceCompoundGuid": "00000000-0000-0000-0000-000000000000"
+      },
+      "ApexOptimizedParameters": {
+        "Version": 1,
+        "MinWavelength": 190.0,
+        "MaxWavelength": 790.0,
+        "WavelengthBandwidth": 10.0,
+        "UseReference": true,
+        "ReferenceWavelength": 400.0,
+        "ReferenceWavelengthBandwidth": 10.0,
+        "ApplyBaselineCorrection": true,
+        "UseAutoAbsorbanceThreshold": true,
+        "ManualAbsorbanceThreshold": 0.0005
+      },
+      "SSTParameters": {
+        "Version": 2,
+        "Enabled": false,
+        "SelectedPharmacopeiaType": "\"Usp32\"",
+        "IsEfficiencyInPlates": true,
+        "ColumnLength": 0.25,
+        "SignalToNoiseRatio": false,
+        "SignalToNoiseWindowStart": 0.0,
+        "SignalToNoiseWindowEnd": 60.0,
+        "AnalyzeAdjacentPeaks": true,
+        "CompoundPharmacopeiaDefinitions": null,
+        "VoidTimeType": 1,
+        "VoidTimeCustomValueInSeconds": 0.0
+      },
+      "ProcessingDeviceMethods": null,
+      "ChannelMethods": [
+        {
+          "Version": 1,
+          "ChannelIndex": 0,
+          "ChannelDescriptor": {
+            "Version": 2,
+            "DeviceChannelDescriptor": {
+              "Version": 3,
+              "DeviceChannelType": 2,
+              "DeviceChannelIdentifier": {
+                "Version": 1,
+                "DeviceIdentifier": {
+                  "Version": 1,
+                  "DeviceClass": "PDA",
+                  "DeviceIndex": 0
+                },
+                "ChannelIdentifier": {
+                  "Version": 1,
+                  "ChannelIndex": 0,
+                  "Auxiliary": false
+                }
+              },
+              "MetaData": {
+                "Version": 2,
+                "ResponseUnit": "mAU",
+                "StartWavelength": 190.0,
+                "EndWavelength": 790.0,
+                "LowResolution": false,
+                "DefaultMinYScale": 0.0,
+                "DefaultMaxYScale": 0.0,
+                "MinValidYValue": 0.0,
+                "MaxValidYValue": 0.0,
+                "SamplingRateInMilliseconds": 200.0
+              }
+            },
+            "ExtractionType": 1,
+            "ExtractionMetaData": {
+              "Version": 2,
+              "ResponseUnit": null,
+              "Wavelength": 254.0,
+              "WavelengthBandwidth": 10.0,
+              "UseReference": true,
+              "ReferenceWavelength": 400.0,
+              "ReferenceWavelengthBandwidth": 10.0,
+              "IsApexOptimized": false,
+              "DefaultMinYScale": 0.0,
+              "DefaultMaxYScale": 0.0,
+              "MinValidYValue": 0.0,
+              "MaxValidYValue": 0.0,
+              "SamplingRateInMilliseconds": 0.0
+            },
+            "PostProcessingChannelType": "\"None\""
+          },
+          "ChannelGuid": "23eea044-3e4f-4126-9b8f-c5172d37cf12",
+          "SmoothParams": {
+            "Version": 1,
+            "Function": "\"None\"",
+            "Width": 0,
+            "Passes": 0,
+            "Order": 0,
+            "Cycles": 0
+          },
+          "IsPdaMethod": true,
+          "PdaParameters": {
+            "Version": 1,
+            "WavelengthParameters": {
+              "Version": 1,
+              "MinWavelength": 190.0,
+              "MaxWavelength": 790.0,
+              "ApplyBaselineCorrection": false,
+              "UseAutoAbsorbanceThreshold": true,
+              "ManualAbsorbanceThreshold": 0.5
+            },
+            "PeakPurityParameters": {
+              "Version": 1,
+              "MinWavelength": 215.0,
+              "MaxWavelength": 600.0,
+              "MinimumDataPoints": 20,
+              "ApplyBaselineCorrection": false,
+              "PurityLimit": 1.5,
+              "PercentOfPeakHeightForSpectra": 0.1,
+              "UseAutoAbsorbanceThreshold": true,
+              "ManualAbsorbanceThreshold": 0.5
+            },
+            "StandardConfirmationParameters": {
+              "Version": 1,
+              "MinWavelength": 190.0,
+              "MaxWavelength": 790.0,
+              "MinimumDataPoints": 20,
+              "PassThreshold": 1.5,
+              "ApplyBaselineCorrection": false,
+              "UseAutoAbsorbanceThresholdForSample": true,
+              "ManualAbsorbanceThresholdForSample": 0.5,
+              "UseAutoAbsorbanceThresholdForStandard": true,
+              "ManualAbsorbanceThresholdForStandard": 0.5,
+              "StandardType": "\"None\""
+            },
+            "AbsorbanceRatioParameters": {
+              "Version": 1,
+              "WavelengthA": 254.0,
+              "WavelengthB": 280.0,
+              "ApplyBaselineCorrection": false,
+              "UseAutoAbsorbanceThreshold": true,
+              "ManualAbsorbanceThreshold": 0.5
+            },
+            "LibraryConfirmationParameters": {
+              "Version": 1,
+              "MinimumWavelength": 190.0,
+              "MaximumWavelength": 790.0,
+              "IsBaselineCorrectionEnabled": false,
+              "HitDistanceThreshold": 975.0,
+              "SelectedLibraries": []
+            },
+            "PeakLibrarySearchParameters": {
+              "Version": 1,
+              "MinimumWavelength": 190.0,
+              "MaximumWavelength": 790.0,
+              "MatchRetentionTimeWindow": 5.0,
+              "IsMatchRetentionTimeWindowEnabled": false,
+              "IsBaselineCorrectionEnabled": false,
+              "HitDistanceThreshold": 975.0,
+              "IsPeakLibrarySearch": false,
+              "SelectedLibraries": [],
+              "UseWavelengthLimits": true,
+              "MaxNumberOfResults": 1
+            },
+            "BaselineCorrectionParameters": {
+              "Version": 1,
+              "CorrectionType": "\"PeakStart\"",
+              "SelectedSpectrumTime": 0.1,
+              "RangeStart": 0.1,
+              "RangeEnd": 0.5
+            }
+          },
+          "WidthRatio": 0.2,
+          "ValleyToPeakRatio": 0.01,
+          "TimeAdjustment": 0.0,
+          "TangentSkimWidth": 0.0,
+          "PeakHeightRatio": 5.0,
+          "AdjustedHeightRatio": 4.0,
+          "ValleyHeightRatio": 3.0,
+          "VoidTime": 0.0,
+          "VoidTimeType": "\"None\"",
+          "RrtReferenceCompound": "00000000-0000-0000-0000-000000000000",
+          "RrtReferenceType": "\"UseFirstPeak\"",
+          "CalibrationFactor": 0.0,
+          "UnidentifiedPeakCalibrationType": "\"None\"",
+          "AmountUnit": null,
+          "BunchingFactor": 1,
+          "NoiseThreshold": 0.001,
+          "AreaThreshold": 0.1,
+          "TimedIntegrationParameters": []
+        },
+        {
+          "Version": 1,
+          "ChannelIndex": 0,
+          "ChannelDescriptor": {
+            "Version": 2,
+            "DeviceChannelDescriptor": {
+              "Version": 3,
+              "DeviceChannelType": 2,
+              "DeviceChannelIdentifier": {
+                "Version": 1,
+                "DeviceIdentifier": {
+                  "Version": 1,
+                  "DeviceClass": "PDA",
+                  "DeviceIndex": 0
+                },
+                "ChannelIdentifier": {
+                  "Version": 1,
+                  "ChannelIndex": 0,
+                  "Auxiliary": false
+                }
+              },
+              "MetaData": {
+                "Version": 2,
+                "ResponseUnit": "mAU",
+                "StartWavelength": 190.0,
+                "EndWavelength": 790.0,
+                "LowResolution": false,
+                "DefaultMinYScale": 0.0,
+                "DefaultMaxYScale": 0.0,
+                "MinValidYValue": 0.0,
+                "MaxValidYValue": 0.0,
+                "SamplingRateInMilliseconds": 200.0
+              }
+            },
+            "ExtractionType": 4,
+            "ExtractionMetaData": {
+              "Version": 1,
+              "ResponseUnit": "mAU",
+              "DefaultMinYScale": 0.0,
+              "DefaultMaxYScale": 0.0,
+              "MinValidYValue": 0.0,
+              "MaxValidYValue": 0.0,
+              "SamplingRateInMilliseconds": 200.0
+            },
+            "PostProcessingChannelType": "\"None\""
+          },
+          "ChannelGuid": "a922e22b-0022-4829-9129-5733c7a302f4",
+          "SmoothParams": {
+            "Version": 1,
+            "Function": "\"None\"",
+            "Width": 0,
+            "Passes": 0,
+            "Order": 0,
+            "Cycles": 0
+          },
+          "IsPdaMethod": true,
+          "PdaParameters": {
+            "Version": 1,
+            "WavelengthParameters": {
+              "Version": 1,
+              "MinWavelength": 190.0,
+              "MaxWavelength": 790.0,
+              "ApplyBaselineCorrection": false,
+              "UseAutoAbsorbanceThreshold": true,
+              "ManualAbsorbanceThreshold": 0.5
+            },
+            "PeakPurityParameters": {
+              "Version": 1,
+              "MinWavelength": 215.0,
+              "MaxWavelength": 600.0,
+              "MinimumDataPoints": 20,
+              "ApplyBaselineCorrection": false,
+              "PurityLimit": 1.5,
+              "PercentOfPeakHeightForSpectra": 0.1,
+              "UseAutoAbsorbanceThreshold": true,
+              "ManualAbsorbanceThreshold": 0.5
+            },
+            "StandardConfirmationParameters": {
+              "Version": 1,
+              "MinWavelength": 190.0,
+              "MaxWavelength": 790.0,
+              "MinimumDataPoints": 20,
+              "PassThreshold": 1.5,
+              "ApplyBaselineCorrection": false,
+              "UseAutoAbsorbanceThresholdForSample": true,
+              "ManualAbsorbanceThresholdForSample": 0.5,
+              "UseAutoAbsorbanceThresholdForStandard": true,
+              "ManualAbsorbanceThresholdForStandard": 0.5,
+              "StandardType": "\"None\""
+            },
+            "AbsorbanceRatioParameters": {
+              "Version": 1,
+              "WavelengthA": 254.0,
+              "WavelengthB": 280.0,
+              "ApplyBaselineCorrection": false,
+              "UseAutoAbsorbanceThreshold": true,
+              "ManualAbsorbanceThreshold": 0.5
+            },
+            "LibraryConfirmationParameters": {
+              "Version": 1,
+              "MinimumWavelength": 190.0,
+              "MaximumWavelength": 790.0,
+              "IsBaselineCorrectionEnabled": false,
+              "HitDistanceThreshold": 975.0,
+              "SelectedLibraries": []
+            },
+            "PeakLibrarySearchParameters": {
+              "Version": 1,
+              "MinimumWavelength": 190.0,
+              "MaximumWavelength": 790.0,
+              "MatchRetentionTimeWindow": 5.0,
+              "IsMatchRetentionTimeWindowEnabled": false,
+              "IsBaselineCorrectionEnabled": false,
+              "HitDistanceThreshold": 975.0,
+              "IsPeakLibrarySearch": false,
+              "SelectedLibraries": [],
+              "UseWavelengthLimits": true,
+              "MaxNumberOfResults": 1
+            },
+            "BaselineCorrectionParameters": {
+              "Version": 1,
+              "CorrectionType": "\"PeakStart\"",
+              "SelectedSpectrumTime": 0.1,
+              "RangeStart": 0.1,
+              "RangeEnd": 0.5
+            }
+          },
+          "WidthRatio": 0.2,
+          "ValleyToPeakRatio": 0.01,
+          "TimeAdjustment": 0.0,
+          "TangentSkimWidth": 0.0,
+          "PeakHeightRatio": 5.0,
+          "AdjustedHeightRatio": 4.0,
+          "ValleyHeightRatio": 3.0,
+          "VoidTime": 0.0,
+          "VoidTimeType": "\"None\"",
+          "RrtReferenceCompound": "00000000-0000-0000-0000-000000000000",
+          "RrtReferenceType": "\"UseFirstPeak\"",
+          "CalibrationFactor": 0.0,
+          "UnidentifiedPeakCalibrationType": "\"None\"",
+          "AmountUnit": null,
+          "BunchingFactor": 1,
+          "NoiseThreshold": 0.001,
+          "AreaThreshold": 0.1,
+          "TimedIntegrationParameters": []
+        }
+      ],
+      "Compounds": [],
+      "SpectrumMethods": [],
+      "CompoundCalibrationResultsMap": {}
+    }
+  ]
+}

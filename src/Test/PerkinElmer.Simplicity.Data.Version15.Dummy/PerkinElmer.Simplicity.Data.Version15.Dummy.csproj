@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFrameworks>netcoreapp3.1;</TargetFrameworks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="DummyData\AcqusitionMethod.json" />
+    <None Remove="DummyData\Templates\ProcessingMethod.Json" />
+    <None Remove="DummyData\Templates\Project.json" />
+    <None Remove="DummyData\Templates\Sequence.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="DummyData\Templates\AcqusitionMethod.json" />
+    <EmbeddedResource Include="DummyData\Templates\ProcessingMethod.json" />
+    <EmbeddedResource Include="DummyData\Templates\Project.json" />
+    <EmbeddedResource Include="DummyData\Templates\Sequence.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\DataVersions\PerkinElmer.Simplicity.Data.Version15.Contract\PerkinElmer.Simplicity.Data.Version15.Contract.csproj">
+      <Private>false</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\DataVersions\PerkinElmer.Simplicity.Data.Version15\PerkinElmer.Simplicity.Data.Version15.csproj" />
+  </ItemGroup>
+
+</Project>

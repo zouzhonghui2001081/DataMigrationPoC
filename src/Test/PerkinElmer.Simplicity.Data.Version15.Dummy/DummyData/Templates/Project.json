@@ -1,0 +1,24 @@
+{
+  "Version": 1,
+  "Description": "",
+  "IsEnabled": true,
+  "IsSecurityOn": false,
+  "IsESignatureOn": false,
+  "IsReviewApprovalOn": false,
+  "StartDateUtc": "2022-06-22T06:40:43.643338",
+  "EndDateUtc": null,
+  "Guid": "c64a8e33-3519-4ad7-91d6-5832774173a7",
+  "Name": "Test Project 01",
+  "CreatedByUser": {
+    "Version": 1,
+    "UserId": null,
+    "UserName": "SimplicityChrom User"
+  },
+  "CreatedDateUtc": "2022-06-22T06:40:39.479425",
+  "ModifiedDateUtc": "2022-06-22T06:40:57.192977",
+  "ModifiedByUser": {
+    "Version": 1,
+    "UserId": null,
+    "UserName": null
+  }
+}

@@ -19,9 +19,6 @@
    </ItemGroup>
 
    <ItemGroup>
-     <EmbeddedResource Include="DataAccess\Postgresql\ConnectionStrings.json">
-       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-     </EmbeddedResource>
      <EmbeddedResource Include="DataAccess\Postgresql\SQL\AuditTrailDBSchema.sql" />
      <EmbeddedResource Include="DataAccess\Postgresql\SQL\ChromatographyDBInit.sql" />
      <EmbeddedResource Include="DataAccess\Postgresql\SQL\ChromatographyDBSchema.sql" />
@@ -48,6 +45,11 @@
     <ProjectReference Include="..\PerkinElmer.Simplicity.Data.Version15.Contract\PerkinElmer.Simplicity.Data.Version15.Contract.csproj">
       <Private>false</Private>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>PerkinElmer.Simplicity.Data.Version15.Dummy</_Parameter1>
+    </AssemblyAttribute>
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="xcopy &quot;$(TargetDir)*.*&quot; &quot;$(ProjectDir)..\..\..\Output\Debug\Version15\&quot; /Y" />
