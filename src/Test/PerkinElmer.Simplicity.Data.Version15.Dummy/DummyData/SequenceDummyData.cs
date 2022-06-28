@@ -50,7 +50,7 @@ namespace PerkinElmer.Simplicity.Data.Version15.Dummy.DummyData
             for (var i = 0; i < sequenceCount; i++)
             {
                 sequenceInfoEntity.Guid = Guid.NewGuid();
-                sequenceInfoEntity.Name = dummySequenceName + i + Guid.NewGuid().ToString().Substring(0, 8);
+                sequenceInfoEntity.Name = dummySequenceName + i +" " + Guid.NewGuid().ToString().Substring(0, 8);
                 foreach (var sequenceSampeInfo in sequenceInfoEntity.SequenceSampleInfos)
                     sequenceSampeInfo.Guid = Guid.NewGuid();
 

@@ -28,7 +28,7 @@ namespace PerkinElmer.Simplicity.Data.Version15.Dummy.DummyData
             for (var i = 0; i < acqusitionMethodCount; i++)
             {
                 acquisitionMethod.Info.Guid = Guid.NewGuid();
-                acquisitionMethod.Info.Name = acqusitionMethodName + i + Guid.NewGuid().ToString().Substring(0,8);
+                acquisitionMethod.Info.Name = acqusitionMethodName + i + " " + Guid.NewGuid().ToString().Substring(0,8);
                 var acqusitionMethodEntity = new AcquisitionMethod();
                 DomainContractAdaptor.PopulateAcquisitionMethodEntity(acquisitionMethod, acqusitionMethodEntity);
                 AcquisitionMethodTarget.CreateProjectAcquisitionMethod(connection, projectGuid, acqusitionMethodEntity);

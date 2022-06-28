@@ -9,6 +9,14 @@
     <None Remove="DummyData\AcqusitionMethod.json" />
     <None Remove="DummyData\Templates\ProcessingMethod.Json" />
     <None Remove="DummyData\Templates\Project.json" />
+    <None Remove="DummyData\Templates\Reports\AcquisitionMethodReport.json" />
+    <None Remove="DummyData\Templates\Reports\CondensedCalibrationReport.json" />
+    <None Remove="DummyData\Templates\Reports\DetailedCalibrationReport.json" />
+    <None Remove="DummyData\Templates\Reports\ProcessingMethodReport.json" />
+    <None Remove="DummyData\Templates\Reports\SequenceDetailedReport.json" />
+    <None Remove="DummyData\Templates\Reports\SequenceSummaryReport.json" />
+    <None Remove="DummyData\Templates\Reports\SummaryReport.json" />
+    <None Remove="DummyData\Templates\Reports\SystemSuitabilitySummaryReport.json" />
     <None Remove="DummyData\Templates\Sequence.json" />
   </ItemGroup>
 
@@ -16,6 +24,14 @@
     <EmbeddedResource Include="DummyData\Templates\AcqusitionMethod.json" />
     <EmbeddedResource Include="DummyData\Templates\ProcessingMethod.json" />
     <EmbeddedResource Include="DummyData\Templates\Project.json" />
+    <EmbeddedResource Include="DummyData\Templates\Reports\AcquisitionMethodReport.json" />
+    <EmbeddedResource Include="DummyData\Templates\Reports\CondensedCalibrationReport.json" />
+    <EmbeddedResource Include="DummyData\Templates\Reports\DetailedCalibrationReport.json" />
+    <EmbeddedResource Include="DummyData\Templates\Reports\ProcessingMethodReport.json" />
+    <EmbeddedResource Include="DummyData\Templates\Reports\SequenceDetailedReport.json" />
+    <EmbeddedResource Include="DummyData\Templates\Reports\SequenceSummaryReport.json" />
+    <EmbeddedResource Include="DummyData\Templates\Reports\SummaryReport.json" />
+    <EmbeddedResource Include="DummyData\Templates\Reports\SystemSuitabilitySummaryReport.json" />
     <EmbeddedResource Include="DummyData\Templates\Sequence.json" />
   </ItemGroup>
 

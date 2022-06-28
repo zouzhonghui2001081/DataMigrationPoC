@@ -27,7 +27,7 @@ namespace PerkinElmer.Simplicity.Data.Version15.Dummy.DummyData
             for (var i = 0; i < processingMethodCount; i++)
             {
                 processingMethod.Info.Guid = Guid.NewGuid();
-                processingMethod.Info.Name = processingMethodName + i + Guid.NewGuid().ToString().Substring(0,8);
+                processingMethod.Info.Name = processingMethodName + i +" "+ Guid.NewGuid().ToString().Substring(0,8);
                 var processingMethodEntity = new ProcessingMethod();
                 DomainContractAdaptor.PopulateProcessingMethodEntity(processingMethod, processingMethodEntity);
                 ProcessingMethodTarget.CreateProcessingMethod(connection, projectGuid, processingMethodEntity);
