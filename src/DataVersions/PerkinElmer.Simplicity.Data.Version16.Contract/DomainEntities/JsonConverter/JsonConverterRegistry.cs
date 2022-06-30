@@ -13,6 +13,7 @@ using PerkinElmer.Simplicity.Data.Version16.Contract.DomainEntities.JsonConverte
 using PerkinElmer.Simplicity.Data.Version16.Contract.DomainEntities.JsonConverter.Processing.CompoundLibrary;
 using PerkinElmer.Simplicity.Data.Version16.Contract.DomainEntities.JsonConverter.Reporting;
 using PerkinElmer.Simplicity.Data.Version16.Contract.DomainEntities.JsonConverter.Shared;
+using PerkinElmer.Simplicity.Data.Version16.Contract.Version.Chromatography;
 using IDeviceMethod = PerkinElmer.Simplicity.Data.Version16.Contract.DomainEntities.Interface.Acquisition.IDeviceMethod;
 
 namespace PerkinElmer.Simplicity.Data.Version16.Contract.DomainEntities.JsonConverter
@@ -132,7 +133,7 @@ namespace PerkinElmer.Simplicity.Data.Version16.Contract.DomainEntities.JsonConv
             {typeof(DeviceModuleCompleteId), new DeviceModuleCompleteIdJsonConverter() },
             {typeof(IInstrumentDetails), new InstrumentDetailsJsonConverter() },
             {typeof(IDictionary<Guid ,IDictionary<PharmacopeiaType, IDictionary<SuitabilityParameter, ISuitabilityParameterCriteria>>> ), new CompoundPharmacopeiaDefinitionsJsonConverter()},
-		};
+        };
 
 		static JsonConverterRegistry()
 		{

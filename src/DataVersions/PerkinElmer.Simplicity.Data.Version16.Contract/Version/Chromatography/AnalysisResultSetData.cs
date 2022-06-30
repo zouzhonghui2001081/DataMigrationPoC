@@ -6,16 +6,13 @@ using PerkinElmer.Simplicity.Data.Version16.Contract.DataEntities.Chromatography
 
 namespace PerkinElmer.Simplicity.Data.Version16.Contract.Version.Chromatography
 {
-    public class CalculatedChannelCompositeVersion16Data : Version16DataBase
+    public class CalculatedChannelCompositeData 
     {
-        public CalculatedChannelCompositeVersion16Data()
+        public CalculatedChannelCompositeData()
         {
             RunPeakResults = new List<RunPeakResult>();
             SuitabilityResults = new List<SuitabilityResult>();
         }
-
-
-        public override Version16DataTypes Version16DataTypes => Version16DataTypes.AnalysisResultSet;
 
         public CalculatedChannelData CalculatedChannelData { get; set; }
 
@@ -28,7 +25,7 @@ namespace PerkinElmer.Simplicity.Data.Version16.Contract.Version.Chromatography
     {
         public BatchRunAnalysisResultData()
         {
-            CalculatedChannelData = new List<CalculatedChannelCompositeVersion16Data>();
+            CalculatedChannelData = new List<CalculatedChannelCompositeData>();
         }
 
         public BatchRunAnalysisResult BatchRunAnalysisResult { get; set; }
@@ -37,7 +34,7 @@ namespace PerkinElmer.Simplicity.Data.Version16.Contract.Version.Chromatography
 
         public ProcessingMethod ModifiableProcessingMethod { get; set; }
 
-        public IList<CalculatedChannelCompositeVersion16Data> CalculatedChannelData { get; set; }
+        public IList<CalculatedChannelCompositeData> CalculatedChannelData { get; set; }
     }
 
     public class AnalysisResultSetData : Version16DataBase

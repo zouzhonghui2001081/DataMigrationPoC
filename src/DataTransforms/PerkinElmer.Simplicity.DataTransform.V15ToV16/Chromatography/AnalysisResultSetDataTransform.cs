@@ -69,12 +69,12 @@ namespace PerkinElmer.Simplicity.DataTransform.V15ToV16.Chromatography
             return batchRunAnalysisResultData16;
         }
 
-        internal static CalculatedChannelCompositeVersion16Data Transform(
+        internal static CalculatedChannelCompositeData Transform(
             CalculatedChannelCompositeData15 calculatedChannelCompositeData)
         {
             if (calculatedChannelCompositeData == null) return null;
 
-            var calculatedChannelCompositeData16 = new CalculatedChannelCompositeVersion16Data
+            var calculatedChannelCompositeData16 = new CalculatedChannelCompositeData
             {
                 CalculatedChannelData = CalculatedChannelData.Transform(calculatedChannelCompositeData.CalculatedChannelData)
             };

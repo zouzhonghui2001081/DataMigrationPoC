@@ -24,6 +24,7 @@ namespace PerkinElmer.Simplicity.DataMigrationAssistant
             var migrationComponentsFactory = new MigrationComponentsFactory();
             var migrationManager = new MigrationManager("Version15", "Version16", migrationComponentsFactory);
             migrationManager.StartMigration(migrationContext);
+
         }
 
         static void LoadSharedLibraries()

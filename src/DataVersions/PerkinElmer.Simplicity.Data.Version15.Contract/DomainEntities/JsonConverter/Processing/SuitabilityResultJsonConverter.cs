@@ -64,17 +64,17 @@ namespace PerkinElmer.Simplicity.Data.Version15.Contract.DomainEntities.JsonConv
             var suitabilityResult = DomainFactory.Create<ISuitabilityResult>();
             suitabilityResult.Area = jObject[AreaKeyName].Type == JTokenType.Null? null : jObject[AreaKeyName].ToObject<SuitabilityParameterResult>();
             suitabilityResult.Height = jObject[HeightKeyName].Type == JTokenType.Null ? null : jObject[HeightKeyName].ToObject<SuitabilityParameterResult>();
-            suitabilityResult.CapacityFactorKPrime = jObject[KPrimeKeyName].Type == JTokenType.Null ? null : jObject[KPrimeKeyName].ToObject<SuitabilityParameterResult>();
-            suitabilityResult.TheoreticalPlatesN = jObject[PlatesDorseyFoleyKeyName].Type == JTokenType.Null ? null : jObject[PlatesDorseyFoleyKeyName].ToObject<SuitabilityParameterResult>();
-            suitabilityResult.TheoreticalPlatesNTan = jObject[PlatesTangentialKeyName].Type == JTokenType.Null ? null : jObject[PlatesTangentialKeyName].ToObject<SuitabilityParameterResult>();
-            suitabilityResult.TailingFactorSymmetry = jObject[TailingFactorKeyName].Type == JTokenType.Null ? null : jObject[TailingFactorKeyName].ToObject<SuitabilityParameterResult>();
-            suitabilityResult.Resolution = jObject[ResolutionKeyName].Type == JTokenType.Null ? null : jObject[ResolutionKeyName].ToObject<SuitabilityParameterResult>();
-            suitabilityResult.PeakWidthAtBase = jObject[PeakWidthKeyName].Type == JTokenType.Null ? null : jObject[PeakWidthKeyName].ToObject<SuitabilityParameterResult>();
-            suitabilityResult.PeakWidthAt5Pct = jObject[PeakWidthAt5PercentHeightKeyName].Type == JTokenType.Null ? null : jObject[PeakWidthAt5PercentHeightKeyName].ToObject<SuitabilityParameterResult>();
-            suitabilityResult.PeakWidthAt10Pct = jObject[PeakWidthAt10PercentHeightKeyName].Type == JTokenType.Null ? null : jObject[PeakWidthAt10PercentHeightKeyName].ToObject<SuitabilityParameterResult>();
-            suitabilityResult.PeakWidthAt50Pct = jObject[PeakWidthAtHalfHeightKeyName].Type == JTokenType.Null ? null : jObject[PeakWidthAtHalfHeightKeyName].ToObject<SuitabilityParameterResult>();
-            suitabilityResult.RelativeRetention = jObject[RelativeRetTimeSuitKeyName].Type == JTokenType.Null ? null : jObject[RelativeRetTimeSuitKeyName].ToObject<SuitabilityParameterResult>();
-            suitabilityResult.SignalToNoise = jObject[SignalKeyName].Type == JTokenType.Null ? null : jObject[SignalKeyName].ToObject<SuitabilityParameterResult>();
+            suitabilityResult.CapacityFactorKPrime = jObject[KPrimeKeyName]==null || jObject[KPrimeKeyName].Type == JTokenType.Null ? null : jObject[KPrimeKeyName].ToObject<SuitabilityParameterResult>();
+            suitabilityResult.TheoreticalPlatesN = jObject[PlatesDorseyFoleyKeyName]==null || jObject[PlatesDorseyFoleyKeyName].Type == JTokenType.Null ? null : jObject[PlatesDorseyFoleyKeyName].ToObject<SuitabilityParameterResult>();
+            suitabilityResult.TheoreticalPlatesNTan = jObject[PlatesTangentialKeyName]== null || jObject[PlatesTangentialKeyName].Type == JTokenType.Null ? null : jObject[PlatesTangentialKeyName].ToObject<SuitabilityParameterResult>();
+            suitabilityResult.TailingFactorSymmetry = jObject[TailingFactorKeyName]==null || jObject[TailingFactorKeyName].Type == JTokenType.Null ? null : jObject[TailingFactorKeyName].ToObject<SuitabilityParameterResult>();
+            suitabilityResult.Resolution = jObject[ResolutionKeyName] == null || jObject[ResolutionKeyName].Type == JTokenType.Null ? null : jObject[ResolutionKeyName].ToObject<SuitabilityParameterResult>();
+            suitabilityResult.PeakWidthAtBase = jObject[PeakWidthKeyName]==null ||  jObject[PeakWidthKeyName].Type == JTokenType.Null ? null : jObject[PeakWidthKeyName].ToObject<SuitabilityParameterResult>();
+            suitabilityResult.PeakWidthAt5Pct = jObject[PeakWidthAt5PercentHeightKeyName]== null || jObject[PeakWidthAt5PercentHeightKeyName].Type == JTokenType.Null ? null : jObject[PeakWidthAt5PercentHeightKeyName].ToObject<SuitabilityParameterResult>();
+            suitabilityResult.PeakWidthAt10Pct = jObject[PeakWidthAt10PercentHeightKeyName]== null || jObject[PeakWidthAt10PercentHeightKeyName].Type == JTokenType.Null ? null : jObject[PeakWidthAt10PercentHeightKeyName].ToObject<SuitabilityParameterResult>();
+            suitabilityResult.PeakWidthAt50Pct = jObject[PeakWidthAtHalfHeightKeyName]== null || jObject[PeakWidthAtHalfHeightKeyName].Type == JTokenType.Null ? null : jObject[PeakWidthAtHalfHeightKeyName].ToObject<SuitabilityParameterResult>();
+            suitabilityResult.RelativeRetention = jObject[RelativeRetTimeSuitKeyName]== null || jObject[RelativeRetTimeSuitKeyName].Type == JTokenType.Null ? null : jObject[RelativeRetTimeSuitKeyName].ToObject<SuitabilityParameterResult>();
+            suitabilityResult.SignalToNoise = jObject[SignalKeyName] == null || jObject[SignalKeyName].Type == JTokenType.Null ? null : jObject[SignalKeyName].ToObject<SuitabilityParameterResult>();
             if (version > Version1)
             {
                 suitabilityResult.RelativeRetentionTime = jObject[RelativeRetentionTimeKeyName].Type == JTokenType.Null ? null : jObject[RelativeRetentionTimeKeyName].ToObject<SuitabilityParameterResult>();

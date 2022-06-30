@@ -14,27 +14,33 @@ namespace PerkinElmer.Simplicity.Data.Version15.Contract.DomainEntities.JsonConv
 			{
 				var list = new List<T>();
 				var array = JArray.FromObject(jObject[propertyName]);
+                var converter = JsonConverterRegistry.GetConverter<T>();
 				if (typeof(T).IsInterface)
 				{
 					foreach (var jToken in array)
 					{
 						var jObj = (JObject)jToken;
-						var item = JsonConverterRegistry.GetConverter<T>().FromJson(jObj);
+						var item = converter.FromJson(jObj);
 						list.Add(item);
 					}
 
 					return list;
 				}
-				else
-				{
-					return array.ToObject<List<T>>();
+                if (converter != null)
+                {
+                    foreach (var jToken in array)
+                    {
+                        var jObj = (JObject)jToken;
+                        var item = converter.FromJson(jObj);
+                        list.Add(item);
+                    }
+                    return list;
 				}
-			}
-			else
-			{
-				return null;
-			}
-		}
+                return array.ToObject<List<T>>();
+            }
+
+            return null;
+        }
 
 		public static T[] GetArrayPropertyFromJson<T>(JObject jObject, string propertyName)
 		{
@@ -158,7 +164,12 @@ namespace PerkinElmer.Simplicity.Data.Version15.Contract.DomainEntities.JsonConv
 				}
 				else
 				{
-					jObject.Add(propertyName, new JArray(collection));
+                    var jArray = new JArray();
+                    foreach (var item in collection)
+                    {
+                        jArray.Add(JsonConverterRegistry.GetConverter<T>().ToJson(item));
+                    }
+					jObject.Add(propertyName, jArray);
 				}
 			}
 		}

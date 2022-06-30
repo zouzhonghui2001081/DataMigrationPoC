@@ -135,11 +135,11 @@ namespace PerkinElmer.Simplicity.Data.Version16.DataSources.Postgresql.Chromatog
                     ModifiableProcessingMethod = processingMethodModifiableDao.GetProcessingMethod(connection, batchRunAnalysisResult.ProcessingMethodModifiableId)
                 };
 
-                var calculatedChannelsData = new List<CalculatedChannelCompositeVersion16Data>();
+                var calculatedChannelsData = new List<CalculatedChannelCompositeData>();
                 var calculatedChannelDataListEntities = batchRunAnalysisResultDao.GetChannelDataByBatchRunAnalysisResultId(connection, batchRunAnalysisResult.Id);
                 foreach (var calculatedChannelDataListEntity in calculatedChannelDataListEntities)
                 {
-                    var calculatedChannelCompositeData = new CalculatedChannelCompositeVersion16Data
+                    var calculatedChannelCompositeData = new CalculatedChannelCompositeData
                     {
                         CalculatedChannelData = calculatedChannelDataListEntity,
                         SuitabilityResults = suitabilityResultDao.GetSuitabilityResult(connection, calculatedChannelDataListEntity.Id),

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography;
 using PerkinElmer.Simplicity.Data.Version15.Contract.DomainEntities.Implementation.Shared;
 using PerkinElmer.Simplicity.Data.Version15.Contract.DomainEntities.Interface.Acquisition;
 using PerkinElmer.Simplicity.Data.Version15.Contract.DomainEntities.Interface.LabManagement;
@@ -13,6 +14,8 @@ using PerkinElmer.Simplicity.Data.Version15.Contract.DomainEntities.JsonConverte
 using PerkinElmer.Simplicity.Data.Version15.Contract.DomainEntities.JsonConverter.Processing.CompoundLibrary;
 using PerkinElmer.Simplicity.Data.Version15.Contract.DomainEntities.JsonConverter.Reporting;
 using PerkinElmer.Simplicity.Data.Version15.Contract.DomainEntities.JsonConverter.Shared;
+using PerkinElmer.Simplicity.Data.Version15.Contract.DomainEntities.JsonConverter.Version;
+using PerkinElmer.Simplicity.Data.Version15.Contract.Version.Chromatography;
 using IDeviceMethod = PerkinElmer.Simplicity.Data.Version15.Contract.DomainEntities.Interface.Acquisition.IDeviceMethod;
 
 namespace PerkinElmer.Simplicity.Data.Version15.Contract.DomainEntities.JsonConverter
@@ -25,7 +28,7 @@ namespace PerkinElmer.Simplicity.Data.Version15.Contract.DomainEntities.JsonConv
             {typeof(IAcquisitionMethodInfo), new AcquisitionMethodInfoJsonConverter()},
             {typeof(IDeviceMethod), new DeviceMethodJsonConverter()},
             {typeof(IUserInfo), new UserInfoJsonConverter()},
-            {typeof(IBatchResultSet), new BatchResultSetJsonConverter()},
+            {typeof(IBatchResultSet), new Acquisition.BatchResultSetJsonConverter()},
             {typeof(IBatchResultSetInfo), new BatchResultSetInfoJsonConverter()},
             {typeof(IBatchRunWithRawData), new BatchRunWithRawDataJsonConverter()},
             {typeof(IStreamData), new StreamDataJsonConverter()},
@@ -91,7 +94,7 @@ namespace PerkinElmer.Simplicity.Data.Version15.Contract.DomainEntities.JsonConv
             {typeof(ISequenceInfo), new SequenceInfoJsonConverter()},
             {typeof(ICompoundLibrary), new CompoundLibraryJsonConverter()},
             {typeof(IAnalysisResultSetDescriptor), new AnalysisResultSetDescriptorJsonConvertor()},
-            {typeof(IAnalysisResultSet), new AnalysisResultSetJsonConverter()},
+            {typeof(IAnalysisResultSet), new Processing.AnalysisResultSetJsonConverter()},
             {typeof(IIdentificationParameters), new IdentificationParametersJsonConverter()},
             {typeof(IIntegrationEventError), new IntegrationEventErrorJsonConverter()},
             {typeof(IIntegrationEvent), new IntegrationEventJsonConverter()},
@@ -122,8 +125,8 @@ namespace PerkinElmer.Simplicity.Data.Version15.Contract.DomainEntities.JsonConv
             {typeof(IntValueWithDeviceName), new IntValueWithDeviceNameJsonConverter() },
             {typeof(DoubleValueWithDeviceName), new DoubleValueWithDeviceNameJsonConverter() },
             
-            {typeof(IDeviceDriverItemDetails), new DeviceDriverItemDetailsJsonConverter() },
-            {typeof(IBatchRun), new BatchRunJsonConverter() },
+            {typeof(IDeviceDriverItemDetails), new Acquisition.DeviceDriverItemDetailsJsonConverter() },
+            {typeof(IBatchRun), new Acquisition.BatchRunJsonConverter() },
 			{typeof(ISequence), new SequenceJsonConverter() },
             {typeof(Id), new IdJsonConverter() },
             {typeof(IDeviceModule), new DeviceModuleJsonConverter() },
@@ -132,7 +135,25 @@ namespace PerkinElmer.Simplicity.Data.Version15.Contract.DomainEntities.JsonConv
             {typeof(DeviceModuleCompleteId), new DeviceModuleCompleteIdJsonConverter() },
             {typeof(IInstrumentDetails), new InstrumentDetailsJsonConverter() },
             {typeof(IDictionary<Guid ,IDictionary<PharmacopeiaType, IDictionary<SuitabilityParameter, ISuitabilityParameterCriteria>>> ), new CompoundPharmacopeiaDefinitionsJsonConverter()},
-		};
+
+            {typeof(AnalysisResultSetData), new AnalysisResultSetDataJsonConverter() },
+            {typeof(BatchResultSetData), new BatchResultSetDataJsonConverter() },
+            {typeof(BatchRunAnalysisResultData), new BatchRunAnalysisResultDataJsonConverter() },
+            {typeof(BatchRunData), new BatchRunDataJsonConverter() },
+            {typeof(CalculatedChannelCompositeData), new CalculatedChannelCompositeDataJsonConverter() },
+            {typeof(CalculatedChannelData), new CalculatedChannelDataJsonConveter() },
+            {typeof(SnapshotCompoundLibraryData), new SnapshotCompoundLibraryDataJsonConverter() },
+            {typeof(SnapshotCompoundLibrary), new SnapshotCompoundLibraryJsonConverter() },
+            {typeof(BatchRunAnalysisResult), new BatchRunAnalysisResultJsonConverter() },
+            {typeof(BatchRun), new Version.BatchRunJsonConverter() },
+            {typeof(StreamDataBatchResult), new StreamDataBatchResultJsonConverter() },
+            {typeof(NamedContent), new NamedContentJsonConverter() },
+            {typeof(BatchResultSet), new Version.BatchResultSetJsonConverter() },
+            {typeof(AnalysisResultSet), new Version.AnalysisResultSetJsonConverter() },
+            {typeof(BatchRunChannelMap), new BatchRunChannelMapJsonConverter() },
+            {typeof(BatchResultDeviceModuleDetails), new BatchResultDeviceModuleDetailsJsonConverter() },
+            {typeof(DeviceDriverItemDetails), new Version.DeviceDriverItemDetailsJsonConverter() },
+        };
 
 		static JsonConverterRegistry()
 		{
@@ -140,7 +161,9 @@ namespace PerkinElmer.Simplicity.Data.Version15.Contract.DomainEntities.JsonConv
 
 		public static IJsonConverter<T> GetConverter<T>()
 		{
-			return (IJsonConverter<T>) JsonConverters[typeof(T)];
+            if(JsonConverters.ContainsKey(typeof(T)))
+			    return (IJsonConverter<T>) JsonConverters[typeof(T)];
+            return null;
 		}
 	}
 }

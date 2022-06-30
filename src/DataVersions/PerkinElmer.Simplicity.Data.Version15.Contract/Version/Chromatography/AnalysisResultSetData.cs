@@ -61,6 +61,7 @@ namespace PerkinElmer.Simplicity.Data.Version15.Contract.Version.Chromatography
 
         public IList<BatchRunAnalysisResultData> BatchRunAnalysisResults { get; set; }
 
+
         public IList<BatchRunChannelMap> BatchRunChannelMaps { get; set; }
 
         public IList<ManualOverrideMap> ManualOverrideMaps { get; set; }
