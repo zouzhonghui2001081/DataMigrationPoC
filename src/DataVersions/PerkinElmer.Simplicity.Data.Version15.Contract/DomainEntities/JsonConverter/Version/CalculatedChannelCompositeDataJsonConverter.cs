@@ -60,7 +60,7 @@ namespace PerkinElmer.Simplicity.Data.Version15.Contract.DomainEntities.JsonConv
             };
 
             var runPeakResultsDomain = JsonConverterHelper.GetListPropertyFromJson<IRunPeakResult>(jObject, RunPeakResultsKeyName);
-            var suitabilityResultsDomain = JsonConverterHelper.GetListPropertyFromJson<ISuitabilityResult>(jObject, RunPeakResultsKeyName);
+            var suitabilityResultsDomain = JsonConverterHelper.GetListPropertyFromJson<ISuitabilityResult>(jObject, SuitabilityResultsKeyName);
 
             var runPeakResultsEntities = new List<RunPeakResult>();
             var suitabilityResultsEntities = new List<SuitabilityResult>();

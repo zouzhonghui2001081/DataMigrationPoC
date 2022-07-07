@@ -24,6 +24,9 @@ namespace PerkinElmer.Simplicity.Data.Version15.Contract.DomainEntities.JsonConv
         public JObject ToJson(StreamDataBatchResult instance)
         {
             if (instance == null) return null;
+
+            string content = (instance.YData == null) ? null :
+                Encoding.ASCII.GetString(instance.YData, 0, instance.YData.Length);
             var jObject = new JObject
             {
                 {BatchRunIdKeyName, instance.BatchRunId},
@@ -31,7 +34,7 @@ namespace PerkinElmer.Simplicity.Data.Version15.Contract.DomainEntities.JsonConv
                 {StreamIndexKeyName, instance.StreamIndex},
                 {MetaDataKeyName, instance.MetaData},
                 {MetaDataTypeKeyName, instance.MetaDataType},
-                {YDataKeyName, instance.YData},
+                {YDataKeyName, content},
                 {DeviceIdKeyName, instance.DeviceId},
                 {LargeObjectOidKeyName, instance.LargeObjectOid},
                 {UseLargeObjectStreamKeyName, instance.UseLargeObjectStream},

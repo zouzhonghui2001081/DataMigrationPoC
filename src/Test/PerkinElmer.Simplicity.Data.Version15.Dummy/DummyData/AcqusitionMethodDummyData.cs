@@ -9,7 +9,6 @@ using PerkinElmer.Simplicity.Data.Version15.Contract.DomainEntities.JsonConverte
 using PerkinElmer.Simplicity.Data.Version15.DataTargets.Postgresql.Chromatography;
 using PerkinElmer.Simplicity.Data.Version15.Version.Context.TargetContext;
 
-
 namespace PerkinElmer.Simplicity.Data.Version15.Dummy.DummyData
 {
     internal class AcqusitionMethodDummyData
@@ -25,10 +24,10 @@ namespace PerkinElmer.Simplicity.Data.Version15.Dummy.DummyData
             using var connection = new NpgsqlConnection(postgresqlTargetContext.ChromatographyConnectionString);
             if (connection.State != ConnectionState.Open) connection.Open();
 
-            for (var i = 0; i < acqusitionMethodCount; i++)
+            for (var i = 1; i <= acqusitionMethodCount; i++)
             {
                 acquisitionMethod.Info.Guid = Guid.NewGuid();
-                acquisitionMethod.Info.Name = acqusitionMethodName + i + " " + Guid.NewGuid().ToString().Substring(0,8);
+                acquisitionMethod.Info.Name = acqusitionMethodName + i.ToString("0000") + " " + Guid.NewGuid().ToString().Substring(0,8);
                 var acqusitionMethodEntity = new AcquisitionMethod();
                 DomainContractAdaptor.PopulateAcquisitionMethodEntity(acquisitionMethod, acqusitionMethodEntity);
                 AcquisitionMethodTarget.CreateProjectAcquisitionMethod(connection, projectGuid, acqusitionMethodEntity);

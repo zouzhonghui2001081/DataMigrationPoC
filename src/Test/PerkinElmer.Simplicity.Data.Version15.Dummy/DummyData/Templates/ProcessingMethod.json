@@ -2,7 +2,7 @@
   "Version": 2,
   "Info": {
     "Version": 1,
-    "Guid": "3052e129-0442-4151-ae06-d228855ea81b",
+    "Guid": "61bc6718-b910-404b-b713-608fe875de5d",
     "Name": "Test Processing Method 01",
     "VersionNumber": 1,
     "ReviewApproveState": "\"NeverSubmitted\"",
@@ -11,8 +11,8 @@
       "UserId": null,
       "UserName": "SimplicityChrom User"
     },
-    "CreatedDateUtc": "2022-06-22T14:53:31.284706+08:00",
-    "ModifiedDateUtc": "2022-06-22T14:53:31.284706+08:00",
+    "CreatedDateUtc": "2022-07-07T11:01:49.217967+08:00",
+    "ModifiedDateUtc": "2022-07-07T11:01:49.217967+08:00",
     "ModifiedByUser": {
       "Version": 1,
       "UserId": null,
@@ -110,7 +110,22 @@
         },
         "PostProcessingChannelType": "\"None\""
       },
-      "ChannelGuid": "23eea044-3e4f-4126-9b8f-c5172d37cf12",
+      "ChannelIdentifier": {
+        "Version": 1,
+        "DeviceClass": "PDA",
+        "DeviceIndex": 0,
+        "ProcessingMethodDataChannelDescriptor": {
+          "Version": 1,
+          "DataChannelType": 6,
+          "DataChannelMetaData": {
+            "Version": 1,
+            "WavelengthInNanometers": 254.0,
+            "Programmed": false
+          }
+        },
+        "ProcessingMethodChannelIndex": 0
+      },
+      "ChannelGuid": "16edbfe5-ba70-4393-9960-a3b8d5736500",
       "SmoothParams": {
         "Version": 1,
         "Function": "\"None\"",
@@ -256,7 +271,20 @@
         },
         "PostProcessingChannelType": "\"None\""
       },
-      "ChannelGuid": "a922e22b-0022-4829-9129-5733c7a302f4",
+      "ChannelIdentifier": {
+        "Version": 1,
+        "DeviceClass": "PDA",
+        "DeviceIndex": 0,
+        "ProcessingMethodDataChannelDescriptor": {
+          "Version": 1,
+          "DataChannelType": 8,
+          "DataChannelMetaData": {
+            "Version": 1
+          }
+        },
+        "ProcessingMethodChannelIndex": 0
+      },
+      "ChannelGuid": "eb8b4063-21cb-428e-b5e0-ace8e20c96f6",
       "SmoothParams": {
         "Version": 1,
         "Function": "\"None\"",
@@ -357,7 +385,233 @@
       "TimedIntegrationParameters": []
     }
   ],
-  "Compounds": [],
+  "Compounds": [
+    {
+      "Version": 2,
+      "CompoundType": "\"SinglePeak\"",
+      "IdentificationParameters": {
+        "Version": 1,
+        "ExpectedRetentionTime": 1.44,
+        "RetentionTimeWindowAbsolute": 0.0,
+        "RetentionTimeWindowInPercents": 3.0,
+        "RetTimeWindowStart": 1.3968,
+        "RetTimeWindowEnd": 1.4831999999999999,
+        "IsRetTimeReferencePeak": false,
+        "RetTimeReferencePeakGuid": "00000000-0000-0000-0000-000000000000",
+        "RetentionIndex": 0,
+        "UseClosestPeak": true,
+        "Index": 0,
+        "IsIntStdReferencePeak": null,
+        "IntStdReferenceGuid": "00000000-0000-0000-0000-000000000000",
+        "IsRrtReferencePeak": false
+      },
+      "CalibrationParameters": {
+        "Version": 1,
+        "InternalStandard": false,
+        "ReferenceInternalStandardGuid": "00000000-0000-0000-0000-000000000000",
+        "InternalStandardAmount": 1.0,
+        "Purity": 100.0,
+        "QuantifyUsingArea": true,
+        "CalibrationType": "\"Linear\"",
+        "WeightingType": "\"None\"",
+        "Scaling": "\"None\"",
+        "OriginTreatment": "\"Ignore\"",
+        "CalibrationFactor": 1.0,
+        "ReferenceCompoundGuid": "00000000-0000-0000-0000-000000000000",
+        "LevelAmounts": "{\"1\":null}"
+      },
+      "Guid": "a67d65f4-e6c5-4116-bf4a-126cf9e6b33d",
+      "Name": "1",
+      "ChannelIndex": 0,
+      "ProcessingMethodChannelGuid": "16edbfe5-ba70-4393-9960-a3b8d5736500",
+      "UsedForSuitability": false
+    },
+    {
+      "Version": 2,
+      "CompoundType": "\"SinglePeak\"",
+      "IdentificationParameters": {
+        "Version": 1,
+        "ExpectedRetentionTime": 29.04,
+        "RetentionTimeWindowAbsolute": 0.0,
+        "RetentionTimeWindowInPercents": 3.0,
+        "RetTimeWindowStart": 28.168799999999997,
+        "RetTimeWindowEnd": 29.9112,
+        "IsRetTimeReferencePeak": false,
+        "RetTimeReferencePeakGuid": "00000000-0000-0000-0000-000000000000",
+        "RetentionIndex": 0,
+        "UseClosestPeak": true,
+        "Index": 0,
+        "IsIntStdReferencePeak": null,
+        "IntStdReferenceGuid": "00000000-0000-0000-0000-000000000000",
+        "IsRrtReferencePeak": false
+      },
+      "CalibrationParameters": {
+        "Version": 1,
+        "InternalStandard": false,
+        "ReferenceInternalStandardGuid": "00000000-0000-0000-0000-000000000000",
+        "InternalStandardAmount": 1.0,
+        "Purity": 100.0,
+        "QuantifyUsingArea": true,
+        "CalibrationType": "\"Linear\"",
+        "WeightingType": "\"None\"",
+        "Scaling": "\"None\"",
+        "OriginTreatment": "\"Ignore\"",
+        "CalibrationFactor": 1.0,
+        "ReferenceCompoundGuid": "00000000-0000-0000-0000-000000000000",
+        "LevelAmounts": "{\"1\":null}"
+      },
+      "Guid": "2f1560c4-a3bd-4c4b-8ab1-d8d33af0de6b",
+      "Name": "2",
+      "ChannelIndex": 0,
+      "ProcessingMethodChannelGuid": "16edbfe5-ba70-4393-9960-a3b8d5736500",
+      "UsedForSuitability": false
+    },
+    {
+      "Version": 2,
+      "CompoundType": "\"SinglePeak\"",
+      "IdentificationParameters": {
+        "Version": 1,
+        "ExpectedRetentionTime": 149.04,
+        "RetentionTimeWindowAbsolute": 0.0,
+        "RetentionTimeWindowInPercents": 3.0,
+        "RetTimeWindowStart": 144.56879999999998,
+        "RetTimeWindowEnd": 153.5112,
+        "IsRetTimeReferencePeak": false,
+        "RetTimeReferencePeakGuid": "00000000-0000-0000-0000-000000000000",
+        "RetentionIndex": 0,
+        "UseClosestPeak": true,
+        "Index": 0,
+        "IsIntStdReferencePeak": null,
+        "IntStdReferenceGuid": "00000000-0000-0000-0000-000000000000",
+        "IsRrtReferencePeak": false
+      },
+      "CalibrationParameters": {
+        "Version": 1,
+        "InternalStandard": false,
+        "ReferenceInternalStandardGuid": "00000000-0000-0000-0000-000000000000",
+        "InternalStandardAmount": 1.0,
+        "Purity": 100.0,
+        "QuantifyUsingArea": true,
+        "CalibrationType": "\"Linear\"",
+        "WeightingType": "\"None\"",
+        "Scaling": "\"None\"",
+        "OriginTreatment": "\"Ignore\"",
+        "CalibrationFactor": 1.0,
+        "ReferenceCompoundGuid": "00000000-0000-0000-0000-000000000000",
+        "LevelAmounts": "{\"1\":null}"
+      },
+      "Guid": "bfd31e81-d74c-47fc-8060-0b3c168be166",
+      "Name": "3",
+      "ChannelIndex": 0,
+      "ProcessingMethodChannelGuid": "16edbfe5-ba70-4393-9960-a3b8d5736500",
+      "UsedForSuitability": false
+    },
+    {
+      "Version": 2,
+      "CompoundType": "\"SinglePeak\"",
+      "IdentificationParameters": {
+        "Version": 1,
+        "ExpectedRetentionTime": 289.02,
+        "RetentionTimeWindowAbsolute": 0.0,
+        "RetentionTimeWindowInPercents": 3.0,
+        "RetTimeWindowStart": 280.3494,
+        "RetTimeWindowEnd": 297.69059999999996,
+        "IsRetTimeReferencePeak": false,
+        "RetTimeReferencePeakGuid": "00000000-0000-0000-0000-000000000000",
+        "RetentionIndex": 0,
+        "UseClosestPeak": true,
+        "Index": 0,
+        "IsIntStdReferencePeak": null,
+        "IntStdReferenceGuid": "00000000-0000-0000-0000-000000000000",
+        "IsRrtReferencePeak": false
+      },
+      "CalibrationParameters": {
+        "Version": 1,
+        "InternalStandard": false,
+        "ReferenceInternalStandardGuid": "00000000-0000-0000-0000-000000000000",
+        "InternalStandardAmount": 1.0,
+        "Purity": 100.0,
+        "QuantifyUsingArea": true,
+        "CalibrationType": "\"Linear\"",
+        "WeightingType": "\"None\"",
+        "Scaling": "\"None\"",
+        "OriginTreatment": "\"Ignore\"",
+        "CalibrationFactor": 1.0,
+        "ReferenceCompoundGuid": "00000000-0000-0000-0000-000000000000",
+        "LevelAmounts": "{\"1\":null}"
+      },
+      "Guid": "50891b9d-3c3e-418c-89e6-f5c356596474",
+      "Name": "4",
+      "ChannelIndex": 0,
+      "ProcessingMethodChannelGuid": "16edbfe5-ba70-4393-9960-a3b8d5736500",
+      "UsedForSuitability": false
+    }
+  ],
   "SpectrumMethods": [],
-  "CompoundCalibrationResultsMap": {}
+  "CompoundCalibrationResultsMap": {
+    "a67d65f4-e6c5-4116-bf4a-126cf9e6b33d": {
+      "CompoundGuid": "a67d65f4-e6c5-4116-bf4a-126cf9e6b33d",
+      "NotEnoughLevelsFoundError": true,
+      "InvalidAmountError": false,
+      "InvalidAmounts": [],
+      "RegressionEquation": {
+        "RegressionType": 0,
+        "Coefficients": [],
+        "RSquare": 0.0,
+        "RelativeStandardErrorValue": 0.0,
+        "RelativeStandardDeviationPercent": 0.0,
+        "CorrelationCoefficient": 0.0
+      },
+      "LevelResponses": {},
+      "ConfLimitTestResult": 0
+    },
+    "2f1560c4-a3bd-4c4b-8ab1-d8d33af0de6b": {
+      "CompoundGuid": "2f1560c4-a3bd-4c4b-8ab1-d8d33af0de6b",
+      "NotEnoughLevelsFoundError": true,
+      "InvalidAmountError": false,
+      "InvalidAmounts": [],
+      "RegressionEquation": {
+        "RegressionType": 0,
+        "Coefficients": [],
+        "RSquare": 0.0,
+        "RelativeStandardErrorValue": 0.0,
+        "RelativeStandardDeviationPercent": 0.0,
+        "CorrelationCoefficient": 0.0
+      },
+      "LevelResponses": {},
+      "ConfLimitTestResult": 0
+    },
+    "bfd31e81-d74c-47fc-8060-0b3c168be166": {
+      "CompoundGuid": "bfd31e81-d74c-47fc-8060-0b3c168be166",
+      "NotEnoughLevelsFoundError": true,
+      "InvalidAmountError": false,
+      "InvalidAmounts": [],
+      "RegressionEquation": {
+        "RegressionType": 0,
+        "Coefficients": [],
+        "RSquare": 0.0,
+        "RelativeStandardErrorValue": 0.0,
+        "RelativeStandardDeviationPercent": 0.0,
+        "CorrelationCoefficient": 0.0
+      },
+      "LevelResponses": {},
+      "ConfLimitTestResult": 0
+    },
+    "50891b9d-3c3e-418c-89e6-f5c356596474": {
+      "CompoundGuid": "50891b9d-3c3e-418c-89e6-f5c356596474",
+      "NotEnoughLevelsFoundError": true,
+      "InvalidAmountError": false,
+      "InvalidAmounts": [],
+      "RegressionEquation": {
+        "RegressionType": 0,
+        "Coefficients": [],
+        "RSquare": 0.0,
+        "RelativeStandardErrorValue": 0.0,
+        "RelativeStandardDeviationPercent": 0.0,
+        "CorrelationCoefficient": 0.0
+      },
+      "LevelResponses": {},
+      "ConfLimitTestResult": 0
+    }
+  }
 }

@@ -5,25 +5,27 @@ using System.Linq;
 using System.Reflection;
 using log4net;
 using Npgsql;
-using PerkinElmer.Simplicity.Data.Version15.DataAccess.Postgresql.Chromatography;
 using PerkinElmer.Simplicity.Data.Version15.Contract.Version.Chromatography;
+using PerkinElmer.Simplicity.Data.Version15.DataAccess.Postgresql.Chromatography;
 using PerkinElmer.Simplicity.Data.Version15.Version.Context.TargetContext;
 
 namespace PerkinElmer.Simplicity.Data.Version15.DataTargets.Postgresql.Chromatography
 {
-    internal class BatchResultSetTarget 
+    internal class BatchResultSetTarget
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         internal static void SaveBatchResultSet(BatchResultSetData batchResultSetData, PostgresqlTargetContext postgresqlTargetContext)
         {
-            using var connection = new NpgsqlConnection(postgresqlTargetContext.ChromatographyConnectionString);
-            if (connection.State != ConnectionState.Open) connection.Open();
-            CreateBatchResultSet(connection, batchResultSetData);
-            connection.Close();
+            using (var connection = new NpgsqlConnection(postgresqlTargetContext.ChromatographyConnectionString))
+            {
+                if (connection.State != ConnectionState.Open) connection.Open();
+                CreateBatchResultSet(connection, batchResultSetData);
+                connection.Close();
+            }
         }
-        
-        internal static void CreateBatchResultSet(IDbConnection connection,  BatchResultSetData batchResultSetData)
+
+        internal static void CreateBatchResultSet(IDbConnection connection, BatchResultSetData batchResultSetData)
         {
             var projectDao = new ProjectDao();
             var batchResultSetDao = new BatchResultSetDao();
@@ -34,80 +36,80 @@ namespace PerkinElmer.Simplicity.Data.Version15.DataTargets.Postgresql.Chromatog
             var deviceDriverItemDetailsDao = new DeviceDriverItemDetailsDao();
             var batchResultDeviceModuleDetailsDao = new BatchResultDeviceModuleDetailsDao();
 
-            var project = projectDao.GetProject(connection, batchResultSetData.ProjectGuid);
-            if (project == null) throw new ArgumentNullException(nameof(project));
 
-            if(batchResultSetDao.IsExists(connection, batchResultSetData.ProjectGuid, batchResultSetData.BatchResultSet.Guid))
-                return;
-
-            batchResultSetData.BatchResultSet.ProjectId = project.Id;
-
-            var batchResultSet = batchResultSetDao.CreateBatchResultSet(connection, batchResultSetData.BatchResultSet);
-            var batchResultSetId = batchResultSet.Id;
-
-            foreach (var deviceModuleDetail in batchResultSetData.DeviceModuleDetails)
-                deviceModuleDetail.BatchResultSetId = batchResultSetId;
-            batchResultDeviceModuleDetailsDao.Create(connection, batchResultSetData.DeviceModuleDetails.ToArray());
-
-            foreach (var deviceDriverItemDetail in batchResultSetData.DeviceDriverItemDetails)
-                deviceDriverItemDetail.BatchResultSetId = batchResultSetId;
-            deviceDriverItemDetailsDao.Create(connection, batchResultSetData.DeviceDriverItemDetails.ToArray());
-
-            var acquisitionMethods = new List<(Guid acquisistionMethodGuid, long id)>();
-            var processingMethods = new List<(Guid processingMethodGuid, long id)>();
-
-            foreach (var batchRunData in batchResultSetData.BatchRuns)
+            using (var transaction = connection.BeginTransaction())
             {
-                batchRunData.BatchRun.BatchResultSetId = batchResultSetId;
+                var project = projectDao.GetProject(connection, batchResultSetData.ProjectGuid);
+                if (project == null) throw new ArgumentNullException(nameof(project));
+                batchResultSetData.BatchResultSet.ProjectId = project.Id;
 
-                //Sequence Sample Info
-                if (batchRunData.SequenceSampleInfoBatchResult != null)
+                if (batchResultSetDao.IsExists(connection, batchResultSetData.ProjectGuid, batchResultSetData.BatchResultSet.Guid))
+                    return;
+
+                var batchResultSet = batchResultSetDao.CreateBatchResultSet(connection, batchResultSetData.BatchResultSet);
+                var batchResultSetId = batchResultSet.Id;
+
+                foreach (var deviceModuleDetail in batchResultSetData.DeviceModuleDetails)
+                    deviceModuleDetail.BatchResultSetId = batchResultSetId;
+                batchResultDeviceModuleDetailsDao.Create(connection, batchResultSetData.DeviceModuleDetails.ToArray());
+
+                foreach (var deviceDriverItemDetail in batchResultSetData.DeviceDriverItemDetails)
+                    deviceDriverItemDetail.BatchResultSetId = batchResultSetId;
+                deviceDriverItemDetailsDao.Create(connection, batchResultSetData.DeviceDriverItemDetails.ToArray());
+
+                var acquisitionMethods = new List<(Guid acquisistionMethodGuid, long id)>();
+                var processingMethods = new List<(Guid processingMethodGuid, long id)>();
+
+                foreach (var batchRunData in batchResultSetData.BatchRuns)
                 {
-                    batchRunData.SequenceSampleInfoBatchResult.BatchResultSetId = batchResultSetId;
-                    sequenceSampleInfoBatchResultDao.CreateSequenceSampleInfo(connection, batchRunData.SequenceSampleInfoBatchResult);
-                    batchRunData.BatchRun.SequenceSampleInfoBatchResultId = batchRunData.SequenceSampleInfoBatchResult.Id;
-                }
+                    batchRunData.BatchRun.BatchResultSetId = batchResultSetId;
 
-                //Acquisition Method
-                var acquisitionMethod = batchRunData.AcquisitionMethod;
-                if (acquisitionMethods.Exists(a => a.acquisistionMethodGuid == acquisitionMethod.Guid))
-                {
-                    var acquisitionMethodValues =
-                        acquisitionMethods.Find(a => a.acquisistionMethodGuid == acquisitionMethod.Guid);
-                    batchRunData.BatchRun.AcquisitionMethodBatchResultId = acquisitionMethodValues.id;
-                }
-                else
-                {
-                   var acquisitionMethodId = AcquisitionMethodTarget.CreateAcquisitionMethod(connection, batchResultSet.Id, acquisitionMethod);
-                   batchRunData.BatchRun.AcquisitionMethodBatchResultId = acquisitionMethodId;
-                   acquisitionMethods.Add((acquisitionMethod.Guid, acquisitionMethodId));
-                }
+                    //Sequence Sample Info
+                    if (batchRunData.SequenceSampleInfoBatchResult != null)
+                    {
+                        batchRunData.SequenceSampleInfoBatchResult.BatchResultSetId = batchResultSetId;
+                        sequenceSampleInfoBatchResultDao.CreateSequenceSampleInfo(connection, batchRunData.SequenceSampleInfoBatchResult);
+                        batchRunData.BatchRun.SequenceSampleInfoBatchResultId = batchRunData.SequenceSampleInfoBatchResult.Id;
+                    }
 
-                //Processing Method
-                var processingMethod = batchRunData.ProcessingMethod;
-                if (processingMethods.Exists(p => p.processingMethodGuid == processingMethod.Guid))
-                {
-                    var processingMethodIdPair = processingMethods.Find(p => p.processingMethodGuid == processingMethod.Guid);
-                    batchRunData.BatchRun.ProcessingMethodBatchResultId = processingMethodIdPair.id;
-                }
-                else
-                {
-                    var processingMethodId = ProcessingMethodTarget.CreateProcessingMethod(connection, batchResultSetId, processingMethod);
-                    batchRunData.BatchRun.ProcessingMethodBatchResultId = processingMethodId;
-                    processingMethods.Add((processingMethod.Guid, processingMethodId));
-                }
+                    //Acquisition Method
+                    var acquisitionMethod = batchRunData.AcquisitionMethod;
+                    if (acquisitionMethods.Exists(a => a.acquisistionMethodGuid == acquisitionMethod.Guid))
+                    {
+                        var acquisitionMethodValues =
+                            acquisitionMethods.Find(a => a.acquisistionMethodGuid == acquisitionMethod.Guid);
+                        batchRunData.BatchRun.AcquisitionMethodBatchResultId = acquisitionMethodValues.id;
+                    }
+                    else
+                    {
+                        var acquisitionMethodId = AcquisitionMethodTarget.CreateAcquisitionMethod(connection, batchResultSet.Id, acquisitionMethod);
+                        batchRunData.BatchRun.AcquisitionMethodBatchResultId = acquisitionMethodId;
+                        acquisitionMethods.Add((acquisitionMethod.Guid, acquisitionMethodId));
+                    }
+
+                    //Processing Method
+                    var processingMethod = batchRunData.ProcessingMethod;
+                    if (processingMethods.Exists(p => p.processingMethodGuid == processingMethod.Guid))
+                    {
+                        var processingMethodIdPair = processingMethods.Find(p => p.processingMethodGuid == processingMethod.Guid);
+                        batchRunData.BatchRun.ProcessingMethodBatchResultId = processingMethodIdPair.id;
+                    }
+                    else
+                    {
+                        var processingMethodId = ProcessingMethodTarget.CreateProcessingMethod(connection, batchResultSetId, processingMethod);
+                        batchRunData.BatchRun.ProcessingMethodBatchResultId = processingMethodId;
+                        processingMethods.Add((processingMethod.Guid, processingMethodId));
+                    }
 
 
-                batchRunDao.Create(connection, batchRunData.BatchRun);
+                    batchRunDao.Create(connection, batchRunData.BatchRun);
 
-                //Name Content
-                foreach (var namedContent in batchRunData.NamedContents)
-                    namedContent.BatchRunId = batchRunData.BatchRun.Id;
-                namedContentDao.Create(connection, batchRunData.NamedContents.ToArray());
+                    //Name Content
+                    foreach (var namedContent in batchRunData.NamedContents)
+                        namedContent.BatchRunId = batchRunData.BatchRun.Id;
+                    namedContentDao.Create(connection, batchRunData.NamedContents.ToArray());
 
-                //Stream Data Batch Result
-                using (var _ = connection.BeginTransaction())
-                {
+                    //Stream Data Batch Result
                     var manager = new NpgsqlLargeObjectManager((NpgsqlConnection)connection);
                     foreach (var streamDataBatchResult in batchRunData.StreamDataBatchResults)
                     {
@@ -123,8 +125,10 @@ namespace PerkinElmer.Simplicity.Data.Version15.DataTargets.Postgresql.Chromatog
                         }
                         streamDataBatchResultDao.InsertStreamData(connection, streamDataBatchResult);
                     }
+
                 }
-                
+
+                transaction.Commit();
             }
         }
     }

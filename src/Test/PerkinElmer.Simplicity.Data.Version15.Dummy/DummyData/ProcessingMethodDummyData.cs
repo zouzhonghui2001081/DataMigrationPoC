@@ -20,14 +20,14 @@ namespace PerkinElmer.Simplicity.Data.Version15.Dummy.DummyData
         {
             var processingMethodJson = GetProcessingMethodTemplate();
             var processingMethod = JsonConverter.FromJson<IProcessingMethod>(processingMethodJson);
-            var processingMethodName = "Dummy Acqusition Method ";
+            var processingMethodName = "Dummy Processing Method ";
             using var connection = new NpgsqlConnection(postgresqlTargetContext.ChromatographyConnectionString);
             if (connection.State != ConnectionState.Open) connection.Open();
 
-            for (var i = 0; i < processingMethodCount; i++)
+            for (var i = 1; i <= processingMethodCount; i++)
             {
                 processingMethod.Info.Guid = Guid.NewGuid();
-                processingMethod.Info.Name = processingMethodName + i +" "+ Guid.NewGuid().ToString().Substring(0,8);
+                processingMethod.Info.Name = processingMethodName + i.ToString("0000") + " " + Guid.NewGuid().ToString().Substring(0, 8);
                 var processingMethodEntity = new ProcessingMethod();
                 DomainContractAdaptor.PopulateProcessingMethodEntity(processingMethod, processingMethodEntity);
                 ProcessingMethodTarget.CreateProcessingMethod(connection, projectGuid, processingMethodEntity);

@@ -390,6 +390,7 @@
             },
             "PostProcessingChannelType": "\"None\""
           },
+          "ChannelIdentifier": null,
           "ChannelGuid": "23eea044-3e4f-4126-9b8f-c5172d37cf12",
           "SmoothParams": {
             "Version": 1,
@@ -536,6 +537,7 @@
             },
             "PostProcessingChannelType": "\"None\""
           },
+          "ChannelIdentifier": null,
           "ChannelGuid": "a922e22b-0022-4829-9129-5733c7a302f4",
           "SmoothParams": {
             "Version": 1,

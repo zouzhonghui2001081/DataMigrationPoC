@@ -6,6 +6,8 @@ using PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography
 using PerkinElmer.Simplicity.Data.Version15.Contract.DomainEntities;
 using PerkinElmer.Simplicity.Data.Version15.Contract.DomainEntities.Interface.LabManagement;
 using PerkinElmer.Simplicity.Data.Version15.Contract.DomainEntities.JsonConverter;
+using PerkinElmer.Simplicity.Data.Version15.Contract.Version.Chromatography;
+using PerkinElmer.Simplicity.Data.Version15.DataTargets.Postgresql.Chromatography;
 using PerkinElmer.Simplicity.Data.Version15.Version.Context.TargetContext;
 
 namespace PerkinElmer.Simplicity.Data.Version15.Dummy.DummyData
@@ -25,6 +27,8 @@ namespace PerkinElmer.Simplicity.Data.Version15.Dummy.DummyData
 
             var projectEntity = new Project();
             DomainContractAdaptor.PopulateProjectEntity(projectInfo, projectEntity);
+            var projectData = new ProjectData {Project = projectEntity};
+            ProjectTarget.SaveProject(projectData, postgresqlTargetContext);
             return projectEntity;
         }
 

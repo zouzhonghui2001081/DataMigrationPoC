@@ -58,10 +58,10 @@ namespace PerkinElmer.Simplicity.Data.Version15.Dummy.DummyData
             using var connection = new NpgsqlConnection(postgresqlTargetContext.ChromatographyConnectionString);
             if (connection.State != ConnectionState.Open) connection.Open();
 
-            for (var i = 0; i < reportTemplateCount; i++)
+            for (var i = 1; i <= reportTemplateCount; i++)
             {
                 reportTemplateDomain.Id = Guid.NewGuid();
-                reportTemplateDomain.Name = reportTemplateName + i+ " " + Guid.NewGuid().ToString().Substring(0, 8);
+                reportTemplateDomain.Name = reportTemplateName + i.ToString("0000") + " " + Guid.NewGuid().ToString().Substring(0, 8);
                 var reportTemplateEntity = new ReportTemplate();
                 DomainContractAdaptor.PopulateReportTemplateEntity(reportTemplateDomain, reportTemplateEntity);
                 var reportTemplateData = new ReportTemplateData

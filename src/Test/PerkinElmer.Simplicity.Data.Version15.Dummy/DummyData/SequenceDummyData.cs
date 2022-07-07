@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
@@ -12,6 +11,7 @@ using PerkinElmer.Simplicity.Data.Version15.Contract.DomainEntities.Interface.Ac
 using PerkinElmer.Simplicity.Data.Version15.Contract.DomainEntities.JsonConverter;
 using PerkinElmer.Simplicity.Data.Version15.Contract.Version.Chromatography;
 using PerkinElmer.Simplicity.Data.Version15.DataTargets.Postgresql.Chromatography;
+using PerkinElmer.Simplicity.Data.Version15.Dummy.DummyData.Extensions;
 using PerkinElmer.Simplicity.Data.Version15.Version.Context.TargetContext;
 
 namespace PerkinElmer.Simplicity.Data.Version15.Dummy.DummyData
@@ -21,7 +21,7 @@ namespace PerkinElmer.Simplicity.Data.Version15.Dummy.DummyData
         private const string SequenceTemplate = "PerkinElmer.Simplicity.Data.Version15.Dummy.DummyData.Templates.Sequence.json";
 
         public void CreateDummySequence(PostgresqlTargetContext postgresqlTargetContext, Guid projectGuid,
-            int sequenceCount)
+            int sequenceCount, int sampleCount)
         {
             var sequenceJson = GetSequenceTemplate();
             var sequence = JsonConverter.FromJson<ISequence>(sequenceJson);
@@ -31,7 +31,11 @@ namespace PerkinElmer.Simplicity.Data.Version15.Dummy.DummyData
 
             var sequenceInfoEntity = new Sequence();
             PopulateSequenceEntity(sequenceInfoEntity, sequence);
-           
+
+            if (sequenceInfoEntity.SequenceSampleInfos.Count == 0) throw new ArgumentException("Sequence sample should not empty!");
+            var sequenceSampleTemplate = sequenceInfoEntity.SequenceSampleInfos[0];
+
+
             foreach (var acquisitionMethod in sequence.ExternalBaselineRunsAcquisitionMethods)
             {
                 var acqusitionMethodEntity = new AcquisitionMethod();
@@ -46,13 +50,19 @@ namespace PerkinElmer.Simplicity.Data.Version15.Dummy.DummyData
                 ProcessingMethodTarget.CreateProcessingMethod(connection, projectGuid, processingMethodEntity);
             }
 
-            var dummySequenceName = "Dummy Acqusition Method ";
-            for (var i = 0; i < sequenceCount; i++)
+            var dummySequenceName = "Dummy Sequence ";
+            for (var i = 1; i <= sequenceCount; i++)
             {
                 sequenceInfoEntity.Guid = Guid.NewGuid();
-                sequenceInfoEntity.Name = dummySequenceName + i +" " + Guid.NewGuid().ToString().Substring(0, 8);
-                foreach (var sequenceSampeInfo in sequenceInfoEntity.SequenceSampleInfos)
-                    sequenceSampeInfo.Guid = Guid.NewGuid();
+                sequenceInfoEntity.Name = dummySequenceName + i + " " + Guid.NewGuid().ToString().Substring(0, 8);
+                sequenceInfoEntity.SequenceSampleInfos.Clear();
+                for (var j = 1; j <= sampleCount; j++)
+                {
+                    var sequenceSample = sequenceSampleTemplate.Copy();
+                    sequenceSample.Guid = Guid.NewGuid();
+                    sequenceSample.SampleName = "DummySample" + i.ToString("0000");
+                    sequenceInfoEntity.SequenceSampleInfos.Add(sequenceSample);
+                }
 
                 var sequenceData = new SequenceData
                 {

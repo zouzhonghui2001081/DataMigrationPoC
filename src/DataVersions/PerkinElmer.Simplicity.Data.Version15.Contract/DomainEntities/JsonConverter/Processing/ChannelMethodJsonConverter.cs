@@ -14,6 +14,7 @@ namespace PerkinElmer.Simplicity.Data.Version15.Contract.DomainEntities.JsonConv
         private const string VersionKeyName = "Version";
         private const string ChannelIndexKeyName = "ChannelIndex";
         private const string ChannelDescriptorKeyName = "ChannelDescriptor";
+        private const string ChannelIdentifierKeyName = "ChannelIdentifier";
         private const string ChannelGuidKeyName = "ChannelGuid";
         private const string SmoothParamsKeyName = "SmoothParams";
         private const string IsPdaMethodKeyName = "IsPdaMethod";
@@ -45,6 +46,7 @@ namespace PerkinElmer.Simplicity.Data.Version15.Contract.DomainEntities.JsonConv
                 {VersionKeyName, new JValue(CurrentVersion)},
                 {ChannelIndexKeyName, new JValue(instance.ChannelIndex)},
                 {ChannelDescriptorKeyName, JsonConverterRegistry.GetConverter<IChromatographicChannelDescriptor>().ToJson(instance.ChannelDescriptor)},
+                {ChannelIdentifierKeyName, JsonConverterRegistry.GetConverter<IProcessingMethodChannelIdentifier>().ToJson(instance.ChannelIdentifier)},
                 {ChannelGuidKeyName, new JValue(instance.ChannelGuid)},
                 {SmoothParamsKeyName, JsonConverterRegistry.GetConverter<ISmoothParameters>().ToJson(instance.SmoothParams)},
                 {IsPdaMethodKeyName,  new JValue(instance.IsPdaMethod)},
@@ -83,6 +85,8 @@ namespace PerkinElmer.Simplicity.Data.Version15.Contract.DomainEntities.JsonConv
             channelMethod.ChannelIndex = (int) jObject[ChannelIndexKeyName];
             channelMethod.ChannelDescriptor = jObject[ChannelDescriptorKeyName].Type== JTokenType.Null ?
                 null : JsonConverterRegistry.GetConverter<IChromatographicChannelDescriptor>().FromJson((JObject) jObject[ChannelDescriptorKeyName]);
+            channelMethod.ChannelIdentifier = jObject[ChannelIdentifierKeyName].Type == JTokenType.Null ?
+                null : JsonConverterRegistry.GetConverter<IProcessingMethodChannelIdentifier>().FromJson((JObject)jObject[ChannelIdentifierKeyName]);
             channelMethod.ChannelGuid = (Guid)jObject[ChannelGuidKeyName];
             channelMethod.SmoothParams = jObject[SmoothParamsKeyName].Type == JTokenType.Null ? 
                 null : JsonConverterRegistry.GetConverter<ISmoothParameters>().FromJson((JObject)jObject[SmoothParamsKeyName]);

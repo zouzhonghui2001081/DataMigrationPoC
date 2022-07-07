@@ -36,9 +36,6 @@ namespace PerkinElmer.Simplicity.Data.Version15.DataTargets.Postgresql.Chromatog
 
             var project = projectDao.GetProject(connection, analysisResultSetData.ProjectGuid);
             if (project == null) throw new ArgumentNullException(nameof(project));
-            if(analysisResultSetDao.IsExists(connection, project.Guid, analysisResultSetData.AnalysisResultSet.Name))
-                return;
-            
 
             //Analysis result set
             var analysisResultSet = analysisResultSetData.AnalysisResultSet;
@@ -49,7 +46,6 @@ namespace PerkinElmer.Simplicity.Data.Version15.DataTargets.Postgresql.Chromatog
             foreach (var batchResultSet in analysisResultSetData.BatchResultSetData)
                 BatchResultSetTarget.CreateBatchResultSet(connection, batchResultSet);
                 
-
             //Batch run channel maps
             foreach (var batchRunChannelMap in analysisResultSetData.BatchRunChannelMaps)
             {
@@ -65,8 +61,7 @@ namespace PerkinElmer.Simplicity.Data.Version15.DataTargets.Postgresql.Chromatog
             }
 
             //Branch channels with exceeded number of peaks
-            foreach (var brChannelsWithExceededNumberOfPeaks in analysisResultSetData
-                .BrChannelsWithExceededNumberOfPeaks)
+            foreach (var brChannelsWithExceededNumberOfPeaks in analysisResultSetData.BrChannelsWithExceededNumberOfPeaks)
                 brChannelsWithExceededNumberOfPeaks.AnalysisResultSetId = analysisResultSet.Id;
             brChannelsWithExceededNumberOfPeaksDao.Create(connection,
                 analysisResultSetData.BrChannelsWithExceededNumberOfPeaks);
@@ -101,8 +96,8 @@ namespace PerkinElmer.Simplicity.Data.Version15.DataTargets.Postgresql.Chromatog
                 //Sequence
                 var sequenceSampleInfoModifiable = batchRunAnalysisResultData.SequenceSampleInfoModifiable;
                 sequenceSampleInfoModifiable.AnalysisResultSetId = analysisResultSetId;
-                sequenceSampleInfoModifiableDao.SaveSequenceSampleInfoModifiable(connection,
-                    batchRunAnalysisResultData.SequenceSampleInfoModifiable);
+                sequenceSampleInfoModifiable.Id = sequenceSampleInfoModifiableDao.SaveSequenceSampleInfoModifiable(connection,
+                    sequenceSampleInfoModifiable);
                 batchRunAnalysisResult.SequenceSampleInfoModifiableId = sequenceSampleInfoModifiable.Id;
 
                 //Processing method
@@ -121,6 +116,7 @@ namespace PerkinElmer.Simplicity.Data.Version15.DataTargets.Postgresql.Chromatog
 
                 //Batch run analysis results
                 batchRunAnalysisResult.AnalysisResultSetId = analysisResultSetId;
+                batchRunAnalysisResult.SequenceSampleInfoModifiableId = sequenceSampleInfoModifiable.Id;
                 batchRunAnalysisResult.Id =
                     batchRunAnalysisResultDao.SaveBatchRunAnalysisResult(connection, projectGuid,
                         batchRunAnalysisResult);
