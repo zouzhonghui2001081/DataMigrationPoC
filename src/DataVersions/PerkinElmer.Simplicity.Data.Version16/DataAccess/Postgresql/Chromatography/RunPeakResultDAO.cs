@@ -372,6 +372,19 @@ namespace PerkinElmer.Simplicity.Data.Version16.DataAccess.Postgresql.Chromatogr
             }
         }
 
+        public void SaveRunPeakResults(IDbConnection connection, IList<RunPeakResult> runPeakResults)
+        {
+            try
+            {
+                connection.Execute(InsertSql, runPeakResults);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error in SaveRunPeakResults method", ex);
+                throw;
+            }
+		}
+
         public void SaveRunPeakResult(IDbConnection connection, IList<RunPeakResult> runPeakResultEntities)
         {
 	        try

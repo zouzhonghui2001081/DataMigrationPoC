@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
@@ -50,13 +52,13 @@ namespace PerkinElmer.Simplicity.Data.Version15
             {
                 case MigrationTypes.Upgrade:
                     var postgresqlSourceContext = JsonConvert.DeserializeObject<PostgresqlSourceContext>(payload);
+                    Version15Host.CreateChromatographyDatabaseIndex(postgresqlSourceContext.ChromatographyConnectionString);
                     UpgradePostgresql(postgresqlSourceContext);
                     break;
             }
 
             _sourceData.Complete();
         }
-
 
         public void PrepareTarget(string targetConfig)
         {
@@ -154,16 +156,36 @@ namespace PerkinElmer.Simplicity.Data.Version15
                 if (!(project is ProjectData projectData)) continue;
                 
                 var projectGuid = projectData.Project.Guid;
+                var projectId = projectData.Project.Id;
 
-                Task.Run(async () => { await _sourceData.SendAsync(projectData); });
+                _sourceData.SendAsync(projectData);
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+                Thread.Sleep(15000);
 
                 var acqusitionMethods = AcquisitionMethodSource.GetAcqusitionMethods(projectGuid, posgresqlSourceContext);
                 foreach (var acqusitionMethod in acqusitionMethods)
                     _sourceData.Post(acqusitionMethod);
 
-                var analysisResultSets = AnalysisResultSetSource.GetAnalysisResultSets(projectGuid, posgresqlSourceContext);
-                foreach (var analysisResultSet in analysisResultSets)
-                    Task.Run(async () => { await _sourceData.SendAsync(analysisResultSet); });
+                var analysisResultGuids = AnalysisResultSetSource.GetAnalysisResultSetGuids(projectId, posgresqlSourceContext);
+                foreach (var analysisResultGuid in analysisResultGuids)
+                {
+                    var stopWatch = new Stopwatch();
+                    stopWatch.Start();
+                    var analysisResultSets = AnalysisResultSetSource.GetAnalysisResultSets(projectGuid,
+                        new List<Guid> { analysisResultGuid }, posgresqlSourceContext);
+                    stopWatch.Stop();
+                    var cost = stopWatch.ElapsedMilliseconds;
+                    foreach (var analysisResultSet in analysisResultSets)
+                        Task.Run(async () => { await _sourceData.SendAsync(analysisResultSet); });
+                }
+                //Parallel.ForEach(analysisResultGuids, new ParallelOptions { MaxDegreeOfParallelism = 1 }, analysisResultGuid =>
+                //{
+                //    var analysisResultSets = AnalysisResultSetSource.GetAnalysisResultSets(projectGuid,
+                //        new List<Guid> { analysisResultGuid }, posgresqlSourceContext);
+                //    foreach (var analysisResultSet in analysisResultSets)
+                //        Task.Run(async () => { await _sourceData.SendAsync(analysisResultSet); });
+                //});
 
                 var compoundLibraries = CompoundLibrarySource.GetCompoundLibrary(projectGuid, posgresqlSourceContext);
                 foreach (var compoundLibrary in compoundLibraries)

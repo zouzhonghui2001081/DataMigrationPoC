@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Reflection;
+using System.Threading.Tasks;
 using log4net;
 using Npgsql;
 using PerkinElmer.Simplicity.Data.Version15.DataAccess.Postgresql.Chromatography;
 using PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography;
+using PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.AcquisitionMethod;
+using PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.ProcessingMethod;
 using PerkinElmer.Simplicity.Data.Version15.Contract.Version;
 using PerkinElmer.Simplicity.Data.Version15.Contract.Version.Chromatography;
 using PerkinElmer.Simplicity.Data.Version15.Version.Context.SourceContext;
@@ -63,8 +67,9 @@ namespace PerkinElmer.Simplicity.Data.Version15.DataSources.Postgresql.Chromatog
             var streamDataBatchResultDao = new StreamDataBatchResultDao();
             var batchResultDeviceModuleDetailsDao = new BatchResultDeviceModuleDetailsDao();
             var deviceDriverItemDetailsDao = new DeviceDriverItemDetailsDao();
-
             var batchResultSetData = new BatchResultSetData { ProjectGuid = projectId, BatchResultSet = batchResultSet };
+            var acqusitionMethodCache = new Dictionary<long, AcquisitionMethod>();
+            var processingMethodCache = new Dictionary<long, ProcessingMethod>();
 
             var batchRuns = batchRunDao.GetBatchRunsByBatchResultSetIdAndSequenceSampleInfoBatchResultId(connection, batchResultSet.Id);
 
@@ -73,12 +78,19 @@ namespace PerkinElmer.Simplicity.Data.Version15.DataSources.Postgresql.Chromatog
                 var batchRunData = new BatchRunData
                 {
                     BatchRun = batchRun,
-                    AcquisitionMethod = AcquisitionMethodSource.GetAcqusitionMethod(connection, batchRun.AcquisitionMethodBatchResultId),
                     SequenceSampleInfoBatchResult = sequenceSampleInfoDao.GetSequenceSampleInfoBatchResultById(connection, batchRun.SequenceSampleInfoBatchResultId),
-                    ProcessingMethod = processingMethodBatchResultDao.GetProcessingMethodById(connection, batchRun.ProcessingMethodBatchResultId),
                     NamedContents = namedContentDao.Get(connection, batchRun.Id),
                     StreamDataBatchResults = streamDataBatchResultDao.GetStreamInfo(connection, batchRun.Guid)
                 };
+
+                if (!acqusitionMethodCache.ContainsKey(batchRun.AcquisitionMethodBatchResultId))
+                    acqusitionMethodCache[batchRun.AcquisitionMethodBatchResultId] = AcquisitionMethodSource.GetAcqusitionMethod(connection, batchRun.AcquisitionMethodBatchResultId);
+                batchRunData.AcquisitionMethod = acqusitionMethodCache[batchRun.AcquisitionMethodBatchResultId];
+
+                if (!processingMethodCache.ContainsKey(batchRun.ProcessingMethodBatchResultId))
+                    processingMethodCache[batchRun.ProcessingMethodBatchResultId] = processingMethodBatchResultDao.GetProcessingMethodById(connection, batchRun.ProcessingMethodBatchResultId);
+                batchRunData.ProcessingMethod = processingMethodCache[batchRun.ProcessingMethodBatchResultId];
+
                 using (var _ = connection.BeginTransaction())
                 {
                     foreach (var streamDataBatchResult in batchRunData.StreamDataBatchResults)
@@ -87,12 +99,11 @@ namespace PerkinElmer.Simplicity.Data.Version15.DataSources.Postgresql.Chromatog
                         streamDataBatchResult.YData = valuesStreamData.data;
                     }
                 }
+                
                 batchResultSetData.BatchRuns.Add(batchRunData);
             }
-
             batchResultSetData.DeviceModuleDetails = batchResultDeviceModuleDetailsDao.GetDeviceModules(connection, batchResultSet.Id);
             batchResultSetData.DeviceDriverItemDetails = deviceDriverItemDetailsDao.Get(connection, batchResultSet.Id);
-
             return batchResultSetData;
         }
     }

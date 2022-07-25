@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
@@ -112,8 +113,13 @@ namespace PerkinElmer.Simplicity.DataTransform.V15ToV16
                     if (!(input is AcqusitionMethodData15 acqusitionMethodData)) return null;
                     return AcquisitionMethodDataTransform.Transform(acqusitionMethodData);
                 case Version15DataTypes.AnalysisResultSet:
+                    var stopWatch = new Stopwatch();
+                    stopWatch.Start();
                     if (!(input is AnalysisResultSetData15 analysisResultSetData)) return null;
-                    return AnalysisResultSetDataTransform.Transform(analysisResultSetData);
+                    var verisionData =  AnalysisResultSetDataTransform.Transform(analysisResultSetData);
+                    stopWatch.Stop();
+                    var cost = stopWatch.ElapsedMilliseconds;
+                    return verisionData;
                 case Version15DataTypes.BatchResultSet:
                     if (!(input is BatchResultSetData15 batchResultSetData)) return null;
                     return BatchResultSetDataTransform.Transform(batchResultSetData);

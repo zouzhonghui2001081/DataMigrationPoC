@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Reflection;
 using log4net;
 using Npgsql;
@@ -81,10 +82,10 @@ namespace PerkinElmer.Simplicity.Data.Version15.DataSources.Postgresql.Chromatog
         {
             var acquisitionMethodDao = new AcquisitionMethodDao();
             var acquisitionMethod = acquisitionMethodDao.GetAcquisitionMethodInfoByAcquisitionMethodId(connection, acquisitionMethodId);
+
             if (acquisitionMethod != null)
-            {
                 acquisitionMethod.DeviceMethods = GetAcquisitionMethodChildren(connection, acquisitionMethodId);
-            }
+
             return acquisitionMethod;
         }
 
@@ -101,8 +102,7 @@ namespace PerkinElmer.Simplicity.Data.Version15.DataSources.Postgresql.Chromatog
             foreach (var deviceMethod in deviceMethods)
             {
                 deviceMethod.DeviceModules = deviceModuleDetailsDao.GetDeviceModules(connection, deviceMethod.Id);
-                deviceMethod.ExpectedDeviceChannelDescriptors =
-                    expectedDeviceChannelDescriptorDao.Get(connection, deviceMethod.Id);
+                deviceMethod.ExpectedDeviceChannelDescriptors = expectedDeviceChannelDescriptorDao.Get(connection, deviceMethod.Id);
             }
 
             return deviceMethods;

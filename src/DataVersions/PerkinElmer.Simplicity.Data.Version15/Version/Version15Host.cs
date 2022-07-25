@@ -19,6 +19,8 @@ namespace PerkinElmer.Simplicity.Data.Version15.Version
 
         private const string ChromatographyDbSchema = "PerkinElmer.Simplicity.Data.Version15.DataAccess.Postgresql.SQL.ChromatographyDBSchema.sql";
 
+        private const string ChromatographyDBIndex = "PerkinElmer.Simplicity.Data.Version15.DataAccess.Postgresql.SQL.ChromatographyDBIndex.sql";
+
         private const string ChromatographyNotificationFunctionTriggers = "PerkinElmer.Simplicity.Data.Version15.DataAccess.Postgresql.SQL.Version15.NotificationFunctionTriggers.sql";
 
         private const string ChromatographyDummyData = "PerkinElmer.Simplicity.Data.Version15.DataAccess.Postgresql.SQL.DummyRuns.sql";
@@ -49,6 +51,15 @@ namespace PerkinElmer.Simplicity.Data.Version15.Version
             ResetChromatographyDatabase(new NpgsqlConnectionStringBuilder(postgresqlTargetContext.ChromatographyConnectionString));
             ResetAuditTrailDatabase(new NpgsqlConnectionStringBuilder(postgresqlTargetContext.AuditTrailConnectionString));
             ResetSecurityDatabase(new NpgsqlConnectionStringBuilder(postgresqlTargetContext.SecurityConnectionString));
+        }
+
+        public static void CreateChromatographyDatabaseIndex(string chromatographyConn)
+        {
+            using var dbConnection = new NpgsqlConnection(chromatographyConn);
+            dbConnection.Open();
+            // Create schema
+            dbConnection.Execute(GetSqlScript(ChromatographyDBIndex));
+            dbConnection.Close();
         }
 
         private static void ResetChromatographyDatabase(NpgsqlConnectionStringBuilder chromatographyConnBuilder)

@@ -69,6 +69,20 @@ namespace PerkinElmer.Simplicity.Data.Version16.DataAccess.Postgresql.Chromatogr
 				throw;
 			}
 		}
+
+        public virtual void Create(IDbConnection connection, IList<BatchRunChannelMap> batchRunChannelMaps)
+        {
+            try
+            {
+                connection.Execute(InsertSql, batchRunChannelMaps);
+			}
+            catch (Exception ex)
+            {
+                Log.Error("Error in Create method", ex);
+                throw;
+            }
+		}
+
 		public List<BatchRunChannelMap> GetBatchRunChannelMapByAnalysisResultSetId(IDbConnection connection, long analysisResultId)
 		{
 			try

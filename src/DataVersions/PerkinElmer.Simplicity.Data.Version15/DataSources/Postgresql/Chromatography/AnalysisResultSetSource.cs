@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using log4net;
@@ -8,6 +9,7 @@ using Npgsql;
 using PerkinElmer.Simplicity.Data.Version15.DataAccess.Postgresql.Chromatography;
 using PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.AuditTrail;
 using PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography;
+using PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.ProcessingMethod;
 using PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.ReviewApprove;
 using PerkinElmer.Simplicity.Data.Version15.DataSources.Postgresql.AuditTrail;
 using PerkinElmer.Simplicity.Data.Version15.Contract.Version;
@@ -19,6 +21,16 @@ namespace PerkinElmer.Simplicity.Data.Version15.DataSources.Postgresql.Chromatog
     internal class AnalysisResultSetSource
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
+        public static IList<Guid> GetAnalysisResultSetGuids(long projectId,
+            PostgresqlSourceContext postgresqlSourceContext)
+        {
+            var analysisResultSetDao = new AnalysisResultSetDao();
+            using var connection = new NpgsqlConnection(postgresqlSourceContext.ChromatographyConnectionString);
+
+            if (connection.State != ConnectionState.Open) connection.Open();
+            return analysisResultSetDao.GetAllAnalysisResultSetGuids(connection, projectId);
+        }
 
         public static IList<Version15DataBase> GetAnalysisResultSets(Guid projectGuid, PostgresqlSourceContext postgresqlSourceContext)
         {
@@ -76,7 +88,6 @@ namespace PerkinElmer.Simplicity.Data.Version15.DataSources.Postgresql.Chromatog
             var brChannelsWithExceededNumberOfPeaksDao = new BrChannelsWithExceededNumberOfPeaksDao();
             var suitabilitySummaryResultDao = new CompoundSuitabilitySummaryResultDao();
 
-     
             analysisResultSetData.ProjectGuid = projectGuid;
             analysisResultSetData.AnalysisResultSet = analysisResultSet;
             var batchRunAnalysisResults = batchRunAnalysisResultDao.GetBatchRunAnalysisResults(connection, analysisResultSet.Id);
@@ -84,6 +95,9 @@ namespace PerkinElmer.Simplicity.Data.Version15.DataSources.Postgresql.Chromatog
             if(batchResultSetGuids.Contains(analysisResultSet.BatchResultSetGuid) == false)
                 batchResultSetGuids.Add(analysisResultSet.BatchResultSetGuid);
 
+
+            var stopWatch = new Stopwatch();
+            stopWatch.Start();
             foreach (var batchResultSetGuid in batchResultSetGuids)
             {
                 var batchResultSet = batchResultSetDao.Get(connection, projectGuid, batchResultSetGuid);
@@ -91,8 +105,10 @@ namespace PerkinElmer.Simplicity.Data.Version15.DataSources.Postgresql.Chromatog
                 analysisResultSetData.BatchResultSetData.Add(batchResultSetData);
             }
 
-            analysisResultSetData.BatchRunAnalysisResults = CreateBatchRunAnalysisResultsData(connection, batchRunAnalysisResults);
+            stopWatch.Stop();
+            var cost = stopWatch.ElapsedMilliseconds;
 
+            analysisResultSetData.BatchRunAnalysisResults = CreateBatchRunAnalysisResultsData(connection, batchRunAnalysisResults);
             analysisResultSetData.BatchRunChannelMaps = batchRunChannelMapDao.GetBatchRunChannelMapByAnalysisResultSetId(connection, analysisResultSet.Id);
 
             var manaualOverrideMaps = manualOverrideMapDao.GetManualOverrideMapByAnalysisResultSetId(connection, analysisResultSet.Id);
@@ -118,22 +134,26 @@ namespace PerkinElmer.Simplicity.Data.Version15.DataSources.Postgresql.Chromatog
             IList<BatchRunAnalysisResult> batchRunAnalysisResults)
         {
             if (batchRunAnalysisResults == null) return null;
-
             var sequenceSampleInfoModifiableDao = new SequenceSampleInfoModifiableDao();
             var processingMethodModifiableDao = new ProcessingMethodModifiableDao();
             var batchRunAnalysisResultDao = new CalculatedChannelDataDao();
             var runPeakResultDao = new RunPeakResultDao();
             var suitabilityResultDao = new SuitabilityResultDao();
+            var processingMethodCache = new Dictionary<long, ProcessingMethod>();
 
             var batchRunAnalysisResultsData = new List<BatchRunAnalysisResultData>();
+
             foreach (var batchRunAnalysisResult in batchRunAnalysisResults)
             {
                 var batchRunAnalysisResultData = new BatchRunAnalysisResultData
                 {
                     BatchRunAnalysisResult = batchRunAnalysisResult,
-                    SequenceSampleInfoModifiable = sequenceSampleInfoModifiableDao.GetSequenceSampleInfoModifiable(connection, batchRunAnalysisResult.SequenceSampleInfoModifiableId),
-                    ModifiableProcessingMethod = processingMethodModifiableDao.GetProcessingMethod(connection, batchRunAnalysisResult.ProcessingMethodModifiableId)
+                    SequenceSampleInfoModifiable = sequenceSampleInfoModifiableDao.GetSequenceSampleInfoModifiable(connection, batchRunAnalysisResult.SequenceSampleInfoModifiableId)
                 };
+
+                if (!processingMethodCache.ContainsKey(batchRunAnalysisResult.ProcessingMethodModifiableId))
+                    processingMethodCache[batchRunAnalysisResult.ProcessingMethodModifiableId] = processingMethodModifiableDao.GetProcessingMethod(connection, batchRunAnalysisResult.ProcessingMethodModifiableId);
+                batchRunAnalysisResultData.ModifiableProcessingMethod = processingMethodCache[batchRunAnalysisResult.ProcessingMethodModifiableId];
 
                 var calculatedChannelsData = new List<CalculatedChannelCompositeData>();
                 var calculatedChannelDataListEntities = batchRunAnalysisResultDao.GetChannelDataByBatchRunAnalysisResultId(connection, batchRunAnalysisResult.Id);
@@ -153,6 +173,5 @@ namespace PerkinElmer.Simplicity.Data.Version15.DataSources.Postgresql.Chromatog
 
             return batchRunAnalysisResultsData;
         }
-
     }
 }

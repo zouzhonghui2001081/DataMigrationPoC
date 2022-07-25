@@ -1,5 +1,6 @@
 using System;
 using System.Data;
+using System.Diagnostics;
 using Dapper;
 using PerkinElmer.Simplicity.Data.Version15.Contract.DataEntities.Chromatography.ProcessingMethod;
 
@@ -97,13 +98,15 @@ namespace PerkinElmer.Simplicity.Data.Version15.DataAccess.Postgresql.Chromatogr
         public ProcessingMethod GetProcessingMethodById(IDbConnection connection, long processingMethodId)
         {
 	        try
-	        {
+            {
 		        var processingMethod = connection.QueryFirstOrDefault<ProcessingMethod>(
 			        selectSql +
 			        $"FROM {TableName} " +
 			        $"WHERE {IdColumn} = {processingMethodId}");
-		        return GetProcessingMethodChildren(connection, processingMethod);
-    }
+
+		        var processingMethods =  GetProcessingMethodChildren(connection, processingMethod);
+				return processingMethods;
+            }
 	        catch (Exception ex)
 	        {
 		        Log.Error("Error in GetProcessingMethodById method", ex);

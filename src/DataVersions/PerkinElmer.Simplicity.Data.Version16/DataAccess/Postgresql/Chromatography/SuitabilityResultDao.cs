@@ -337,6 +337,7 @@ namespace PerkinElmer.Simplicity.Data.Version16.DataAccess.Postgresql.Chromatogr
 				throw;
 			}
 		}
+
 		public bool Create(IDbConnection connection, IList<SuitabilityResult> suitabilityResults)
 		{
 			try

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using Dapper;
@@ -118,10 +119,11 @@ namespace PerkinElmer.Simplicity.Data.Version15.DataAccess.Postgresql.Chromatogr
                     $"INNER JOIN {BatchRunDao.TableName} ON {BatchRunDao.TableName}.{BatchRunDao.IdColumn} = {TableName}.{BatchRunIdColumn} " +
                     $"WHERE {BatchRunDao.TableName}.{BatchRunDao.GuidColumn} = @BatchRunGuid AND {TableName}.{StreamIndexColumn} = {streamIndex} AND {TableName}.{DeviceIdColumn} = @DeviceID"
 					,new { DeviceID = deviceId, BatchRunGuid = batchRunGuid });
-
+                
+                
 				if (item != null && item.uselargeobjectstream)
-				{
-					var manager = new NpgsqlLargeObjectManager((NpgsqlConnection) connection);
+                {
+                    var manager = new NpgsqlLargeObjectManager((NpgsqlConnection) connection);
 
 					using (var stream = manager.OpenRead((uint) item.largeobjectoid))
 					{
@@ -130,10 +132,10 @@ namespace PerkinElmer.Simplicity.Data.Version15.DataAccess.Postgresql.Chromatogr
 						stream.Read(data, 0, size);
 						stream.Close();
 					}
-				}
+                }
 				else
                 {
-                    var sql = $"SELECT {TableName}.{YDataColumn} " +
+					var sql = $"SELECT {TableName}.{YDataColumn} " +
                               $"FROM {TableName} " +
                               $"INNER JOIN {BatchRunDao.TableName} ON {BatchRunDao.TableName}.{BatchRunDao.IdColumn} = {TableName}.{BatchRunIdColumn} " +
                               $"WHERE {BatchRunDao.TableName}.{BatchRunDao.GuidColumn} = @BatchRunGuid AND {TableName}.{DeviceIdColumn} = @DeviceID  AND {TableName}.{StreamIndexColumn} = {streamIndex}";

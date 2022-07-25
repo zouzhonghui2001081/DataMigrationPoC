@@ -178,9 +178,7 @@ namespace PerkinElmer.Simplicity.Data.Version16.DataAccess.Postgresql.Chromatogr
 			}
 		}
 
-		public long SaveBatchRunAnalysisResult(IDbConnection connection,
-			Guid projectGuid,
-			BatchRunAnalysisResult batchRunAnalysisResultEntity)
+		public long SaveBatchRunAnalysisResult(IDbConnection connection, Guid projectGuid, BatchRunAnalysisResult batchRunAnalysisResultEntity)
 		{
 			try
 			{

@@ -636,6 +636,15 @@ namespace PerkinElmer.Simplicity.Data.Version15.DataAccess.Postgresql.Chromatogr
 
         }
 
+        public IList<Guid> GetAllAnalysisResultSetGuids(IDbConnection connection, long projectId)
+        {
+			string sql =
+                $"SELECT {TableName}.{GuidColumn} " +
+                $"FROM {TableName} " +
+                $"WHERE {TableName}.{ProjectIdColumn} = @ProjectId";
+            return connection.Query<Guid>(sql, new {ProjectId = projectId}).ToList();
+        }
+
         public  Guid GetProjectGuid(IDbConnection connection, long analysisResultSetId)
         {
             string sql =

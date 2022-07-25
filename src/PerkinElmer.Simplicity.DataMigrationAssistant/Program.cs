@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using log4net;
 using System.Reflection;
 using System.Runtime.Loader;
 using Newtonsoft.Json.Linq;
+using PerkinElmer.Simplicity.Data.Version15.Dummy;
 using PerkinElmer.Simplicity.DataMigration.Implementation;
 using PerkinElmer.Simplicity.DataMigration.Implementation.Common;
 
@@ -23,7 +25,14 @@ namespace PerkinElmer.Simplicity.DataMigrationAssistant
             };
             var migrationComponentsFactory = new MigrationComponentsFactory();
             var migrationManager = new MigrationManager("Version15", "Version16", migrationComponentsFactory);
+            var stopWatch = new Stopwatch();
+            stopWatch.Start();
             migrationManager.StartMigration(migrationContext);
+            stopWatch.Stop();
+            var cost = stopWatch.ElapsedMilliseconds;
+
+            //var dummyDataManager = new DummyDataManager();
+            //dummyDataManager.CreateApplicationDummyDatabase(20);
         }
 
         static void LoadSharedLibraries()
@@ -31,7 +40,7 @@ namespace PerkinElmer.Simplicity.DataMigrationAssistant
             var exeFileFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             var sharedFileFolder = Path.Combine(exeFileFolder, "Share");
             var sharedLibraryFiles = System.IO.Directory.GetFiles(sharedFileFolder, "*.dll");
-            foreach(var sharedLibraryFile in sharedLibraryFiles)
+            foreach (var sharedLibraryFile in sharedLibraryFiles)
                 AssemblyLoadContext.Default.LoadFromAssemblyPath(sharedLibraryFile);
         }
 

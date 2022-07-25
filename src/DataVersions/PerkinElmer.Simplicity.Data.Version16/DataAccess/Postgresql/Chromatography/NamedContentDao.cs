@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Reflection;
@@ -124,6 +125,19 @@ namespace PerkinElmer.Simplicity.Data.Version16.DataAccess.Postgresql.Chromatogr
 				Log.Error("Error in Create method", ex);
 				throw;
 			}
+		}
+
+        public virtual void Create(IDbConnection connection, IList<NamedContent> namedContents)
+        {
+            try
+            {
+                connection.Execute(InsertSql, namedContents);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error in Create method", ex);
+                throw;
+            }
 		}
 
 		public void Delete(IDbConnection connection, long batchRunId)

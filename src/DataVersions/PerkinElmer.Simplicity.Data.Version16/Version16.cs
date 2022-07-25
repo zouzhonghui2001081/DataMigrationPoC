@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
@@ -28,8 +29,7 @@ namespace PerkinElmer.Simplicity.Data.Version16
             var dataflowOption = new DataflowBlockOptions { CancellationToken = cancellToken };
             var executeDataFlowOption = new ExecutionDataflowBlockOptions
             {
-                //MaxDegreeOfParallelism = Environment.ProcessorCount,
-                MaxDegreeOfParallelism = 1,
+                MaxDegreeOfParallelism = 4,
                 CancellationToken = cancellToken
             };
             _sourceData = new BufferBlock<object>(dataflowOption);
@@ -212,8 +212,12 @@ namespace PerkinElmer.Simplicity.Data.Version16
                         
                     break;
                 case Version16DataTypes.AnalysisResultSet:
+                    var stopWatch = new Stopwatch();
+                    stopWatch.Start();
                     if (versionData is AnalysisResultSetData analysisResultSetData)
                         AnalysisResultSetTarget.SaveAnalysisResultSet(analysisResultSetData, PostgresqlTargetContext);
+                    stopWatch.Stop();
+                    var cost = stopWatch.ElapsedMilliseconds;
                     break;
                 case Version16DataTypes.BatchResultSet:
                     if (versionData is BatchResultSetData batchResultSetData)
